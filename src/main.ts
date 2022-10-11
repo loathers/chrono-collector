@@ -15,8 +15,7 @@ import {
   print,
   runChoice,
   useSkill,
-  visitUrl,
-  wait
+  visitUrl
 } from "kolmafia";
 import {
   $effect,
