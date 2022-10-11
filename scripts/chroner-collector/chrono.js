@@ -6243,17 +6243,13 @@ function main(command) {
   }, chooseFamEquip = function(fam) {
     return fam === $familiar(_templateObject327 || (_templateObject327 = _taggedTemplateLiteral15(["Reagnimated Gnome"]))) ? $item(_templateObject420 || (_templateObject420 = _taggedTemplateLiteral15(["gnomish housemaid's kgnee"]))) : $item(_templateObject515 || (_templateObject515 = _taggedTemplateLiteral15(["tiny stillsuit"])));
   }, outfitSpec = function() {
-    var familiar2 = chooseFamiliar(), famequip = chooseFamEquip(familiar2);
-    return {
-      weapon: $item(_templateObject612 || (_templateObject612 = _taggedTemplateLiteral15(["June cleaver"]))),
-      offhand: $item(_templateObject711 || (_templateObject711 = _taggedTemplateLiteral15(["carnivorous potted plant"]))),
-      acc1: $item(_templateObject810 || (_templateObject810 = _taggedTemplateLiteral15(["mafia thumb ring"]))),
-      acc2: $item(_templateObject910 || (_templateObject910 = _taggedTemplateLiteral15(["time-twitching toolbelt"]))),
-      acc3: $item(_templateObject1011 || (_templateObject1011 = _taggedTemplateLiteral15(["lucky gold ring"]))),
-      familiar: familiar2,
-      famequip: famequip,
-      modifier: $familiars(_templateObject1111 || (_templateObject1111 = _taggedTemplateLiteral15(["Reagnimated Gnome, Temporal Riftlet"]))).includes(familiar2) ? "Familiar Weight" : "Item Drop"
+    var familiar2 = chooseFamiliar(), famequip = chooseFamEquip(familiar2), ifHave = function(slot, item3) {
+      return have(item3) ? Object.fromEntries([[slot, item3]]) : {};
     };
+    return _objectSpread5(_objectSpread5(_objectSpread5(_objectSpread5(_objectSpread5(_objectSpread5(_objectSpread5({}, ifHave("weapon", $item(_templateObject612 || (_templateObject612 = _taggedTemplateLiteral15(["June cleaver"]))))), ifHave("offhand", $item(_templateObject711 || (_templateObject711 = _taggedTemplateLiteral15(["carnivorous potted plant"]))))), ifHave("acc1", $item(_templateObject810 || (_templateObject810 = _taggedTemplateLiteral15(["mafia thumb ring"]))))), ifHave("acc2", $item(_templateObject910 || (_templateObject910 = _taggedTemplateLiteral15(["time-twitching toolbelt"]))))), ifHave("acc3", $item(_templateObject1011 || (_templateObject1011 = _taggedTemplateLiteral15(["lucky gold ring"]))))), ifHave("famequip", famequip)), {}, {
+      familiar: familiar2,
+      modifier: $familiars(_templateObject1111 || (_templateObject1111 = _taggedTemplateLiteral15(["Reagnimated Gnome, Temporal Riftlet"]))).includes(familiar2) ? "Familiar Weight" : "Item Drop"
+    });
   }, globeTheater = $location(_templateObject1210 || (_templateObject1210 = _taggedTemplateLiteral15(["Globe Theatre Main Stage"]))), yrTarget = $location(_templateObject1310 || (_templateObject1310 = _taggedTemplateLiteral15(["The Cave Before Time"]))), ttt = {
     name: "TimeTwitchingTower",
     tasks: [{
@@ -6274,7 +6270,7 @@ function main(command) {
         return _completed() && AutumnAton_exports.currentlyIn() !== null;
       },
       do: function() {
-        return AutumnAton_exports.sendTo($locations(_templateObject178 || (_templateObject178 = _taggedTemplateLiteral15(["Globe Theatre Main Stage, The Dire Warren"]))));
+        return AutumnAton_exports.sendTo($locations(_templateObject178 || (_templateObject178 = _taggedTemplateLiteral15(["Moonshiners' Woods, The Dire Warren"]))));
       },
       ready: function() {
         return AutumnAton_exports.available();
