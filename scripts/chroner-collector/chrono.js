@@ -6637,7 +6637,7 @@ function main(command) {
         return _completed() && AutumnAton_exports.currentlyIn() !== null;
       },
       do: function() {
-        return AutumnAton_exports.sendTo($locations(_templateObject2112 || (_templateObject2112 = _taggedTemplateLiteral16(["Moonshiners' Woods, The Dire Warren"]))));
+        return AutumnAton_exports.sendTo($locations(_templateObject2112 || (_templateObject2112 = _taggedTemplateLiteral16(["Moonshiners' Woods, The Sleazy Back Alley"]))));
       },
       ready: function() {
         return AutumnAton_exports.available();
