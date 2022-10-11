@@ -8,6 +8,10 @@ import {
   isDarkMode,
   print,
   myTurncount,
+  myMaxhp,
+  myHp,
+  useSkill,
+  itemAmount,
 } from "kolmafia";
 import {
   $effect,
@@ -72,6 +76,18 @@ export function main(command?: string) {
           runChoice(4);
         },
         outfit: { familiar: $familiar`Reagnimated Gnome` },
+      },
+      {
+        name: "Beaten Up!",
+        do: () => {
+          throw "You got beaten up, which is bad";
+        },
+        completed: () => !have($effect`Beaten Up`),
+      },
+      {
+        name: "Recover HP",
+        completed: () => myHp() / myMaxhp() > 0.5,
+        do: () => useSkill($skill`Cannelloni Cocoon`),
       },
       {
         name: "Autumn-Aton",
