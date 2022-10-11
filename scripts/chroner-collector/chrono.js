@@ -1675,6 +1675,21 @@ function setProperties(properties) {
     _set(prop, value);
   }
 }
+function withProperties(properties, callback) {
+  var propertiesBackup = Object.fromEntries(Object.entries(properties).map(function(_ref) {
+    var _ref2 = _slicedToArray(_ref, 1), prop = _ref2[0];
+    return [prop, get(prop)];
+  }));
+  setProperties(properties);
+  try {
+    callback();
+  } finally {
+    setProperties(propertiesBackup);
+  }
+}
+function withProperty(property, value, callback) {
+  withProperties(_defineProperty({}, property, value), callback);
+}
 var PropertiesManager = /* @__PURE__ */ function() {
   function PropertiesManager2() {
     _classCallCheck(this, PropertiesManager2), _defineProperty(this, "properties", {});
@@ -6322,7 +6337,7 @@ function shouldSkip(choice) {
 }
 
 // src/main.ts
-var _templateObject90, _templateObject239, _templateObject328, _templateObject421, _templateObject516, _templateObject613, _templateObject712, _templateObject811, _templateObject910, _templateObject1011, _templateObject1111, _templateObject1210, _templateObject1310, _templateObject149, _templateObject159, _templateObject168, _templateObject178, _templateObject188, _templateObject198, _templateObject208, _templateObject2112, _templateObject2210, _templateObject2310, _templateObject248, _templateObject258, _templateObject268, _templateObject278, _templateObject288, _templateObject297, _templateObject307, _templateObject3111, _templateObject329, _templateObject336, _templateObject346, _templateObject356, _templateObject365, _templateObject375, _templateObject384, _templateObject394, _templateObject404, _templateObject4110, _templateObject423;
+var _templateObject90, _templateObject239, _templateObject328, _templateObject421, _templateObject516, _templateObject613, _templateObject712, _templateObject811, _templateObject910, _templateObject1011, _templateObject1111, _templateObject1210, _templateObject1310, _templateObject149, _templateObject159, _templateObject168, _templateObject178, _templateObject188, _templateObject198, _templateObject208, _templateObject2112, _templateObject2210, _templateObject2310, _templateObject248, _templateObject258, _templateObject268, _templateObject278, _templateObject288, _templateObject297, _templateObject307, _templateObject3111, _templateObject329, _templateObject336, _templateObject346, _templateObject356, _templateObject365, _templateObject375, _templateObject384, _templateObject394, _templateObject404, _templateObject4110, _templateObject423, _templateObject433;
 function _slicedToArray7(arr, i) {
   return _arrayWithHoles7(arr) || _iterableToArrayLimit7(arr, i) || _unsupportedIterableToArray18(arr, i) || _nonIterableRest7();
 }
@@ -6604,7 +6619,11 @@ function main(command) {
       completed: function() {
         return !!get("_juneCleaverFightsLeft");
       },
-      do: $location(_templateObject2112 || (_templateObject2112 = _taggedTemplateLiteral16(["Noob Cave"]))),
+      do: function() {
+        return withProperty("recoveryScript", "", function() {
+          (0, import_kolmafia22.adv1)($location(_templateObject2112 || (_templateObject2112 = _taggedTemplateLiteral16(["Noob Cave"]))), -1, ""), ["Poetic Justice", "Lost and Found"].includes(get("lastEncounter")) && uneffect($effect(_templateObject2210 || (_templateObject2210 = _taggedTemplateLiteral16(["Beaten Up"]))));
+        });
+      },
       choices: Object.fromEntries(JuneCleaver_exports.choices.map(function(choice) {
         return [choice, function() {
           return shouldSkip(choice) ? bestJuneCleaverOption(choice) : 4;
@@ -6615,12 +6634,13 @@ function main(command) {
         return JuneCleaver_exports.have() && !get("_juneCleaverFightsLeft");
       },
       outfit: {
-        weapon: $item(_templateObject2210 || (_templateObject2210 = _taggedTemplateLiteral16(["June cleaver"])))
-      }
+        weapon: $item(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral16(["June cleaver"])))
+      },
+      combat: new CombatStrategy().macro(Macro.abort())
     }, {
       name: "Proton Ghost",
       ready: function() {
-        return have($item(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral16(["protonic accelerator pack"])))) && get("questPAGhost") !== "unstarted" && !!get("ghostLocation");
+        return have($item(_templateObject248 || (_templateObject248 = _taggedTemplateLiteral16(["protonic accelerator pack"])))) && get("questPAGhost") !== "unstarted" && !!get("ghostLocation");
       },
       do: function() {
         var location = get("ghostLocation");
@@ -6631,13 +6651,13 @@ function main(command) {
       },
       outfit: function() {
         return _objectSpread5(_objectSpread5({}, outfitSpec), {}, {
-          back: $item(_templateObject248 || (_templateObject248 = _taggedTemplateLiteral16(["protonic accelerator pack"])))
+          back: $item(_templateObject258 || (_templateObject258 = _taggedTemplateLiteral16(["protonic accelerator pack"])))
         });
       },
       completed: function() {
         return get("questPAGhost") === "unstarted";
       },
-      combat: new CombatStrategy().macro(Macro.trySkill($skill(_templateObject258 || (_templateObject258 = _taggedTemplateLiteral16(["Sing Along"])))).trySkill($skill(_templateObject268 || (_templateObject268 = _taggedTemplateLiteral16(["Shoot Ghost"])))).trySkill($skill(_templateObject278 || (_templateObject278 = _taggedTemplateLiteral16(["Shoot Ghost"])))).trySkill($skill(_templateObject288 || (_templateObject288 = _taggedTemplateLiteral16(["Shoot Ghost"])))).trySkill($skill(_templateObject297 || (_templateObject297 = _taggedTemplateLiteral16(["Trap Ghost"]))))),
+      combat: new CombatStrategy().macro(Macro.trySkill($skill(_templateObject268 || (_templateObject268 = _taggedTemplateLiteral16(["Sing Along"])))).trySkill($skill(_templateObject278 || (_templateObject278 = _taggedTemplateLiteral16(["Shoot Ghost"])))).trySkill($skill(_templateObject288 || (_templateObject288 = _taggedTemplateLiteral16(["Shoot Ghost"])))).trySkill($skill(_templateObject297 || (_templateObject297 = _taggedTemplateLiteral16(["Shoot Ghost"])))).trySkill($skill(_templateObject307 || (_templateObject307 = _taggedTemplateLiteral16(["Trap Ghost"]))))),
       sobriety: "sober"
     }, {
       name: "Asdon Missle",
@@ -6645,9 +6665,9 @@ function main(command) {
         return AsdonMartin_exports.installed();
       },
       completed: function() {
-        return get("_missileLauncherUsed") || have($effect(_templateObject307 || (_templateObject307 = _taggedTemplateLiteral16(["Everything Looks Yellow"]))));
+        return get("_missileLauncherUsed") || have($effect(_templateObject3111 || (_templateObject3111 = _taggedTemplateLiteral16(["Everything Looks Yellow"]))));
       },
-      combat: new CombatStrategy().macro(Macro.skill($skill(_templateObject3111 || (_templateObject3111 = _taggedTemplateLiteral16(["Asdon Martin: Missile Launcher"]))))),
+      combat: new CombatStrategy().macro(Macro.skill($skill(_templateObject329 || (_templateObject329 = _taggedTemplateLiteral16(["Asdon Martin: Missile Launcher"]))))),
       prepare: function() {
         return AsdonMartin_exports.fillTo(100);
       },
@@ -6656,34 +6676,34 @@ function main(command) {
     }, {
       name: "Spit Jurassic Acid",
       completed: function() {
-        return have($effect(_templateObject329 || (_templateObject329 = _taggedTemplateLiteral16(["Everything Looks Yellow"]))));
+        return have($effect(_templateObject336 || (_templateObject336 = _taggedTemplateLiteral16(["Everything Looks Yellow"]))));
       },
       ready: function() {
-        return have($item(_templateObject336 || (_templateObject336 = _taggedTemplateLiteral16(["Jurassic Parka"])))) && have($skill(_templateObject346 || (_templateObject346 = _taggedTemplateLiteral16(["Torso Awareness"]))));
+        return have($item(_templateObject346 || (_templateObject346 = _taggedTemplateLiteral16(["Jurassic Parka"])))) && have($skill(_templateObject356 || (_templateObject356 = _taggedTemplateLiteral16(["Torso Awareness"]))));
       },
       outfit: function() {
         return _objectSpread5(_objectSpread5({}, outfitSpec), {}, {
-          shirt: $item(_templateObject356 || (_templateObject356 = _taggedTemplateLiteral16(["Jurassic Parka"])))
+          shirt: $item(_templateObject365 || (_templateObject365 = _taggedTemplateLiteral16(["Jurassic Parka"])))
         });
       },
       prepare: function() {
         return (0, import_kolmafia22.cliExecute)("parka dilophosaur");
       },
       do: yrTarget,
-      combat: new CombatStrategy().macro(Macro.skill($skill(_templateObject365 || (_templateObject365 = _taggedTemplateLiteral16(["Spit jurassic acid"])))).abort()),
+      combat: new CombatStrategy().macro(Macro.skill($skill(_templateObject375 || (_templateObject375 = _taggedTemplateLiteral16(["Spit jurassic acid"])))).abort()),
       sobriety: "sober"
     }, {
       name: "Chroner",
       completed: _completed,
       do: globeTheater,
       outfit: function() {
-        return sober() ? have($item(_templateObject384 || (_templateObject384 = _taggedTemplateLiteral16(["Kramco Sausage-o-Matic\u2122"])))) && getKramcoWandererChance() >= 1 ? _objectSpread5(_objectSpread5({}, outfitSpec()), {}, {
-          offhand: $item(_templateObject394 || (_templateObject394 = _taggedTemplateLiteral16(["Kramco Sausage-o-Matic\u2122"])))
+        return sober() ? have($item(_templateObject394 || (_templateObject394 = _taggedTemplateLiteral16(["Kramco Sausage-o-Matic\u2122"])))) && getKramcoWandererChance() >= 1 ? _objectSpread5(_objectSpread5({}, outfitSpec()), {}, {
+          offhand: $item(_templateObject404 || (_templateObject404 = _taggedTemplateLiteral16(["Kramco Sausage-o-Matic\u2122"])))
         }) : outfitSpec() : _objectSpread5(_objectSpread5({}, outfitSpec()), {}, {
-          offhand: $item(_templateObject375 || (_templateObject375 = _taggedTemplateLiteral16(["Drunkula's wineglass"])))
+          offhand: $item(_templateObject384 || (_templateObject384 = _taggedTemplateLiteral16(["Drunkula's wineglass"])))
         });
       },
-      combat: new CombatStrategy().macro(Macro.externalIf(get("cosmicBowlingBallReturnCombats") < 1, Macro.trySkill($skill(_templateObject404 || (_templateObject404 = _taggedTemplateLiteral16(["Bowl Straight Up"]))))).trySkill($skill(_templateObject4110 || (_templateObject4110 = _taggedTemplateLiteral16(["Sing Along"])))).trySkill($skill(_templateObject423 || (_templateObject423 = _taggedTemplateLiteral16(["Extract"])))).attack().repeat()),
+      combat: new CombatStrategy().macro(Macro.externalIf(get("cosmicBowlingBallReturnCombats") < 1, Macro.trySkill($skill(_templateObject4110 || (_templateObject4110 = _taggedTemplateLiteral16(["Bowl Straight Up"]))))).trySkill($skill(_templateObject423 || (_templateObject423 = _taggedTemplateLiteral16(["Sing Along"])))).trySkill($skill(_templateObject433 || (_templateObject433 = _taggedTemplateLiteral16(["Extract"])))).attack().repeat()),
       sobriety: "either"
     }]
   }, engine = new ChronerEngine(getTasks([ttt])), sessionStart = Session.current();
