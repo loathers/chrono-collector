@@ -3449,6 +3449,20 @@ var telescopeStats = /* @__PURE__ */ new Map([["standing around flexing their mu
 
 // node_modules/libram/dist/combat.js
 var _templateObject2, _templateObject210;
+function _get() {
+  return typeof Reflect != "undefined" && Reflect.get ? _get = Reflect.get.bind() : _get = function(target, property, receiver) {
+    var base = _superPropBase(target, property);
+    if (!!base) {
+      var desc = Object.getOwnPropertyDescriptor(base, property);
+      return desc.get ? desc.get.call(arguments.length < 3 ? target : receiver) : desc.value;
+    }
+  }, _get.apply(this, arguments);
+}
+function _superPropBase(object, property) {
+  for (; !Object.prototype.hasOwnProperty.call(object, property) && (object = _getPrototypeOf2(object), object !== null); )
+    ;
+  return object;
+}
 function _createForOfIteratorHelper2(o, allowArrayLike) {
   var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
@@ -3926,6 +3940,79 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
 _defineProperty2(Macro, "SAVED_MACRO_PROPERTY", "libram_savedMacro");
 _defineProperty2(Macro, "cachedMacroIds", /* @__PURE__ */ new Map());
 _defineProperty2(Macro, "cachedAutoAttacks", /* @__PURE__ */ new Map());
+var StrictMacro = /* @__PURE__ */ function(_Macro) {
+  _inherits2(StrictMacro2, _Macro);
+  var _super2 = _createSuper2(StrictMacro2);
+  function StrictMacro2() {
+    return _classCallCheck3(this, StrictMacro2), _super2.apply(this, arguments);
+  }
+  return _createClass3(StrictMacro2, [{
+    key: "skill",
+    value: function() {
+      for (var _get22, _len7 = arguments.length, skills = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++)
+        skills[_key7] = arguments[_key7];
+      return (_get22 = _get(_getPrototypeOf2(StrictMacro2.prototype), "skill", this)).call.apply(_get22, [this].concat(skills));
+    }
+  }, {
+    key: "item",
+    value: function() {
+      for (var _get3, _len8 = arguments.length, items = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++)
+        items[_key8] = arguments[_key8];
+      return (_get3 = _get(_getPrototypeOf2(StrictMacro2.prototype), "item", this)).call.apply(_get3, [this].concat(items));
+    }
+  }, {
+    key: "trySkill",
+    value: function() {
+      for (var _get4, _len9 = arguments.length, skills = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++)
+        skills[_key9] = arguments[_key9];
+      return (_get4 = _get(_getPrototypeOf2(StrictMacro2.prototype), "trySkill", this)).call.apply(_get4, [this].concat(skills));
+    }
+  }, {
+    key: "tryItem",
+    value: function() {
+      for (var _get5, _len10 = arguments.length, items = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++)
+        items[_key10] = arguments[_key10];
+      return (_get5 = _get(_getPrototypeOf2(StrictMacro2.prototype), "tryItem", this)).call.apply(_get5, [this].concat(items));
+    }
+  }, {
+    key: "trySkillRepeat",
+    value: function() {
+      for (var _get6, _len11 = arguments.length, skills = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++)
+        skills[_key11] = arguments[_key11];
+      return (_get6 = _get(_getPrototypeOf2(StrictMacro2.prototype), "trySkillRepeat", this)).call.apply(_get6, [this].concat(skills));
+    }
+  }], [{
+    key: "skill",
+    value: function() {
+      var _this8;
+      return (_this8 = new this()).skill.apply(_this8, arguments);
+    }
+  }, {
+    key: "item",
+    value: function() {
+      var _this9;
+      return (_this9 = new this()).item.apply(_this9, arguments);
+    }
+  }, {
+    key: "trySkill",
+    value: function() {
+      var _this10;
+      return (_this10 = new this()).trySkill.apply(_this10, arguments);
+    }
+  }, {
+    key: "tryItem",
+    value: function() {
+      var _this11;
+      return (_this11 = new this()).tryItem.apply(_this11, arguments);
+    }
+  }, {
+    key: "trySkillRepeat",
+    value: function() {
+      var _this12;
+      return (_this12 = new this()).trySkillRepeat.apply(_this12, arguments);
+    }
+  }]), StrictMacro2;
+}(Macro);
 
 // node_modules/libram/dist/maximize.js
 init_kolmafia_polyfill();
@@ -8178,16 +8265,16 @@ function _defineProperties13(target, props) {
 function _createClass13(Constructor, protoProps, staticProps) {
   return protoProps && _defineProperties13(Constructor.prototype, protoProps), staticProps && _defineProperties13(Constructor, staticProps), Object.defineProperty(Constructor, "prototype", { writable: !1 }), Constructor;
 }
-function _get() {
-  return typeof Reflect != "undefined" && Reflect.get ? _get = Reflect.get.bind() : _get = function(target, property, receiver) {
-    var base = _superPropBase(target, property);
+function _get2() {
+  return typeof Reflect != "undefined" && Reflect.get ? _get2 = Reflect.get.bind() : _get2 = function(target, property, receiver) {
+    var base = _superPropBase2(target, property);
     if (!!base) {
       var desc = Object.getOwnPropertyDescriptor(base, property);
       return desc.get ? desc.get.call(arguments.length < 3 ? target : receiver) : desc.value;
     }
-  }, _get.apply(this, arguments);
+  }, _get2.apply(this, arguments);
 }
-function _superPropBase(object, property) {
+function _superPropBase2(object, property) {
   for (; !Object.prototype.hasOwnProperty.call(object, property) && (object = _getPrototypeOf5(object), object !== null); )
     ;
   return object;
@@ -8268,19 +8355,19 @@ var ChronerEngine = /* @__PURE__ */ function(_Engine) {
     key: "available",
     value: function(task) {
       var sobriety = task.sobriety === "either" || sober() && task.sobriety === "sober" || !sober() && task.sobriety === "drunk";
-      return sobriety && _get(_getPrototypeOf5(ChronerEngine2.prototype), "available", this).call(this, task);
+      return sobriety && _get2(_getPrototypeOf5(ChronerEngine2.prototype), "available", this).call(this, task);
     }
   }, {
     key: "setChoices",
     value: function(task, manager) {
-      _get(_getPrototypeOf5(ChronerEngine2.prototype), "setChoices", this).call(this, task, manager), (0, import_kolmafia26.equippedAmount)($item(_templateObject241 || (_templateObject241 = _taggedTemplateLiteral17(["June cleaver"])))) > 0 && this.propertyManager.setChoices(Object.fromEntries(JuneCleaver_exports.choices.map(function(choice) {
+      _get2(_getPrototypeOf5(ChronerEngine2.prototype), "setChoices", this).call(this, task, manager), (0, import_kolmafia26.equippedAmount)($item(_templateObject241 || (_templateObject241 = _taggedTemplateLiteral17(["June cleaver"])))) > 0 && this.propertyManager.setChoices(Object.fromEntries(JuneCleaver_exports.choices.map(function(choice) {
         return [choice, shouldSkip(choice) ? 4 : bestJuneCleaverOption(choice)];
       })));
     }
   }, {
     key: "shouldRepeatAdv",
     value: function(task) {
-      return ["Poetic Justice", "Lost and Found"].includes(get("lastEncounter")) ? !1 : _get(_getPrototypeOf5(ChronerEngine2.prototype), "shouldRepeatAdv", this).call(this, task);
+      return ["Poetic Justice", "Lost and Found"].includes(get("lastEncounter")) ? !1 : _get2(_getPrototypeOf5(ChronerEngine2.prototype), "shouldRepeatAdv", this).call(this, task);
     }
   }, {
     key: "print",
@@ -8299,7 +8386,15 @@ var ChronerEngine = /* @__PURE__ */ function(_Engine) {
       }
     }
   }]), ChronerEngine2;
-}(Engine);
+}(Engine), ChronerStrategy = /* @__PURE__ */ function(_CombatStrategy) {
+  _inherits5(ChronerStrategy2, _CombatStrategy);
+  var _super2 = _createSuper5(ChronerStrategy2);
+  function ChronerStrategy2(macro) {
+    var _this;
+    return _classCallCheck13(this, ChronerStrategy2), _this = _super2.call(this), _this.macro(macro).autoattack(macro), _this;
+  }
+  return _createClass13(ChronerStrategy2);
+}(CombatStrategy);
 function main(command) {
   Args.fill(args, command), sinceKolmafiaRevision(26834);
   var turncount = (0, import_kolmafia26.myTurncount)(), _completed = args.turns > 0 ? function() {
@@ -8423,7 +8518,7 @@ function main(command) {
       completed: function() {
         return get("questPAGhost") === "unstarted";
       },
-      combat: new CombatStrategy().macro(Macro.trySkill($skill(_templateObject3111 || (_templateObject3111 = _taggedTemplateLiteral17(["Sing Along"])))).trySkill($skill(_templateObject3210 || (_templateObject3210 = _taggedTemplateLiteral17(["Shoot Ghost"])))).trySkill($skill(_templateObject336 || (_templateObject336 = _taggedTemplateLiteral17(["Shoot Ghost"])))).trySkill($skill(_templateObject346 || (_templateObject346 = _taggedTemplateLiteral17(["Shoot Ghost"])))).trySkill($skill(_templateObject356 || (_templateObject356 = _taggedTemplateLiteral17(["Trap Ghost"]))))),
+      combat: new ChronerStrategy(StrictMacro.trySkill($skill(_templateObject3111 || (_templateObject3111 = _taggedTemplateLiteral17(["Sing Along"])))).trySkill($skill(_templateObject3210 || (_templateObject3210 = _taggedTemplateLiteral17(["Shoot Ghost"])))).trySkill($skill(_templateObject336 || (_templateObject336 = _taggedTemplateLiteral17(["Shoot Ghost"])))).trySkill($skill(_templateObject346 || (_templateObject346 = _taggedTemplateLiteral17(["Shoot Ghost"])))).trySkill($skill(_templateObject356 || (_templateObject356 = _taggedTemplateLiteral17(["Trap Ghost"]))))),
       sobriety: "sober"
     }, {
       name: "Digitize Wanderer",
@@ -8437,7 +8532,7 @@ function main(command) {
       do: function() {
         (0, import_kolmafia26.adv1)(globeTheater, -1, ""), digitizes = get("_sourceTerminalDigitizeMonsterCount");
       },
-      combat: new CombatStrategy().macro(Macro.externalIf(shouldRedigitize(), Macro.skill($skill(_templateObject365 || (_templateObject365 = _taggedTemplateLiteral17(["Digitize"]))))).externalIf(get("cosmicBowlingBallReturnCombats") < 1, Macro.trySkill($skill(_templateObject375 || (_templateObject375 = _taggedTemplateLiteral17(["Bowl Straight Up"]))))).trySkill($skill(_templateObject384 || (_templateObject384 = _taggedTemplateLiteral17(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject394 || (_templateObject394 = _taggedTemplateLiteral17(["Sing Along"])))).trySkill($skill(_templateObject404 || (_templateObject404 = _taggedTemplateLiteral17(["Extract"])))).attack().repeat()),
+      combat: new ChronerStrategy(StrictMacro.externalIf(shouldRedigitize(), StrictMacro.skill($skill(_templateObject365 || (_templateObject365 = _taggedTemplateLiteral17(["Digitize"]))))).externalIf(get("cosmicBowlingBallReturnCombats") < 1, StrictMacro.trySkill($skill(_templateObject375 || (_templateObject375 = _taggedTemplateLiteral17(["Bowl Straight Up"]))))).trySkill($skill(_templateObject384 || (_templateObject384 = _taggedTemplateLiteral17(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject394 || (_templateObject394 = _taggedTemplateLiteral17(["Sing Along"])))).trySkill($skill(_templateObject404 || (_templateObject404 = _taggedTemplateLiteral17(["Extract"])))).attack().repeat()),
       sobriety: "either"
     }, {
       name: "Asdon Missle",
@@ -8447,7 +8542,7 @@ function main(command) {
       completed: function() {
         return get("_missileLauncherUsed") || have($effect(_templateObject4110 || (_templateObject4110 = _taggedTemplateLiteral17(["Everything Looks Yellow"]))));
       },
-      combat: new CombatStrategy().macro(Macro.trySkill($skill(_templateObject424 || (_templateObject424 = _taggedTemplateLiteral17(["Summon Mayfly Swarm"])))).skill($skill(_templateObject433 || (_templateObject433 = _taggedTemplateLiteral17(["Asdon Martin: Missile Launcher"])))).abort()),
+      combat: new ChronerStrategy(StrictMacro.trySkill($skill(_templateObject424 || (_templateObject424 = _taggedTemplateLiteral17(["Summon Mayfly Swarm"])))).skill($skill(_templateObject433 || (_templateObject433 = _taggedTemplateLiteral17(["Asdon Martin: Missile Launcher"])))).abort()),
       prepare: function() {
         return AsdonMartin_exports.fillTo(100);
       },
@@ -8470,7 +8565,7 @@ function main(command) {
         return (0, import_kolmafia26.cliExecute)("parka dilophosaur");
       },
       do: yrTarget,
-      combat: new CombatStrategy().macro(Macro.trySkill($skill(_templateObject482 || (_templateObject482 = _taggedTemplateLiteral17(["Summon Mayfly Swarm"])))).skill($skill(_templateObject492 || (_templateObject492 = _taggedTemplateLiteral17(["Spit jurassic acid"])))).abort()),
+      combat: new ChronerStrategy(StrictMacro.trySkill($skill(_templateObject482 || (_templateObject482 = _taggedTemplateLiteral17(["Summon Mayfly Swarm"])))).skill($skill(_templateObject492 || (_templateObject492 = _taggedTemplateLiteral17(["Spit jurassic acid"])))).abort()),
       sobriety: "sober"
     }, {
       name: "Chroner",
@@ -8483,7 +8578,7 @@ function main(command) {
           offhand: $item(_templateObject502 || (_templateObject502 = _taggedTemplateLiteral17(["Drunkula's wineglass"])))
         });
       },
-      combat: new CombatStrategy().macro(Macro.externalIf(get("cosmicBowlingBallReturnCombats") < 1, Macro.trySkill($skill(_templateObject532 || (_templateObject532 = _taggedTemplateLiteral17(["Bowl Straight Up"]))))).trySkill($skill(_templateObject542 || (_templateObject542 = _taggedTemplateLiteral17(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject552 || (_templateObject552 = _taggedTemplateLiteral17(["Sing Along"])))).trySkill($skill(_templateObject562 || (_templateObject562 = _taggedTemplateLiteral17(["Extract"])))).externalIf(have($skill(_templateObject572 || (_templateObject572 = _taggedTemplateLiteral17(["Meteor Lore"])))), Macro.trySkill($skill(_templateObject582 || (_templateObject582 = _taggedTemplateLiteral17(["Micrometeorite"]))))).tryItem($item(_templateObject592 || (_templateObject592 = _taggedTemplateLiteral17(["Time-Spinner"])))).tryItem($item(_templateObject602 || (_templateObject602 = _taggedTemplateLiteral17(["Rain-Doh indigo cup"])))).tryItem($item(_templateObject616 || (_templateObject616 = _taggedTemplateLiteral17(["Rain-Doh blue balls"])))).tryItem($item(_templateObject622 || (_templateObject622 = _taggedTemplateLiteral17(["porquoise-handled sixgun"])))).attack().repeat()),
+      combat: new ChronerStrategy(StrictMacro.externalIf(get("cosmicBowlingBallReturnCombats") < 1, StrictMacro.trySkill($skill(_templateObject532 || (_templateObject532 = _taggedTemplateLiteral17(["Bowl Straight Up"]))))).trySkill($skill(_templateObject542 || (_templateObject542 = _taggedTemplateLiteral17(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject552 || (_templateObject552 = _taggedTemplateLiteral17(["Sing Along"])))).trySkill($skill(_templateObject562 || (_templateObject562 = _taggedTemplateLiteral17(["Extract"])))).externalIf(have($skill(_templateObject572 || (_templateObject572 = _taggedTemplateLiteral17(["Meteor Lore"])))), StrictMacro.trySkill($skill(_templateObject582 || (_templateObject582 = _taggedTemplateLiteral17(["Micrometeorite"]))))).tryItem($item(_templateObject592 || (_templateObject592 = _taggedTemplateLiteral17(["Time-Spinner"])))).tryItem($item(_templateObject602 || (_templateObject602 = _taggedTemplateLiteral17(["Rain-Doh indigo cup"])))).tryItem($item(_templateObject616 || (_templateObject616 = _taggedTemplateLiteral17(["Rain-Doh blue balls"])))).tryItem($item(_templateObject622 || (_templateObject622 = _taggedTemplateLiteral17(["porquoise-handled sixgun"])))).attack().repeat()),
       sobriety: "either"
     }]
   }, engine = new ChronerEngine(getTasks([ttt])), sessionStart = Session.current();
