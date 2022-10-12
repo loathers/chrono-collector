@@ -7882,6 +7882,11 @@ var ChronerStrategy = /* @__PURE__ */ function(_CombatStrategy) {
         _iterator.f();
       }
     }
+  }, {
+    key: "destruct",
+    value: function() {
+      _get(_getPrototypeOf5(ChronerEngine2.prototype), "destruct", this).call(this), Macro.clearAutoAttackMacros();
+    }
   }]), ChronerEngine2;
 }(Engine);
 
@@ -8547,8 +8552,6 @@ function main(command) {
     return (0, import_kolmafia28.myAdventures)() === -args.turns;
   }, digitizes = -1, globeTheater = $location(_templateObject111 || (_templateObject111 = _taggedTemplateLiteral22(["Globe Theatre Main Stage"]))), yrTarget = $location(_templateObject251 || (_templateObject251 = _taggedTemplateLiteral22(["The Cave Before Time"]))), quest = _objectSpread6(_objectSpread6({}, rose), {}, {
     completed: completed
-  }), setup2 = _objectSpread6(_objectSpread6({}, setup), {}, {
-    completed: completed
   }), global2 = {
     name: "Global",
     completed: completed,
@@ -8622,7 +8625,7 @@ function main(command) {
       combat: new ChronerStrategy(Macro.trySkill($skill(_templateObject2212 || (_templateObject2212 = _taggedTemplateLiteral22(["Summon Mayfly Swarm"])))).skill($skill(_templateObject2311 || (_templateObject2311 = _taggedTemplateLiteral22(["Spit jurassic acid"])))).abort()),
       sobriety: "sober"
     }]
-  }, engine = new ChronerEngine(getTasks([setup2, global2, rose])), sessionStart = Session.current();
+  }, engine = new ChronerEngine(getTasks([setup, global2, quest])), sessionStart = Session.current();
   withProperty("recoveryScript", "", function() {
     try {
       engine.run();
