@@ -8831,19 +8831,23 @@ function _defineProperty12(obj, key, value) {
 function _taggedTemplateLiteral24(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
-var args = Args.create("chroner-collector", "A script for farming chroner", {
+var args = Args.create("chrono", "A script for farming chroner", {
   turns: Args.number({
     help: "The number of turns to run (use negative numbers for the number of turns remaining)",
     default: 1 / 0
   }),
   mode: Args.string({
     key: "mode",
-    options: [["rose"], ["capsule"]],
+    options: [["rose", "Farm Roses from The Main Stage"], ["capsule", "Farm Time Capsules from the Cave Before Time"]],
     default: "rose"
   })
 });
 function main(command) {
-  Args.fill(args, command), sinceKolmafiaRevision(26834);
+  if (Args.fill(args, command), args.help) {
+    Args.showHelp(args);
+    return;
+  }
+  sinceKolmafiaRevision(26834);
   var turncount = (0, import_kolmafia29.myTurncount)(), completed = args.turns > 0 ? function() {
     return (0, import_kolmafia29.myTurncount)() - turncount >= args.turns || (0, import_kolmafia29.myAdventures)() === 0;
   } : function() {
