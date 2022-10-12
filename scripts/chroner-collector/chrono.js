@@ -8061,7 +8061,7 @@ function shouldSkip(choice) {
 }
 
 // src/main.ts
-var _templateObject91, _templateObject241, _templateObject329, _templateObject423, _templateObject516, _templateObject615, _templateObject713, _templateObject812, _templateObject911, _templateObject1012, _templateObject1112, _templateObject1211, _templateObject1311, _templateObject1410, _templateObject1510, _templateObject1610, _templateObject1710, _templateObject189, _templateObject199, _templateObject209, _templateObject2113, _templateObject2211, _templateObject2310, _templateObject249, _templateObject259, _templateObject269, _templateObject279, _templateObject288, _templateObject297, _templateObject307, _templateObject3111, _templateObject3210, _templateObject336, _templateObject346, _templateObject356, _templateObject365, _templateObject375, _templateObject384, _templateObject394, _templateObject404, _templateObject4110, _templateObject424, _templateObject433, _templateObject443, _templateObject453, _templateObject462, _templateObject472, _templateObject482, _templateObject492, _templateObject502, _templateObject517;
+var _templateObject91, _templateObject241, _templateObject329, _templateObject423, _templateObject516, _templateObject615, _templateObject713, _templateObject812, _templateObject911, _templateObject1012, _templateObject1112, _templateObject1211, _templateObject1311, _templateObject1410, _templateObject1510, _templateObject1610, _templateObject1710, _templateObject189, _templateObject199, _templateObject209, _templateObject2113, _templateObject2211, _templateObject2310, _templateObject249, _templateObject259, _templateObject269, _templateObject279, _templateObject288, _templateObject297, _templateObject307, _templateObject3111, _templateObject3210, _templateObject336, _templateObject346, _templateObject356, _templateObject365, _templateObject375, _templateObject384, _templateObject394, _templateObject404, _templateObject4110, _templateObject424, _templateObject433, _templateObject443, _templateObject453, _templateObject462, _templateObject472, _templateObject482, _templateObject492, _templateObject502, _templateObject517, _templateObject522, _templateObject532, _templateObject542, _templateObject552, _templateObject562, _templateObject572;
 function _slicedToArray8(arr, i) {
   return _arrayWithHoles8(arr) || _iterableToArrayLimit8(arr, i) || _unsupportedIterableToArray20(arr, i) || _nonIterableRest8();
 }
@@ -8335,11 +8335,23 @@ function main(command) {
       sobriety: "either"
     }, {
       name: "Recover",
+      ready: function() {
+        return have($skill(_templateObject209 || (_templateObject209 = _taggedTemplateLiteral17(["Cannelloni Cocoon"]))));
+      },
       completed: function() {
-        return (0, import_kolmafia26.myPath)() === $path(_templateObject209 || (_templateObject209 = _taggedTemplateLiteral17(["Grey You"]))) || (0, import_kolmafia26.myHp)() / (0, import_kolmafia26.myMaxhp)() >= 0.5;
+        return (0, import_kolmafia26.myHp)() / (0, import_kolmafia26.myMaxhp)() >= 0.5;
       },
       do: function() {
         (0, import_kolmafia26.useSkill)($skill(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral17(["Cannelloni Cocoon"]))));
+      },
+      sobriety: "either"
+    }, {
+      name: "Recover Failed",
+      completed: function() {
+        return (0, import_kolmafia26.myHp)() / (0, import_kolmafia26.myMaxhp)() >= 0.5;
+      },
+      do: function() {
+        throw "Unable to heal above 50% HP, heal yourself!";
       },
       sobriety: "either"
     }, {
@@ -8471,7 +8483,7 @@ function main(command) {
           offhand: $item(_templateObject462 || (_templateObject462 = _taggedTemplateLiteral17(["Drunkula's wineglass"])))
         });
       },
-      combat: new CombatStrategy().macro(Macro.externalIf(get("cosmicBowlingBallReturnCombats") < 1, Macro.trySkill($skill(_templateObject492 || (_templateObject492 = _taggedTemplateLiteral17(["Bowl Straight Up"]))))).trySkill($skill(_templateObject502 || (_templateObject502 = _taggedTemplateLiteral17(["Sing Along"])))).trySkill($skill(_templateObject517 || (_templateObject517 = _taggedTemplateLiteral17(["Extract"])))).attack().repeat()),
+      combat: new CombatStrategy().macro(Macro.externalIf(get("cosmicBowlingBallReturnCombats") < 1, Macro.trySkill($skill(_templateObject492 || (_templateObject492 = _taggedTemplateLiteral17(["Bowl Straight Up"]))))).trySkill($skill(_templateObject502 || (_templateObject502 = _taggedTemplateLiteral17(["Sing Along"])))).trySkill($skill(_templateObject517 || (_templateObject517 = _taggedTemplateLiteral17(["Extract"])))).externalIf(have($skill(_templateObject522 || (_templateObject522 = _taggedTemplateLiteral17(["Meteor Lore"])))), Macro.trySkill($skill(_templateObject532 || (_templateObject532 = _taggedTemplateLiteral17(["Micrometeorite"]))))).tryItem($item(_templateObject542 || (_templateObject542 = _taggedTemplateLiteral17(["Time-Spinner"])))).tryItem($item(_templateObject552 || (_templateObject552 = _taggedTemplateLiteral17(["Rain-Doh indigo cup"])))).tryItem($item(_templateObject562 || (_templateObject562 = _taggedTemplateLiteral17(["Rain-Doh blue balls"])))).tryItem($item(_templateObject572 || (_templateObject572 = _taggedTemplateLiteral17(["porquoise-handled sixgun"])))).attack().repeat()),
       sobriety: "either"
     }]
   }, engine = new ChronerEngine(getTasks([ttt])), sessionStart = Session.current();
