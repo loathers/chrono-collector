@@ -7885,7 +7885,7 @@ var ChronerStrategy = /* @__PURE__ */ function(_CombatStrategy) {
   }, {
     key: "destruct",
     value: function() {
-      _get(_getPrototypeOf5(ChronerEngine2.prototype), "destruct", this).call(this), Macro.clearAutoAttackMacros();
+      _get(_getPrototypeOf5(ChronerEngine2.prototype), "destruct", this).call(this), (0, import_kolmafia23.setAutoAttack)(0);
     }
   }]), ChronerEngine2;
 }(Engine);
