@@ -1,4 +1,4 @@
-import { OutfitSlot, OutfitSpec } from "grimoire-kolmafia";
+import { OutfitSpec } from "grimoire-kolmafia";
 import {
   $familiars,
   $item,
@@ -8,7 +8,7 @@ import {
   getKramcoWandererChance,
   have,
 } from "libram";
-import { Item, myLocation } from "kolmafia";
+import { myLocation } from "kolmafia";
 
 import { ChronerQuest, ChronerStrategy } from "./engine";
 import { chooseFamEquip, chooseFamiliar } from "./familiar";
