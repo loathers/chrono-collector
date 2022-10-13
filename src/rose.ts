@@ -9,7 +9,6 @@ import {
   getKramcoWandererChance,
   have,
 } from "libram";
-import { Item } from "kolmafia";
 
 import { $familiars, $item, $location, get, getKramcoWandererChance, have } from "libram";
 import { ChronerQuest, ChronerStrategy } from "./engine";
