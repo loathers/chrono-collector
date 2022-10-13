@@ -8484,11 +8484,11 @@ var ChronerEngine = /* @__PURE__ */ function(_Engine) {
   }, {
     key: "setChoices",
     value: function(task, manager) {
-      _get2(_getPrototypeOf5(ChronerEngine2.prototype), "setChoices", this).call(this, task, manager), (0, import_kolmafia26.equippedAmount)($item(_templateObject71 || (_templateObject71 = _taggedTemplateLiteral14(["June cleaver"])))) > 0 && (this.propertyManager.setChoices(Object.fromEntries(JuneCleaver_exports.choices.map(function(choice) {
+      _get2(_getPrototypeOf5(ChronerEngine2.prototype), "setChoices", this).call(this, task, manager), (0, import_kolmafia26.equippedAmount)($item(_templateObject71 || (_templateObject71 = _taggedTemplateLiteral14(["June cleaver"])))) > 0 && this.propertyManager.setChoices(Object.fromEntries(JuneCleaver_exports.choices.map(function(choice) {
         return [choice, shouldSkip(choice) ? 4 : bestJuneCleaverOption(choice)];
       }))), this.propertyManager.setChoices({
         955: 2
-      }));
+      });
     }
   }, {
     key: "shouldRepeatAdv",
