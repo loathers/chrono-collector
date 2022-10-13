@@ -8907,7 +8907,7 @@ var poisons = $effects(_templateObject120 || (_templateObject120 = _taggedTempla
 };
 
 // src/main.ts
-var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject521, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1314, _templateObject1413, _templateObject1512, _templateObject1610, _templateObject1710, _templateObject1810, _templateObject199, _templateObject209, _templateObject2113, _templateObject2211, _templateObject2310, _templateObject2410, _templateObject2510, _templateObject269, _templateObject279, _templateObject288;
+var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject521, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1314, _templateObject1413, _templateObject1512, _templateObject1610, _templateObject1710, _templateObject1810, _templateObject199, _templateObject209, _templateObject2113, _templateObject2211, _templateObject2310, _templateObject2410, _templateObject2510, _templateObject269, _templateObject279, _templateObject288, _templateObject297, _templateObject307;
 function _slicedToArray8(arr, i) {
   return _arrayWithHoles8(arr) || _iterableToArrayLimit8(arr, i) || _unsupportedIterableToArray22(arr, i) || _nonIterableRest8();
 }
@@ -9077,6 +9077,24 @@ function main(command) {
       combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject619 || (_templateObject619 = _taggedTemplateLiteral25(["Sing Along"])))).trySkill($skill(_templateObject718 || (_templateObject718 = _taggedTemplateLiteral25(["Shoot Ghost"])))).trySkill($skill(_templateObject816 || (_templateObject816 = _taggedTemplateLiteral25(["Shoot Ghost"])))).trySkill($skill(_templateObject915 || (_templateObject915 = _taggedTemplateLiteral25(["Shoot Ghost"])))).trySkill($skill(_templateObject1016 || (_templateObject1016 = _taggedTemplateLiteral25(["Trap Ghost"]))))),
       sobriety: "sober"
     }, {
+      name: "Vote Wanderer",
+      ready: function() {
+        return have($item(_templateObject1116 || (_templateObject1116 = _taggedTemplateLiteral25(['"I Voted!" sticker'])))) && (0, import_kolmafia31.totalTurnsPlayed)() % 11 === 1 && get("lastVoteMonsterTurn") < (0, import_kolmafia31.totalTurnsPlayed)() && get("_voteFreeFights") < 3;
+      },
+      do: function() {
+        (0, import_kolmafia31.adv1)(quest.location, -1, "");
+      },
+      outfit: function() {
+        return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
+          acc3: $item(_templateObject1215 || (_templateObject1215 = _taggedTemplateLiteral25(['"I Voted!" sticker'])))
+        });
+      },
+      completed: function() {
+        return get("lastVoteMonsterTurn") === (0, import_kolmafia31.totalTurnsPlayed)();
+      },
+      combat: new ChronerStrategy(Macro2.redigitize().standardCombat()),
+      sobriety: "either"
+    }, {
       name: "Digitize Wanderer",
       ready: function() {
         return counter_exports.get("Digitize") <= 0;
@@ -9093,11 +9111,11 @@ function main(command) {
     }, {
       name: "Time Capsule",
       do: function() {
-        if ((0, import_kolmafia31.adv1)($location(_templateObject1116 || (_templateObject1116 = _taggedTemplateLiteral25(["The Cave Before Time"]))), 0, ""), get("lastEncounter") === "Time Cave.  Period.")
+        if ((0, import_kolmafia31.adv1)($location(_templateObject1314 || (_templateObject1314 = _taggedTemplateLiteral25(["The Cave Before Time"]))), 0, ""), get("lastEncounter") === "Time Cave.  Period.")
           printd("Forced noncombat!"), resetNcForced();
         else {
           printd("Uh oh, we didn't force the NC");
-          var possibleEncouters = Object.keys((0, import_kolmafia31.getLocationMonsters)($location(_templateObject1215 || (_templateObject1215 = _taggedTemplateLiteral25(["The Cave Before Time"])))));
+          var possibleEncouters = Object.keys((0, import_kolmafia31.getLocationMonsters)($location(_templateObject1413 || (_templateObject1413 = _taggedTemplateLiteral25(["The Cave Before Time"])))));
           possibleEncouters.includes(get("lastEncounter")) ? (printd("We hit a normal monster, so reset the noncombat forcing"), resetNcForced()) : printd("We hit something else, so keep trying for the noncombat");
         }
       },
@@ -9112,21 +9130,21 @@ function main(command) {
       ready: function() {
         return get("cosmicBowlingBallReturnCombats") < 1;
       },
-      do: $location(_templateObject1314 || (_templateObject1314 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
+      do: $location(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
       sobriety: "sober",
       completed: function() {
         return !1;
       },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject1413 || (_templateObject1413 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral25(["Bowl a Curveball"])))).abort())
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral25(["Bowl a Curveball"])))).abort())
     }, {
       name: "Asdon Missle",
       ready: function() {
         return AsdonMartin_exports.installed();
       },
       completed: function() {
-        return get("_missileLauncherUsed") || have($effect(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
+        return get("_missileLauncherUsed") || have($effect(_templateObject1810 || (_templateObject1810 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
       },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject1810 || (_templateObject1810 = _taggedTemplateLiteral25(["Asdon Martin: Missile Launcher"])))).abort()),
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject199 || (_templateObject199 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject209 || (_templateObject209 = _taggedTemplateLiteral25(["Asdon Martin: Missile Launcher"])))).abort()),
       prepare: function() {
         return AsdonMartin_exports.fillTo(100);
       },
@@ -9135,30 +9153,30 @@ function main(command) {
     }, {
       name: "Spit Jurassic Acid",
       completed: function() {
-        return have($effect(_templateObject199 || (_templateObject199 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
+        return have($effect(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
       },
       ready: function() {
-        return have($item(_templateObject209 || (_templateObject209 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral25(["Torso Awareness"]))));
+        return have($item(_templateObject2211 || (_templateObject2211 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral25(["Torso Awareness"]))));
       },
       outfit: function() {
         return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
-          shirt: $item(_templateObject2211 || (_templateObject2211 = _taggedTemplateLiteral25(["Jurassic Parka"])))
+          shirt: $item(_templateObject2410 || (_templateObject2410 = _taggedTemplateLiteral25(["Jurassic Parka"])))
         });
       },
       prepare: function() {
         return (0, import_kolmafia31.cliExecute)("parka dilophosaur");
       },
       do: yrTarget,
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject2410 || (_templateObject2410 = _taggedTemplateLiteral25(["Spit jurassic acid"])))).abort()),
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral25(["Spit jurassic acid"])))).abort()),
       sobriety: "sober"
     }, {
       name: "Spikolodon Spikes",
       ready: function() {
-        return have($item(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral25(["Torso Awareness"])))) && get("_spikolodonSpikeUses") < 5;
+        return have($item(_templateObject279 || (_templateObject279 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject288 || (_templateObject288 = _taggedTemplateLiteral25(["Torso Awareness"])))) && get("_spikolodonSpikeUses") < 5;
       },
       outfit: function() {
         return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
-          shirt: $item(_templateObject279 || (_templateObject279 = _taggedTemplateLiteral25(["Jurassic Parka"])))
+          shirt: $item(_templateObject297 || (_templateObject297 = _taggedTemplateLiteral25(["Jurassic Parka"])))
         });
       },
       do: quest.location,
@@ -9168,7 +9186,7 @@ function main(command) {
       prepare: function() {
         return (0, import_kolmafia31.cliExecute)("parka spikolodon");
       },
-      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject288 || (_templateObject288 = _taggedTemplateLiteral25(["Launch spikolodon spikes"])))).standardCombat()),
+      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject307 || (_templateObject307 = _taggedTemplateLiteral25(["Launch spikolodon spikes"])))).standardCombat()),
       sobriety: "sober"
     }]
   }, engine = new ChronerEngine(getTasks([setup, global2, quest]));
