@@ -11,7 +11,7 @@ export const chooseFamiliar = (options: MenuOptions = {}) =>
     ? $familiars`Reagnimated Gnome, Temporal Riftlet`.find((f) => have(f)) ??
       freeFightFamiliar(options)
     : freeFightFamiliar();
-export const chooseFamEquip = (fam: Familiar) => {
+export const chooseFamEquip = (fam: Familiar): Item => {
 	switch(fam) {
 		case $familiar`Reagnimated Gnome`:
 			return $item`gnomish housemaid's kgnee`;
