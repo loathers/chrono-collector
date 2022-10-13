@@ -8817,7 +8817,7 @@ var rose = {
 // src/setup.ts
 init_kolmafia_polyfill();
 var import_kolmafia30 = require("kolmafia");
-var _templateObject120, _templateObject259, _templateObject337, _templateObject427, _templateObject521, _templateObject618, _templateObject717, _templateObject815, _templateObject914, _templateObject1015, _templateObject1115, _templateObject1214;
+var _templateObject120, _templateObject259, _templateObject337, _templateObject427, _templateObject521, _templateObject618, _templateObject717, _templateObject815, _templateObject914, _templateObject1015, _templateObject1115, _templateObject1214, _templateObject1314, _templateObject1413, _templateObject1512, _templateObject1610, _templateObject1710, _templateObject1810, _templateObject199, _templateObject209;
 function _taggedTemplateLiteral24(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
@@ -8880,12 +8880,30 @@ var poisons = $effects(_templateObject120 || (_templateObject120 = _taggedTempla
     },
     sobriety: "sober"
   }, {
-    name: "Snapper",
+    name: "Closet Sand Dollars",
     completed: function() {
-      return Snapper_exports.getTrackedPhylum() === $phylum(_templateObject1015 || (_templateObject1015 = _taggedTemplateLiteral24(["dude"])));
+      return (0, import_kolmafia30.itemAmount)($item(_templateObject1015 || (_templateObject1015 = _taggedTemplateLiteral24(["sand dollar"])))) === 0;
     },
     do: function() {
-      return Snapper_exports.trackPhylum($phylum(_templateObject1115 || (_templateObject1115 = _taggedTemplateLiteral24(["dude"]))));
+      return (0, import_kolmafia30.putCloset)((0, import_kolmafia30.itemAmount)($item(_templateObject1115 || (_templateObject1115 = _taggedTemplateLiteral24(["sand dollar"])))), $item(_templateObject1214 || (_templateObject1214 = _taggedTemplateLiteral24(["sand dollar"]))));
+    },
+    sobriety: "either"
+  }, {
+    name: "Closet Hobo Nickels",
+    completed: function() {
+      return (0, import_kolmafia30.itemAmount)($item(_templateObject1314 || (_templateObject1314 = _taggedTemplateLiteral24(["hobo nickel"])))) === 0 || !have($familiar(_templateObject1413 || (_templateObject1413 = _taggedTemplateLiteral24(["Hobo Monkey"])))) && !have($item(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral24(["hobo nickel"]))), 1e3);
+    },
+    do: function() {
+      return (0, import_kolmafia30.putCloset)((0, import_kolmafia30.itemAmount)($item(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral24(["hobo nickel"])))), $item(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral24(["hobo nickel"]))));
+    },
+    sobriety: "either"
+  }, {
+    name: "Snapper",
+    completed: function() {
+      return Snapper_exports.getTrackedPhylum() === $phylum(_templateObject1810 || (_templateObject1810 = _taggedTemplateLiteral24(["dude"])));
+    },
+    do: function() {
+      return Snapper_exports.trackPhylum($phylum(_templateObject199 || (_templateObject199 = _taggedTemplateLiteral24(["dude"]))));
     },
     ready: function() {
       return Snapper_exports.have();
@@ -8897,7 +8915,7 @@ var poisons = $effects(_templateObject120 || (_templateObject120 = _taggedTempla
       return AutumnAton_exports.currentlyIn() !== null;
     },
     do: function() {
-      return AutumnAton_exports.sendTo($locations(_templateObject1214 || (_templateObject1214 = _taggedTemplateLiteral24(["Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley"]))));
+      return AutumnAton_exports.sendTo($locations(_templateObject209 || (_templateObject209 = _taggedTemplateLiteral24(["Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley"]))));
     },
     ready: function() {
       return AutumnAton_exports.available();
@@ -8907,7 +8925,7 @@ var poisons = $effects(_templateObject120 || (_templateObject120 = _taggedTempla
 };
 
 // src/main.ts
-var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject522, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1314, _templateObject1413, _templateObject1512, _templateObject1610, _templateObject1710, _templateObject1810, _templateObject199, _templateObject209, _templateObject2113, _templateObject2211, _templateObject2310, _templateObject2410, _templateObject2510, _templateObject269, _templateObject279, _templateObject288, _templateObject297, _templateObject307;
+var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject522, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1315, _templateObject1414, _templateObject1513, _templateObject1611, _templateObject1711, _templateObject1811, _templateObject1910, _templateObject2010, _templateObject2113, _templateObject2211, _templateObject2310, _templateObject2410, _templateObject2510, _templateObject269, _templateObject279, _templateObject288, _templateObject297, _templateObject307;
 function _slicedToArray8(arr, i) {
   return _arrayWithHoles8(arr) || _iterableToArrayLimit8(arr, i) || _unsupportedIterableToArray22(arr, i) || _nonIterableRest8();
 }
@@ -9111,11 +9129,11 @@ function main(command) {
     }, {
       name: "Time Capsule",
       do: function() {
-        if ((0, import_kolmafia31.adv1)($location(_templateObject1314 || (_templateObject1314 = _taggedTemplateLiteral25(["The Cave Before Time"]))), 0, ""), get("lastEncounter") === "Time Cave.  Period.")
+        if ((0, import_kolmafia31.adv1)($location(_templateObject1315 || (_templateObject1315 = _taggedTemplateLiteral25(["The Cave Before Time"]))), 0, ""), get("lastEncounter") === "Time Cave.  Period.")
           printd("Forced noncombat!"), resetNcForced();
         else {
           printd("Uh oh, we didn't force the NC");
-          var possibleEncouters = Object.keys((0, import_kolmafia31.getLocationMonsters)($location(_templateObject1413 || (_templateObject1413 = _taggedTemplateLiteral25(["The Cave Before Time"])))));
+          var possibleEncouters = Object.keys((0, import_kolmafia31.getLocationMonsters)($location(_templateObject1414 || (_templateObject1414 = _taggedTemplateLiteral25(["The Cave Before Time"])))));
           possibleEncouters.includes(get("lastEncounter")) ? (printd("We hit a normal monster, so reset the noncombat forcing"), resetNcForced()) : printd("We hit something else, so keep trying for the noncombat");
         }
       },
@@ -9128,11 +9146,11 @@ function main(command) {
     }, {
       name: "Spikolodon Spikes",
       ready: function() {
-        return have($item(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral25(["Torso Awareness"])))) && get("_spikolodonSpikeUses") < 5;
+        return have($item(_templateObject1513 || (_templateObject1513 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject1611 || (_templateObject1611 = _taggedTemplateLiteral25(["Torso Awareness"])))) && get("_spikolodonSpikeUses") < 5;
       },
       outfit: function() {
         return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
-          shirt: $item(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral25(["Jurassic Parka"])))
+          shirt: $item(_templateObject1711 || (_templateObject1711 = _taggedTemplateLiteral25(["Jurassic Parka"])))
         });
       },
       do: quest.location,
@@ -9142,19 +9160,19 @@ function main(command) {
       prepare: function() {
         return (0, import_kolmafia31.cliExecute)("parka spikolodon");
       },
-      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject1810 || (_templateObject1810 = _taggedTemplateLiteral25(["Launch spikolodon spikes"])))).standardCombat()),
+      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject1811 || (_templateObject1811 = _taggedTemplateLiteral25(["Launch spikolodon spikes"])))).standardCombat()),
       sobriety: "sober"
     }, {
       name: "Bowling Ball Run",
       ready: function() {
         return get("cosmicBowlingBallReturnCombats") < 1;
       },
-      do: $location(_templateObject199 || (_templateObject199 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
+      do: $location(_templateObject1910 || (_templateObject1910 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
       sobriety: "sober",
       completed: function() {
         return !1;
       },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject209 || (_templateObject209 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral25(["Bowl a Curveball"])))).abort())
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2010 || (_templateObject2010 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral25(["Bowl a Curveball"])))).abort())
     }, {
       name: "Asdon Missle",
       ready: function() {
