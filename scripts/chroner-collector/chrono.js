@@ -8392,7 +8392,70 @@ var chooseFamiliar = function() {
 // src/macro.ts
 init_kolmafia_polyfill();
 var import_kolmafia27 = require("kolmafia");
-var _templateObject101, _templateObject249, _templateObject330, _templateObject424, _templateObject516, _templateObject615, _templateObject714, _templateObject812, _templateObject911, _templateObject1012, _templateObject1112, _templateObject1211, _templateObject1311, _templateObject1410, _templateObject1510;
+var _templateObject101, _templateObject249, _templateObject330, _templateObject424, _templateObject516, _templateObject615, _templateObject714, _templateObject812, _templateObject911, _templateObject1012, _templateObject1112, _templateObject1211, _templateObject1311, _templateObject1410;
+function _toConsumableArray14(arr) {
+  return _arrayWithoutHoles14(arr) || _iterableToArray14(arr) || _unsupportedIterableToArray21(arr) || _nonIterableSpread14();
+}
+function _nonIterableSpread14() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _iterableToArray14(iter) {
+  if (typeof Symbol != "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+    return Array.from(iter);
+}
+function _arrayWithoutHoles14(arr) {
+  if (Array.isArray(arr))
+    return _arrayLikeToArray21(arr);
+}
+function _createForOfIteratorHelper13(o, allowArrayLike) {
+  var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  if (!it) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray21(o)) || allowArrayLike && o && typeof o.length == "number") {
+      it && (o = it);
+      var i = 0, F = function() {
+      };
+      return { s: F, n: function() {
+        return i >= o.length ? { done: !0 } : { done: !1, value: o[i++] };
+      }, e: function(_e) {
+        throw _e;
+      }, f: F };
+    }
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  var normalCompletion = !0, didErr = !1, err;
+  return { s: function() {
+    it = it.call(o);
+  }, n: function() {
+    var step = it.next();
+    return normalCompletion = step.done, step;
+  }, e: function(_e2) {
+    didErr = !0, err = _e2;
+  }, f: function() {
+    try {
+      !normalCompletion && it.return != null && it.return();
+    } finally {
+      if (didErr)
+        throw err;
+    }
+  } };
+}
+function _unsupportedIterableToArray21(o, minLen) {
+  if (!!o) {
+    if (typeof o == "string")
+      return _arrayLikeToArray21(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor && (n = o.constructor.name), n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray21(o, minLen);
+  }
+}
+function _arrayLikeToArray21(arr, len) {
+  (len == null || len > arr.length) && (len = arr.length);
+  for (var i = 0, arr2 = new Array(len); i < len; i++)
+    arr2[i] = arr[i];
+  return arr2;
+}
 function _taggedTemplateLiteral20(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
@@ -8483,9 +8546,38 @@ var Macro2 = /* @__PURE__ */ function(_StrictMacro) {
       return this.externalIf(shouldRedigitize(), Macro3.if_((_get3 = get("_sourceTerminalDigitizeMonster")) !== null && _get3 !== void 0 ? _get3 : $monster.none, Macro3.skill($skill(_templateObject101 || (_templateObject101 = _taggedTemplateLiteral20(["Digitize"]))))));
     }
   }, {
+    key: "doItems",
+    value: function() {
+      var steps = new Macro3(), items = $items(_templateObject249 || (_templateObject249 = _taggedTemplateLiteral20(["Rain-Doh blue balls, Time-Spinner, Rain-Doh indigo cup, HOA citation pad, porquoise-handled sixgun"]))).filter(function(i2) {
+        return have(i2);
+      });
+      if (items.length)
+        if (have($skill(_templateObject330 || (_templateObject330 = _taggedTemplateLiteral20(["Ambidextrous Funkslinging"])))))
+          for (var i = 0; i <= items.length; i += 2) {
+            var chunk = items.slice(i, i + 1);
+            chunk.length === 2 ? steps.tryItem(chunk) : steps.tryItem.apply(steps, _toConsumableArray14(chunk));
+          }
+        else {
+          var _iterator = _createForOfIteratorHelper13(items), _step;
+          try {
+            for (_iterator.s(); !(_step = _iterator.n()).done; ) {
+              var item3 = _step.value;
+              steps.tryItem(item3);
+            }
+          } catch (err) {
+            _iterator.e(err);
+          } finally {
+            _iterator.f();
+          }
+        }
+      else
+        steps.tryHaveItem($item(_templateObject424 || (_templateObject424 = _taggedTemplateLiteral20(["seal tooth"]))));
+      return this.step(steps);
+    }
+  }, {
     key: "standardCombat",
     value: function() {
-      return this.externalIf(canOpenRedPresent() && (0, import_kolmafia27.myFamiliar)() === $familiar(_templateObject249 || (_templateObject249 = _taggedTemplateLiteral20(["Crimbo Shrub"]))), Macro3.trySkill($skill(_templateObject330 || (_templateObject330 = _taggedTemplateLiteral20(["Open a Big Red Present"]))))).externalIf(timeToMeatify() && (0, import_kolmafia27.myFamiliar)() === $familiar(_templateObject424 || (_templateObject424 = _taggedTemplateLiteral20(["Grey Goose"]))), Macro3.trySkill($skill(_templateObject516 || (_templateObject516 = _taggedTemplateLiteral20(["Meatify Matter"]))))).externalIf(get("cosmicBowlingBallReturnCombats") < 1, Macro3.trySkill($skill(_templateObject615 || (_templateObject615 = _taggedTemplateLiteral20(["Bowl Straight Up"]))))).externalIf((0, import_kolmafia27.haveEquipped)($item(_templateObject714 || (_templateObject714 = _taggedTemplateLiteral20(["packet of mayfly bait"])))), Macro3.trySkill($skill(_templateObject812 || (_templateObject812 = _taggedTemplateLiteral20(["Summon Mayfly Swarm"]))))).tryHaveSkill($skill(_templateObject911 || (_templateObject911 = _taggedTemplateLiteral20(["Sing Along"])))).tryHaveSkill($skill(_templateObject1012 || (_templateObject1012 = _taggedTemplateLiteral20(["Extract"])))).tryHaveSkill($skill(_templateObject1112 || (_templateObject1112 = _taggedTemplateLiteral20(["Micrometeorite"])))).tryHaveItem($item(_templateObject1211 || (_templateObject1211 = _taggedTemplateLiteral20(["Time-Spinner"])))).tryHaveItem($item(_templateObject1311 || (_templateObject1311 = _taggedTemplateLiteral20(["Rain-Doh indigo cup"])))).tryHaveItem($item(_templateObject1410 || (_templateObject1410 = _taggedTemplateLiteral20(["Rain-Doh blue balls"])))).tryHaveItem($item(_templateObject1510 || (_templateObject1510 = _taggedTemplateLiteral20(["porquoise-handled sixgun"])))).attack().repeat();
+      return this.externalIf(canOpenRedPresent() && (0, import_kolmafia27.myFamiliar)() === $familiar(_templateObject516 || (_templateObject516 = _taggedTemplateLiteral20(["Crimbo Shrub"]))), Macro3.trySkill($skill(_templateObject615 || (_templateObject615 = _taggedTemplateLiteral20(["Open a Big Red Present"]))))).externalIf(timeToMeatify() && (0, import_kolmafia27.myFamiliar)() === $familiar(_templateObject714 || (_templateObject714 = _taggedTemplateLiteral20(["Grey Goose"]))), Macro3.trySkill($skill(_templateObject812 || (_templateObject812 = _taggedTemplateLiteral20(["Meatify Matter"]))))).externalIf(get("cosmicBowlingBallReturnCombats") < 1, Macro3.trySkill($skill(_templateObject911 || (_templateObject911 = _taggedTemplateLiteral20(["Bowl Straight Up"]))))).externalIf((0, import_kolmafia27.haveEquipped)($item(_templateObject1012 || (_templateObject1012 = _taggedTemplateLiteral20(["packet of mayfly bait"])))), Macro3.trySkill($skill(_templateObject1112 || (_templateObject1112 = _taggedTemplateLiteral20(["Summon Mayfly Swarm"]))))).tryHaveSkill($skill(_templateObject1211 || (_templateObject1211 = _taggedTemplateLiteral20(["Sing Along"])))).tryHaveSkill($skill(_templateObject1311 || (_templateObject1311 = _taggedTemplateLiteral20(["Extract"])))).tryHaveSkill($skill(_templateObject1410 || (_templateObject1410 = _taggedTemplateLiteral20(["Micrometeorite"])))).doItems().attack().repeat();
     }
   }], [{
     key: "tryHaveSkill",
@@ -8724,9 +8816,9 @@ var poisons = $effects(_templateObject120 || (_templateObject120 = _taggedTempla
 };
 
 // src/main.ts
-var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject520, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1314, _templateObject1411, _templateObject1511, _templateObject1610, _templateObject1710;
+var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject520, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1314, _templateObject1411, _templateObject1510, _templateObject1610, _templateObject1710;
 function _slicedToArray8(arr, i) {
-  return _arrayWithHoles8(arr) || _iterableToArrayLimit8(arr, i) || _unsupportedIterableToArray21(arr, i) || _nonIterableRest8();
+  return _arrayWithHoles8(arr) || _iterableToArrayLimit8(arr, i) || _unsupportedIterableToArray22(arr, i) || _nonIterableRest8();
 }
 function _nonIterableRest8() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -8755,10 +8847,10 @@ function _arrayWithHoles8(arr) {
   if (Array.isArray(arr))
     return arr;
 }
-function _createForOfIteratorHelper13(o, allowArrayLike) {
+function _createForOfIteratorHelper14(o, allowArrayLike) {
   var it = typeof Symbol != "undefined" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
-    if (Array.isArray(o) || (it = _unsupportedIterableToArray21(o)) || allowArrayLike && o && typeof o.length == "number") {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray22(o)) || allowArrayLike && o && typeof o.length == "number") {
       it && (o = it);
       var i = 0, F = function() {
       };
@@ -8787,18 +8879,18 @@ function _createForOfIteratorHelper13(o, allowArrayLike) {
     }
   } };
 }
-function _unsupportedIterableToArray21(o, minLen) {
+function _unsupportedIterableToArray22(o, minLen) {
   if (!!o) {
     if (typeof o == "string")
-      return _arrayLikeToArray21(o, minLen);
+      return _arrayLikeToArray22(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor && (n = o.constructor.name), n === "Map" || n === "Set")
       return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray21(o, minLen);
+      return _arrayLikeToArray22(o, minLen);
   }
 }
-function _arrayLikeToArray21(arr, len) {
+function _arrayLikeToArray22(arr, len) {
   (len == null || len > arr.length) && (len = arr.length);
   for (var i = 0, arr2 = new Array(len); i < len; i++)
     arr2[i] = arr[i];
@@ -8919,7 +9011,7 @@ function main(command) {
       },
       outfit: function() {
         return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
-          shirt: $item(_templateObject1511 || (_templateObject1511 = _taggedTemplateLiteral24(["Jurassic Parka"])))
+          shirt: $item(_templateObject1510 || (_templateObject1510 = _taggedTemplateLiteral24(["Jurassic Parka"])))
         });
       },
       prepare: function() {
@@ -8939,7 +9031,7 @@ function main(command) {
   });
   var sessionResults = Session.current().diff(sessionStart);
   printh("SESSION RESULTS:");
-  var _iterator = _createForOfIteratorHelper13(sessionResults.items.entries()), _step;
+  var _iterator = _createForOfIteratorHelper14(sessionResults.items.entries()), _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done; ) {
       var _step$value = _slicedToArray8(_step.value, 2), item3 = _step$value[0], count = _step$value[1];
