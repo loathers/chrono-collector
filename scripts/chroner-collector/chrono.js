@@ -9126,57 +9126,13 @@ function main(command) {
       },
       combat: new ChronerStrategy(Macro2.standardCombat())
     }, {
-      name: "Bowling Ball Run",
-      ready: function() {
-        return get("cosmicBowlingBallReturnCombats") < 1;
-      },
-      do: $location(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
-      sobriety: "sober",
-      completed: function() {
-        return !1;
-      },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral25(["Bowl a Curveball"])))).abort())
-    }, {
-      name: "Asdon Missle",
-      ready: function() {
-        return AsdonMartin_exports.installed();
-      },
-      completed: function() {
-        return get("_missileLauncherUsed") || have($effect(_templateObject1810 || (_templateObject1810 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
-      },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject199 || (_templateObject199 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject209 || (_templateObject209 = _taggedTemplateLiteral25(["Asdon Martin: Missile Launcher"])))).abort()),
-      prepare: function() {
-        return AsdonMartin_exports.fillTo(100);
-      },
-      do: yrTarget,
-      sobriety: "sober"
-    }, {
-      name: "Spit Jurassic Acid",
-      completed: function() {
-        return have($effect(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
-      },
-      ready: function() {
-        return have($item(_templateObject2211 || (_templateObject2211 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral25(["Torso Awareness"]))));
-      },
-      outfit: function() {
-        return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
-          shirt: $item(_templateObject2410 || (_templateObject2410 = _taggedTemplateLiteral25(["Jurassic Parka"])))
-        });
-      },
-      prepare: function() {
-        return (0, import_kolmafia31.cliExecute)("parka dilophosaur");
-      },
-      do: yrTarget,
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral25(["Spit jurassic acid"])))).abort()),
-      sobriety: "sober"
-    }, {
       name: "Spikolodon Spikes",
       ready: function() {
-        return have($item(_templateObject279 || (_templateObject279 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject288 || (_templateObject288 = _taggedTemplateLiteral25(["Torso Awareness"])))) && get("_spikolodonSpikeUses") < 5;
+        return have($item(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral25(["Torso Awareness"])))) && get("_spikolodonSpikeUses") < 5;
       },
       outfit: function() {
         return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
-          shirt: $item(_templateObject297 || (_templateObject297 = _taggedTemplateLiteral25(["Jurassic Parka"])))
+          shirt: $item(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral25(["Jurassic Parka"])))
         });
       },
       do: quest.location,
@@ -9186,7 +9142,51 @@ function main(command) {
       prepare: function() {
         return (0, import_kolmafia31.cliExecute)("parka spikolodon");
       },
-      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject307 || (_templateObject307 = _taggedTemplateLiteral25(["Launch spikolodon spikes"])))).standardCombat()),
+      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject1810 || (_templateObject1810 = _taggedTemplateLiteral25(["Launch spikolodon spikes"])))).standardCombat()),
+      sobriety: "sober"
+    }, {
+      name: "Bowling Ball Run",
+      ready: function() {
+        return get("cosmicBowlingBallReturnCombats") < 1;
+      },
+      do: $location(_templateObject199 || (_templateObject199 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
+      sobriety: "sober",
+      completed: function() {
+        return !1;
+      },
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject209 || (_templateObject209 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral25(["Bowl a Curveball"])))).abort())
+    }, {
+      name: "Asdon Missle",
+      ready: function() {
+        return AsdonMartin_exports.installed();
+      },
+      completed: function() {
+        return get("_missileLauncherUsed") || have($effect(_templateObject2211 || (_templateObject2211 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
+      },
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject2410 || (_templateObject2410 = _taggedTemplateLiteral25(["Asdon Martin: Missile Launcher"])))).abort()),
+      prepare: function() {
+        return AsdonMartin_exports.fillTo(100);
+      },
+      do: yrTarget,
+      sobriety: "sober"
+    }, {
+      name: "Spit Jurassic Acid",
+      completed: function() {
+        return have($effect(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
+      },
+      ready: function() {
+        return have($item(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject279 || (_templateObject279 = _taggedTemplateLiteral25(["Torso Awareness"]))));
+      },
+      outfit: function() {
+        return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
+          shirt: $item(_templateObject288 || (_templateObject288 = _taggedTemplateLiteral25(["Jurassic Parka"])))
+        });
+      },
+      prepare: function() {
+        return (0, import_kolmafia31.cliExecute)("parka dilophosaur");
+      },
+      do: yrTarget,
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject297 || (_templateObject297 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject307 || (_templateObject307 = _taggedTemplateLiteral25(["Spit jurassic acid"])))).abort()),
       sobriety: "sober"
     }]
   }, engine = new ChronerEngine(getTasks([setup, global2, quest]));
