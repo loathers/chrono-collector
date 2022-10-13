@@ -8186,20 +8186,30 @@ var HIGHLIGHT = (0, import_kolmafia24.isDarkMode)() ? "yellow" : "blue";
 function printh(message) {
   (0, import_kolmafia24.print)(message, HIGHLIGHT);
 }
-var debugEnabled = !1;
-function enableDebug() {
-  debugEnabled = !0;
-}
 function printd(message) {
-  debugEnabled && (0, import_kolmafia24.print)(message, HIGHLIGHT);
+  args.debug && (0, import_kolmafia24.print)(message, HIGHLIGHT);
 }
 function sober() {
   return (0, import_kolmafia24.myInebriety)() <= (0, import_kolmafia24.inebrietyLimit)() + ((0, import_kolmafia24.myFamiliar)() === $familiar(_templateObject69 || (_templateObject69 = _taggedTemplateLiteral12(["Stooper"]))) ? -1 : 0);
 }
-var ifHave = function(slot, item4, condition) {
+function ifHave(slot, item4, condition) {
   var _condition;
   return have(item4) && (0, import_kolmafia24.canEquip)(item4) && ((_condition = condition == null ? void 0 : condition()) !== null && _condition !== void 0 ? _condition : !0) ? Object.fromEntries([[slot, item4]]) : {};
-};
+}
+var args = Args.create("chrono", "A script for farming chroner", {
+  turns: Args.number({
+    help: "The number of turns to run (use negative numbers for the number of turns remaining)",
+    default: 1 / 0
+  }),
+  mode: Args.string({
+    options: [["rose", "Farm Roses from The Main Stage"], ["capsule", "Farm Time Capsules from the Cave Before Time"]],
+    default: "rose"
+  }),
+  debug: Args.flag({
+    help: "Turn on debug printing",
+    default: !1
+  })
+});
 
 // src/juneCleaver.ts
 var _templateObject70, _templateObject228, _templateObject319, _templateObject417, _templateObject512, _templateObject610, _templateObject78, _templateObject88;
@@ -8435,7 +8445,7 @@ function _getPrototypeOf5(o) {
     return o2.__proto__ || Object.getPrototypeOf(o2);
   }, _getPrototypeOf5(o);
 }
-var ChronerStrategy = /* @__PURE__ */ function(_CombatStrategy) {
+var introAdventures = ["The Cave Before Time"], ChronerStrategy = /* @__PURE__ */ function(_CombatStrategy) {
   _inherits5(ChronerStrategy2, _CombatStrategy);
   var _super = _createSuper5(ChronerStrategy2);
   function ChronerStrategy2(macro) {
@@ -8483,7 +8493,7 @@ var ChronerEngine = /* @__PURE__ */ function(_Engine) {
   }, {
     key: "shouldRepeatAdv",
     value: function(task) {
-      return ["Poetic Justice", "Lost and Found"].includes(get("lastEncounter")) ? (printd("Skipping repeating Adventure despite free NC (beaten up)"), !1) : _get2(_getPrototypeOf5(ChronerEngine2.prototype), "shouldRepeatAdv", this).call(this, task);
+      return ["Poetic Justice", "Lost and Found"].includes(get("lastEncounter")) ? (printd("Skipping repeating Adventure despite free NC (beaten up)"), !1) : introAdventures.includes(get("lastEncounter")) ? (printd("Hit Intro adventure ".concat(get("lastEncounter"), " which is a free NC")), !0) : _get2(_getPrototypeOf5(ChronerEngine2.prototype), "shouldRepeatAdv", this).call(this, task);
     }
   }, {
     key: "print",
@@ -9563,26 +9573,12 @@ function _defineProperty14(obj, key, value) {
 function _taggedTemplateLiteral25(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
-var args = Args.create("chrono", "A script for farming chroner", {
-  turns: Args.number({
-    help: "The number of turns to run (use negative numbers for the number of turns remaining)",
-    default: 1 / 0
-  }),
-  mode: Args.string({
-    options: [["rose", "Farm Roses from The Main Stage"], ["capsule", "Farm Time Capsules from the Cave Before Time"]],
-    default: "rose"
-  }),
-  debug: Args.flag({
-    help: "Turn on debug printing",
-    default: !1
-  })
-});
 function main(command) {
   if (Args.fill(args, command), args.help) {
     Args.showHelp(args);
     return;
   }
-  args.debug && enableDebug(), sinceKolmafiaRevision(26834);
+  sinceKolmafiaRevision(26834);
   var turncount = (0, import_kolmafia34.myTurncount)(), completed = args.turns > 0 ? function() {
     return (0, import_kolmafia34.myTurncount)() - turncount >= args.turns || (0, import_kolmafia34.myAdventures)() === 0;
   } : function() {
