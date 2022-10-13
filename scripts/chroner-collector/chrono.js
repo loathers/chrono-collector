@@ -8925,7 +8925,7 @@ var poisons = $effects(_templateObject120 || (_templateObject120 = _taggedTempla
 };
 
 // src/main.ts
-var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject522, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1315, _templateObject1414, _templateObject1513, _templateObject1611, _templateObject1711, _templateObject1811, _templateObject1910, _templateObject2010, _templateObject2113, _templateObject2211, _templateObject2310, _templateObject2410, _templateObject2510, _templateObject269, _templateObject279, _templateObject288, _templateObject297, _templateObject307;
+var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject522, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1315, _templateObject1414, _templateObject1513, _templateObject1611, _templateObject1711, _templateObject1811, _templateObject1910, _templateObject2010, _templateObject2113, _templateObject2211, _templateObject2310, _templateObject2410, _templateObject2510, _templateObject269, _templateObject279, _templateObject288, _templateObject297, _templateObject307, _templateObject3111, _templateObject3210;
 function _slicedToArray8(arr, i) {
   return _arrayWithHoles8(arr) || _iterableToArrayLimit8(arr, i) || _unsupportedIterableToArray22(arr, i) || _nonIterableRest8();
 }
@@ -9172,16 +9172,30 @@ function main(command) {
       completed: function() {
         return !1;
       },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2010 || (_templateObject2010 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral25(["Bowl a Curveball"])))).abort())
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2010 || (_templateObject2010 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).tryHaveSkill($skill(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral25(["Curse of Weaksauce"])))).trySkill($skill(_templateObject2211 || (_templateObject2211 = _taggedTemplateLiteral25(["Bowl a Curveball"])))).abort())
+    }, {
+      name: "Asdon Bumper",
+      ready: function() {
+        return AsdonMartin_exports.installed();
+      },
+      completed: function() {
+        return !get("banishedMonsters").includes("Spring-Loaded Front Bumper");
+      },
+      sobriety: "sober",
+      do: $location(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
+      combat: new ChronerStrategy(Macro2.skill($skill(_templateObject2410 || (_templateObject2410 = _taggedTemplateLiteral25(["Asdon Martin: Spring-Loaded Front Bumper"])))).abort()),
+      prepare: function() {
+        return AsdonMartin_exports.fillTo(50);
+      }
     }, {
       name: "Asdon Missle",
       ready: function() {
         return AsdonMartin_exports.installed();
       },
       completed: function() {
-        return get("_missileLauncherUsed") || have($effect(_templateObject2211 || (_templateObject2211 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
+        return get("_missileLauncherUsed");
       },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject2410 || (_templateObject2410 = _taggedTemplateLiteral25(["Asdon Martin: Missile Launcher"])))).abort()),
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral25(["Asdon Martin: Missile Launcher"])))).abort()),
       prepare: function() {
         return AsdonMartin_exports.fillTo(100);
       },
@@ -9190,21 +9204,21 @@ function main(command) {
     }, {
       name: "Spit Jurassic Acid",
       completed: function() {
-        return have($effect(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
+        return have($effect(_templateObject279 || (_templateObject279 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
       },
       ready: function() {
-        return have($item(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject279 || (_templateObject279 = _taggedTemplateLiteral25(["Torso Awareness"]))));
+        return have($item(_templateObject288 || (_templateObject288 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject297 || (_templateObject297 = _taggedTemplateLiteral25(["Torso Awareness"]))));
       },
       outfit: function() {
         return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
-          shirt: $item(_templateObject288 || (_templateObject288 = _taggedTemplateLiteral25(["Jurassic Parka"])))
+          shirt: $item(_templateObject307 || (_templateObject307 = _taggedTemplateLiteral25(["Jurassic Parka"])))
         });
       },
       prepare: function() {
         return (0, import_kolmafia31.cliExecute)("parka dilophosaur");
       },
       do: yrTarget,
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject297 || (_templateObject297 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject307 || (_templateObject307 = _taggedTemplateLiteral25(["Spit jurassic acid"])))).abort()),
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject3111 || (_templateObject3111 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject3210 || (_templateObject3210 = _taggedTemplateLiteral25(["Spit jurassic acid"])))).abort()),
       sobriety: "sober"
     }]
   }, engine = new ChronerEngine(getTasks([setup, global2, quest]));
