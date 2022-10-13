@@ -9,14 +9,16 @@ import {
   getKramcoWandererChance,
   have,
 } from "libram";
+import { Item } from "kolmafia";
 
+import { $familiars, $item, $location, get, getKramcoWandererChance, have } from "libram";
 import { ChronerQuest, ChronerStrategy } from "./engine";
 import { chooseFamEquip, chooseFamiliar } from "./familiar";
 import { sober } from "./lib";
 import Macro from "./macro";
 
 function roseOutfit(): OutfitSpec {
-  const familiar = chooseFamiliar();
+  const familiar = chooseFamiliar({ location: $location`Globe Theatre Main Stage` });
   const famequip = chooseFamEquip(familiar);
 
   const ifHave = (slot: OutfitSlot, item: Item): OutfitSpec =>
@@ -31,6 +33,9 @@ function roseOutfit(): OutfitSpec {
     ...(get("_mayflySummons") < 30 ? ifHave("acc3", $item`mayfly bait necklace`) : {}),
     ...ifHave("famequip", famequip),
     ...ifHave("back", $item`Time Cloak`),
+    ...(25 * get("_sweatOutSomeBoozeUsed") + get("sweat") < 75
+      ? ifHave("pants", $item`designer sweatpants`)
+      : {}),
     familiar,
     modifier: $familiars`Reagnimated Gnome, Temporal Riftlet`.includes(familiar)
       ? "Familiar Weight"

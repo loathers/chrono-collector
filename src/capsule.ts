@@ -8,7 +8,7 @@ import { sober } from "./lib";
 import Macro from "./macro";
 
 function capsuleOutfit(): OutfitSpec {
-  const familiar = chooseFamiliar();
+  const familiar = chooseFamiliar({ location: $location`The Cave Before Time` });
   const famequip = chooseFamEquip(familiar);
 
   const ifHave = (slot: OutfitSlot, item: Item): OutfitSpec =>
@@ -23,6 +23,9 @@ function capsuleOutfit(): OutfitSpec {
     ...(get("_mayflySummons") < 30 ? ifHave("acc3", $item`mayfly bait necklace`) : {}),
     ...ifHave("famequip", famequip),
     ...ifHave("back", $item`Time Cloak`),
+    ...(25 * get("_sweatOutSomeBoozeUsed") + get("sweat") < 75
+      ? ifHave("pants", $item`designer sweatpants`)
+      : {}),
     familiar,
     modifier: $familiars`Reagnimated Gnome, Temporal Riftlet`.includes(familiar)
       ? "Familiar Weight"
