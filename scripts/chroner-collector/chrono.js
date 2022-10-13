@@ -7768,6 +7768,13 @@ var HIGHLIGHT = (0, import_kolmafia22.isDarkMode)() ? "yellow" : "blue";
 function printh(message) {
   (0, import_kolmafia22.print)(message, HIGHLIGHT);
 }
+var debugEnabled = !1;
+function enableDebug() {
+  debugEnabled = !0;
+}
+function printd(message) {
+  debugEnabled && (0, import_kolmafia22.print)(message, HIGHLIGHT);
+}
 function sober() {
   return (0, import_kolmafia22.myInebriety)() <= (0, import_kolmafia22.inebrietyLimit)() + ((0, import_kolmafia22.myFamiliar)() === $familiar(_templateObject69 || (_templateObject69 = _taggedTemplateLiteral12(["Stooper"]))) ? -1 : 0);
 }
@@ -8014,7 +8021,15 @@ var ChronerStrategy = /* @__PURE__ */ function(_CombatStrategy) {
     return _classCallCheck13(this, ChronerStrategy2), _this = _super.call(this), _this.macro(macro).autoattack(macro), _this;
   }
   return _createClass13(ChronerStrategy2);
-}(CombatStrategy), ChronerEngine = /* @__PURE__ */ function(_Engine) {
+}(CombatStrategy);
+function countAvailableNcForces() {
+  return (get("_claraBellUsed") ? 0 : 1) + (5 - get("_spikolodonSpikeUses"));
+}
+var ncForced = !1;
+function resetNcForced() {
+  printd("Reset NC forcing"), ncForced = !1;
+}
+var ChronerEngine = /* @__PURE__ */ function(_Engine) {
   _inherits5(ChronerEngine2, _Engine);
   var _super2 = _createSuper5(ChronerEngine2);
   function ChronerEngine2() {
@@ -8024,7 +8039,15 @@ var ChronerStrategy = /* @__PURE__ */ function(_CombatStrategy) {
     key: "available",
     value: function(task) {
       var sobriety = task.sobriety === "either" || sober() && task.sobriety === "sober" || !sober() && task.sobriety === "drunk";
-      return sobriety && _get2(_getPrototypeOf5(ChronerEngine2.prototype), "available", this).call(this, task);
+      return task.forced ? sobriety && ncForced && _get2(_getPrototypeOf5(ChronerEngine2.prototype), "available", this).call(this, task) : sobriety && _get2(_getPrototypeOf5(ChronerEngine2.prototype), "available", this).call(this, task);
+    }
+  }, {
+    key: "execute",
+    value: function(task) {
+      var ncBefore = countAvailableNcForces();
+      _get2(_getPrototypeOf5(ChronerEngine2.prototype), "execute", this).call(this, task);
+      var ncAfter = countAvailableNcForces();
+      ncBefore > ncAfter && (ncForced = !0);
     }
   }, {
     key: "setChoices",
@@ -8038,17 +8061,17 @@ var ChronerStrategy = /* @__PURE__ */ function(_CombatStrategy) {
   }, {
     key: "shouldRepeatAdv",
     value: function(task) {
-      return ["Poetic Justice", "Lost and Found"].includes(get("lastEncounter")) ? !1 : _get2(_getPrototypeOf5(ChronerEngine2.prototype), "shouldRepeatAdv", this).call(this, task);
+      return ["Poetic Justice", "Lost and Found"].includes(get("lastEncounter")) ? (printd("Skipping repeating Adventure despite free NC (beaten up)"), !1) : _get2(_getPrototypeOf5(ChronerEngine2.prototype), "shouldRepeatAdv", this).call(this, task);
     }
   }, {
     key: "print",
     value: function() {
-      printh("Task List:");
+      printd("Task List:");
       var _iterator = _createForOfIteratorHelper12(this.tasks), _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
           var task = _step.value;
-          printh("".concat(task.name, ": available:").concat(this.available(task)));
+          printd("".concat(task.name, ": available:").concat(this.available(task)));
         }
       } catch (err) {
         _iterator.e(err);
@@ -8884,7 +8907,7 @@ var poisons = $effects(_templateObject120 || (_templateObject120 = _taggedTempla
 };
 
 // src/main.ts
-var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject521, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1314, _templateObject1413, _templateObject1512, _templateObject1610, _templateObject1710;
+var _templateObject121, _templateObject260, _templateObject338, _templateObject428, _templateObject521, _templateObject619, _templateObject718, _templateObject816, _templateObject915, _templateObject1016, _templateObject1116, _templateObject1215, _templateObject1314, _templateObject1413, _templateObject1512, _templateObject1610, _templateObject1710, _templateObject1810, _templateObject199, _templateObject209, _templateObject2113, _templateObject2211, _templateObject2310, _templateObject2410, _templateObject2510, _templateObject269, _templateObject279, _templateObject288;
 function _slicedToArray8(arr, i) {
   return _arrayWithHoles8(arr) || _iterableToArrayLimit8(arr, i) || _unsupportedIterableToArray22(arr, i) || _nonIterableRest8();
 }
@@ -8997,9 +9020,12 @@ var args = Args.create("chrono", "A script for farming chroner", {
     default: 1 / 0
   }),
   mode: Args.string({
-    key: "mode",
     options: [["rose", "Farm Roses from The Main Stage"], ["capsule", "Farm Time Capsules from the Cave Before Time"]],
     default: "rose"
+  }),
+  debug: Args.flag({
+    help: "Turn on debug printing",
+    default: !1
   })
 });
 function main(command) {
@@ -9007,7 +9033,7 @@ function main(command) {
     Args.showHelp(args);
     return;
   }
-  sinceKolmafiaRevision(26834);
+  args.debug && enableDebug(), sinceKolmafiaRevision(26834);
   var turncount = (0, import_kolmafia31.myTurncount)(), completed = args.turns > 0 ? function() {
     return (0, import_kolmafia31.myTurncount)() - turncount >= args.turns || (0, import_kolmafia31.myAdventures)() === 0;
   } : function() {
@@ -9020,9 +9046,18 @@ function main(command) {
     name: "Global",
     completed: completed,
     tasks: [{
+      name: "Clara's Bell",
+      completed: function() {
+        return !have($item(_templateObject260 || (_templateObject260 = _taggedTemplateLiteral25(["Clara's bell"])))) || get("_claraBellUsed");
+      },
+      do: function() {
+        (0, import_kolmafia31.use)($item(_templateObject338 || (_templateObject338 = _taggedTemplateLiteral25(["Clara's bell"]))));
+      },
+      sobriety: "either"
+    }, {
       name: "Proton Ghost",
       ready: function() {
-        return have($item(_templateObject260 || (_templateObject260 = _taggedTemplateLiteral25(["protonic accelerator pack"])))) && get("questPAGhost") !== "unstarted" && !!get("ghostLocation");
+        return have($item(_templateObject428 || (_templateObject428 = _taggedTemplateLiteral25(["protonic accelerator pack"])))) && get("questPAGhost") !== "unstarted" && !!get("ghostLocation");
       },
       do: function() {
         var location = get("ghostLocation");
@@ -9033,13 +9068,13 @@ function main(command) {
       },
       outfit: function() {
         return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
-          back: $item(_templateObject338 || (_templateObject338 = _taggedTemplateLiteral25(["protonic accelerator pack"])))
+          back: $item(_templateObject521 || (_templateObject521 = _taggedTemplateLiteral25(["protonic accelerator pack"])))
         });
       },
       completed: function() {
         return get("questPAGhost") === "unstarted";
       },
-      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject428 || (_templateObject428 = _taggedTemplateLiteral25(["Sing Along"])))).trySkill($skill(_templateObject521 || (_templateObject521 = _taggedTemplateLiteral25(["Shoot Ghost"])))).trySkill($skill(_templateObject619 || (_templateObject619 = _taggedTemplateLiteral25(["Shoot Ghost"])))).trySkill($skill(_templateObject718 || (_templateObject718 = _taggedTemplateLiteral25(["Shoot Ghost"])))).trySkill($skill(_templateObject816 || (_templateObject816 = _taggedTemplateLiteral25(["Trap Ghost"]))))),
+      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject619 || (_templateObject619 = _taggedTemplateLiteral25(["Sing Along"])))).trySkill($skill(_templateObject718 || (_templateObject718 = _taggedTemplateLiteral25(["Shoot Ghost"])))).trySkill($skill(_templateObject816 || (_templateObject816 = _taggedTemplateLiteral25(["Shoot Ghost"])))).trySkill($skill(_templateObject915 || (_templateObject915 = _taggedTemplateLiteral25(["Shoot Ghost"])))).trySkill($skill(_templateObject1016 || (_templateObject1016 = _taggedTemplateLiteral25(["Trap Ghost"]))))),
       sobriety: "sober"
     }, {
       name: "Digitize Wanderer",
@@ -9056,14 +9091,42 @@ function main(command) {
       combat: new ChronerStrategy(Macro2.redigitize().standardCombat()),
       sobriety: "either"
     }, {
+      name: "Time Capsule",
+      do: function() {
+        if ((0, import_kolmafia31.adv1)($location(_templateObject1116 || (_templateObject1116 = _taggedTemplateLiteral25(["The Cave Before Time"]))), 0, ""), get("lastEncounter") === "Time Cave.  Period.")
+          printd("Forced noncombat!"), resetNcForced();
+        else {
+          printd("Uh oh, we didn't force the NC");
+          var possibleEncouters = Object.keys((0, import_kolmafia31.getLocationMonsters)($location(_templateObject1215 || (_templateObject1215 = _taggedTemplateLiteral25(["The Cave Before Time"])))));
+          possibleEncouters.includes(get("lastEncounter")) ? (printd("We hit a normal monster, so reset the noncombat forcing"), resetNcForced()) : printd("We hit something else, so keep trying for the noncombat");
+        }
+      },
+      forced: !0,
+      sobriety: "either",
+      completed: function() {
+        return !1;
+      },
+      combat: new ChronerStrategy(Macro2.standardCombat())
+    }, {
+      name: "Bowling Ball Run",
+      ready: function() {
+        return get("cosmicBowlingBallReturnCombats") < 1;
+      },
+      do: $location(_templateObject1314 || (_templateObject1314 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
+      sobriety: "sober",
+      completed: function() {
+        return !1;
+      },
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject1413 || (_templateObject1413 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).trySkill($skill(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral25(["Bowl a Curveball"])))).abort())
+    }, {
       name: "Asdon Missle",
       ready: function() {
         return AsdonMartin_exports.installed();
       },
       completed: function() {
-        return get("_missileLauncherUsed") || have($effect(_templateObject915 || (_templateObject915 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
+        return get("_missileLauncherUsed") || have($effect(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
       },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject1016 || (_templateObject1016 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject1116 || (_templateObject1116 = _taggedTemplateLiteral25(["Asdon Martin: Missile Launcher"])))).abort()),
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject1810 || (_templateObject1810 = _taggedTemplateLiteral25(["Asdon Martin: Missile Launcher"])))).abort()),
       prepare: function() {
         return AsdonMartin_exports.fillTo(100);
       },
@@ -9072,24 +9135,45 @@ function main(command) {
     }, {
       name: "Spit Jurassic Acid",
       completed: function() {
-        return have($effect(_templateObject1215 || (_templateObject1215 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
+        return have($effect(_templateObject199 || (_templateObject199 = _taggedTemplateLiteral25(["Everything Looks Yellow"]))));
       },
       ready: function() {
-        return have($item(_templateObject1314 || (_templateObject1314 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject1413 || (_templateObject1413 = _taggedTemplateLiteral25(["Torso Awareness"]))));
+        return have($item(_templateObject209 || (_templateObject209 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject2113 || (_templateObject2113 = _taggedTemplateLiteral25(["Torso Awareness"]))));
       },
       outfit: function() {
         return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
-          shirt: $item(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral25(["Jurassic Parka"])))
+          shirt: $item(_templateObject2211 || (_templateObject2211 = _taggedTemplateLiteral25(["Jurassic Parka"])))
         });
       },
       prepare: function() {
         return (0, import_kolmafia31.cliExecute)("parka dilophosaur");
       },
       do: yrTarget,
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral25(["Spit jurassic acid"])))).abort()),
+      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral25(["Summon Mayfly Swarm"])))).skill($skill(_templateObject2410 || (_templateObject2410 = _taggedTemplateLiteral25(["Spit jurassic acid"])))).abort()),
+      sobriety: "sober"
+    }, {
+      name: "Spikolodon Spikes",
+      ready: function() {
+        return have($item(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral25(["Jurassic Parka"])))) && have($skill(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral25(["Torso Awareness"])))) && get("_spikolodonSpikeUses") < 5;
+      },
+      outfit: function() {
+        return _objectSpread8(_objectSpread8({}, quest.outfit()), {}, {
+          shirt: $item(_templateObject279 || (_templateObject279 = _taggedTemplateLiteral25(["Jurassic Parka"])))
+        });
+      },
+      do: quest.location,
+      completed: function() {
+        return !1;
+      },
+      prepare: function() {
+        return (0, import_kolmafia31.cliExecute)("parka spikolodon");
+      },
+      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject288 || (_templateObject288 = _taggedTemplateLiteral25(["Launch spikolodon spikes"])))).standardCombat()),
       sobriety: "sober"
     }]
-  }, engine = new ChronerEngine(getTasks([setup, global2, quest])), sessionStart = Session.current();
+  }, engine = new ChronerEngine(getTasks([setup, global2, quest]));
+  engine.print();
+  var sessionStart = Session.current();
   withProperty("recoveryScript", "", function() {
     try {
       engine.run();
