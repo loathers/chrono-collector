@@ -9722,7 +9722,7 @@ function main(command) {
         return AsdonMartin_exports.installed();
       },
       completed: function() {
-        return !get("banishedMonsters").includes("Spring-Loaded Front Bumper");
+        return get("banishedMonsters").includes("Spring-Loaded Front Bumper");
       },
       sobriety: "sober",
       do: $location(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
