@@ -9296,7 +9296,7 @@ function roseOutfit() {
     modifier: $familiars(_templateObject1114 || (_templateObject1114 = _taggedTemplateLiteral23(["Reagnimated Gnome, Temporal Riftlet"]))).includes(familiar3) ? "Familiar Weight" : "Item Drop"
   });
 }
-var location = $location(_templateObject1213 || (_templateObject1213 = _taggedTemplateLiteral23(["Globe Theatre Main Stage"]))), rose = {
+var location = $location(_templateObject1213 || (_templateObject1213 = _taggedTemplateLiteral23(["Globe Theatre Main Stage"]))), triedFlorist = !1, rose = {
   name: "Rose",
   location: location,
   outfit: roseOutfit,
@@ -9306,21 +9306,21 @@ var location = $location(_templateObject1213 || (_templateObject1213 = _taggedTe
       return Florist_exports.have() && (0, import_kolmafia32.myLocation)() === location;
     },
     completed: function() {
-      return Florist_exports.flowersIn(location).length >= 3 || Florist_exports.flowersAvailableFor(location).length === 0;
+      return Florist_exports.isFull() || triedFlorist;
     },
     do: function() {
       var flowers = [Florist_exports.ArcticMoss, Florist_exports.SpiderPlant, Florist_exports.BamBoo].concat(_toConsumableArray16(Florist_exports.flowersAvailableFor(location))), _iterator = _createForOfIteratorHelper14(flowers), _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
           var flower = _step.value;
-          if (!flower.plant())
-            break;
+          flower.plant();
         }
       } catch (err) {
         _iterator.e(err);
       } finally {
         _iterator.f();
       }
+      triedFlorist = !0;
     },
     sobriety: "either"
   }, {
