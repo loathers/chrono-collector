@@ -38,17 +38,26 @@ function roseOutfit(): OutfitSpec {
   };
 }
 
+const location = $location`Globe Theatre Main Stage`;
+
 export const rose: ChronerQuest = {
   name: "Rose",
-  location: $location`Globe Theatre Main Stage`,
+  location,
   outfit: roseOutfit,
   tasks: [
     {
       name: "Flowers",
-      ready: () => FloristFriar.have() && myLocation() === $location`Globe Theatre Main Stage`,
-      completed: () => FloristFriar.flowersIn($location`Globe Theatre Main Stage`).length >= 3,
+      ready: () => FloristFriar.have() && myLocation() === location,
+      completed: () =>
+        FloristFriar.flowersIn(location).length >= 3 ||
+        FloristFriar.flowersAvailableFor(location).length === 0,
       do: () => {
-        const flowers = [FloristFriar.ArcticMoss, FloristFriar.SpiderPlant, FloristFriar.BamBoo];
+        const flowers = [
+          FloristFriar.ArcticMoss,
+          FloristFriar.SpiderPlant,
+          FloristFriar.BamBoo,
+          ...FloristFriar.flowersAvailableFor(location),
+        ];
         for (const flower of flowers) {
           if (!flower.plant()) break;
         }
