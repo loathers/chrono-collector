@@ -8782,7 +8782,7 @@ var experienceFamiliars = [{
   useValue: 15 ** 4
 }];
 function valueExperienceFamiliar(_ref) {
-  var familiar3 = _ref.familiar, useValue = _ref.useValue, currentExp = familiar3.experience || (have($familiar(_templateObject326 || (_templateObject326 = _taggedTemplateLiteral17(["Shorter-Order Cook"])))) ? 100 : 0), experienceNeeded = 400 - currentExp, estimatedExperience = 12;
+  var familiar3 = _ref.familiar, useValue = _ref.useValue, currentExp = familiar3.experience || (have($familiar(_templateObject326 || (_templateObject326 = _taggedTemplateLiteral17(["Shorter-Order Cook"])))) ? 100 : 0), experienceNeeded = 400 - currentExp, estimatedExperience = 3;
   return {
     familiar: familiar3,
     expectedValue: useValue / (experienceNeeded / estimatedExperience),
