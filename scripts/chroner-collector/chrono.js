@@ -9372,7 +9372,7 @@ function _taggedTemplateLiteral19(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
 function timeToMeatify() {
-  if (!have($familiar(_templateObject151 || (_templateObject151 = _taggedTemplateLiteral19(["Grey Goose"])))) || get("_meatifyMatterUsed") || (0, import_kolmafia29.myInebriety)() > (0, import_kolmafia29.inebrietyLimit)())
+  if (!have($familiar(_templateObject151 || (_templateObject151 = _taggedTemplateLiteral19(["Grey Goose"])))) || get("_meatifyMatterUsed") || !sober())
     return !1;
   if ($familiar(_templateObject250 || (_templateObject250 = _taggedTemplateLiteral19(["Grey Goose"]))).experience >= 400)
     return !0;
@@ -9382,7 +9382,7 @@ function timeToMeatify() {
   return delay < (0, import_kolmafia29.myAdventures)() ? !1 : !!(freeFightNow || $familiar(_templateObject818 || (_templateObject818 = _taggedTemplateLiteral19(["Grey Goose"]))).experience >= 121);
 }
 function canOpenRedPresent() {
-  return have($familiar(_templateObject1015 || (_templateObject1015 = _taggedTemplateLiteral19(["Crimbo Shrub"])))) && !have($effect(_templateObject1113 || (_templateObject1113 = _taggedTemplateLiteral19(["Everything Looks Red"])))) && get("shrubGifts") === "meat" && (0, import_kolmafia29.myInebriety)() <= (0, import_kolmafia29.inebrietyLimit)();
+  return have($familiar(_templateObject1015 || (_templateObject1015 = _taggedTemplateLiteral19(["Crimbo Shrub"])))) && !have($effect(_templateObject1113 || (_templateObject1113 = _taggedTemplateLiteral19(["Everything Looks Red"])))) && get("shrubGifts") === "meat" && sober();
 }
 
 // src/familiar/freeFightFamiliar.ts
@@ -9459,7 +9459,7 @@ function menu() {
     leprechaunMultiplier: 0,
     limit: "none"
   }]);
-  return canChooseMacro && (0, import_kolmafia30.myInebriety)() <= (0, import_kolmafia30.inebrietyLimit)() && (timeToMeatify() && familiarMenu.push({
+  return canChooseMacro && sober() && (timeToMeatify() && familiarMenu.push({
     familiar: $familiar(_templateObject251 || (_templateObject251 = _taggedTemplateLiteral20(["Grey Goose"]))),
     expectedValue: (Math.max((0, import_kolmafia30.familiarWeight)($familiar(_templateObject331 || (_templateObject331 = _taggedTemplateLiteral20(["Grey Goose"])))) - 5), 0 ** 4),
     leprechaunMultiplier: 0,
@@ -9805,19 +9805,29 @@ function mergeSpecs() {
 }
 var chooseFamiliar = function() {
   var _find, options = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-  return (0, import_kolmafia32.canInteract)() && (0, import_kolmafia32.myInebriety)() <= (0, import_kolmafia32.inebrietyLimit)() ? (_find = $familiars(_templateObject170 || (_templateObject170 = _taggedTemplateLiteral22(["Reagnimated Gnome, Temporal Riftlet"]))).find(function(f) {
+  return (0, import_kolmafia32.canInteract)() && sober() ? (_find = $familiars(_templateObject170 || (_templateObject170 = _taggedTemplateLiteral22(["Reagnimated Gnome, Temporal Riftlet"]))).find(function(f) {
     return have(f);
   })) !== null && _find !== void 0 ? _find : freeFightFamiliar(options) : freeFightFamiliar(options);
 };
 function chooseQuestOutfit(_ref) {
   for (var _equipmentFamiliars$g, location3 = _ref.location, isFree = _ref.isFree, familiar3 = chooseFamiliar({
     location: location3
-  }), famEquip = (_equipmentFamiliars$g = equipmentFamiliars.get(familiar3)) !== null && _equipmentFamiliars$g !== void 0 ? _equipmentFamiliars$g : familiar3.elementalDamage || familiar3.physicalDamage ? $item(_templateObject261 || (_templateObject261 = _taggedTemplateLiteral22(["tiny stillsuit"]))) : $item(_templateObject338 || (_templateObject338 = _taggedTemplateLiteral22(["oversized fish scaler"]))), offhands = mergeSpecs(ifHave("offhand", $item(_templateObject428 || (_templateObject428 = _taggedTemplateLiteral22(["cursed magnifying glass"]))), function() {
-    return !isFree && get("_voidFreeFights") < 5 && get("cursedMagnifyingGlassCount") < 13;
-  }), ifHave("offhand", $item(_templateObject523 || (_templateObject523 = _taggedTemplateLiteral22(["Kramco Sausage-o-Matic\u2122"]))), function() {
-    return getKramcoWandererChance() >= 0.04;
-  }), ifHave("offhand", $item(_templateObject621 || (_templateObject621 = _taggedTemplateLiteral22(["carnivorous potted plant"]))))), weapons = mergeSpecs(ifHave("weapon", $item(_templateObject721 || (_templateObject721 = _taggedTemplateLiteral22(["June cleaver"])))), ifHave("weapon", $item(_templateObject820 || (_templateObject820 = _taggedTemplateLiteral22(["Fourth of May Cosplay Saber"]))))), backs = mergeSpecs(ifHave("back", $item(_templateObject918 || (_templateObject918 = _taggedTemplateLiteral22(["protonic accelerator pack"]))), function() {
-    return get("questPAGhost") === "unstarted" && get("nextParanormalActivity") <= (0, import_kolmafia32.totalTurnsPlayed)();
+  }), famEquip = (_equipmentFamiliars$g = equipmentFamiliars.get(familiar3)) !== null && _equipmentFamiliars$g !== void 0 ? _equipmentFamiliars$g : familiar3.elementalDamage || familiar3.physicalDamage ? $item(_templateObject261 || (_templateObject261 = _taggedTemplateLiteral22(["tiny stillsuit"]))) : $item(_templateObject338 || (_templateObject338 = _taggedTemplateLiteral22(["oversized fish scaler"]))), freeChance = [{
+    i: $item(_templateObject428 || (_templateObject428 = _taggedTemplateLiteral22(["Kramco Sausage-o-Matic\u2122"]))),
+    p: getKramcoWandererChance()
+  }, {
+    i: $item(_templateObject523 || (_templateObject523 = _taggedTemplateLiteral22(["carnivorous potted plant"]))),
+    p: 0.04
+  }, {
+    i: $item(_templateObject621 || (_templateObject621 = _taggedTemplateLiteral22(["cursed magnifying glass"]))),
+    p: get("_voidFreeFights") < 5 ? 1 / 13 : 0
+  }].filter(function(_ref2) {
+    var i2 = _ref2.i;
+    return have(i2) && (0, import_kolmafia32.canEquip)(i2);
+  }), offhands = freeChance.length ? {
+    offhand: maxBy(freeChance, "p").i
+  } : {}, weapons = mergeSpecs(ifHave("weapon", $item(_templateObject721 || (_templateObject721 = _taggedTemplateLiteral22(["June cleaver"])))), ifHave("weapon", $item(_templateObject820 || (_templateObject820 = _taggedTemplateLiteral22(["Fourth of May Cosplay Saber"]))))), backs = mergeSpecs(ifHave("back", $item(_templateObject918 || (_templateObject918 = _taggedTemplateLiteral22(["protonic accelerator pack"]))), function() {
+    return get("questPAGhost") === "unstarted" && get("nextParanormalActivity") <= (0, import_kolmafia32.totalTurnsPlayed)() && sober();
   }), ifHave("back", $item(_templateObject1017 || (_templateObject1017 = _taggedTemplateLiteral22(["Time Cloak"]))))), spec = mergeSpecs(ifHave("hat", $item(_templateObject1115 || (_templateObject1115 = _taggedTemplateLiteral22(["Crown of Thrones"])))), offhands, weapons, backs, {
     familiar: familiar3
   }, ifHave("famequip", famEquip), ifHave("pants", $item(_templateObject1213 || (_templateObject1213 = _taggedTemplateLiteral22(["designer sweatpants"]))), function() {
@@ -9869,17 +9879,17 @@ var accessories = /* @__PURE__ */ new Map([
   }]
 ]);
 function getBestAccessories(isFree) {
-  return Array.from(accessories.entries()).filter(function(_ref2) {
-    var _ref3 = _slicedToArray8(_ref2, 1), item4 = _ref3[0];
+  return Array.from(accessories.entries()).filter(function(_ref3) {
+    var _ref4 = _slicedToArray8(_ref3, 1), item4 = _ref4[0];
     return have(item4) && (0, import_kolmafia32.canEquip)(item4);
-  }).map(function(_ref4) {
-    var _ref5 = _slicedToArray8(_ref4, 2), item4 = _ref5[0], valueFunction = _ref5[1];
+  }).map(function(_ref5) {
+    var _ref6 = _slicedToArray8(_ref5, 2), item4 = _ref6[0], valueFunction = _ref6[1];
     return [item4, valueFunction(isFree)];
-  }).sort(function(_ref6, _ref7) {
-    var _ref8 = _slicedToArray8(_ref6, 2), a = _ref8[1], _ref9 = _slicedToArray8(_ref7, 2), b = _ref9[1];
+  }).sort(function(_ref7, _ref8) {
+    var _ref9 = _slicedToArray8(_ref7, 2), a = _ref9[1], _ref10 = _slicedToArray8(_ref8, 2), b = _ref10[1];
     return b - a;
-  }).map(function(_ref10) {
-    var _ref11 = _slicedToArray8(_ref10, 1), item4 = _ref11[0];
+  }).map(function(_ref11) {
+    var _ref12 = _slicedToArray8(_ref11, 1), item4 = _ref12[0];
     return item4;
   }).splice(0, 3);
 }
