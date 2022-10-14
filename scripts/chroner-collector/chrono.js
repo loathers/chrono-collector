@@ -9765,7 +9765,7 @@ function main(command) {
     }, {
       name: "Bowling Ball Run",
       ready: function() {
-        return get("cosmicBowlingBallReturnCombats") < 1;
+        return get("cosmicBowlingBallReturnCombats") < 1 && get("hasCosmicBowlingBall");
       },
       do: $location(_templateObject2114 || (_templateObject2114 = _taggedTemplateLiteral25(["The Cave Before Time"]))),
       sobriety: "sober",
