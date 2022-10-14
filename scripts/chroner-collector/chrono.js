@@ -9495,6 +9495,15 @@ var setup = {
       return tryGetCMCItem(cmcTarget().item);
     },
     sobriety: "either"
+  }, {
+    name: "Boombox",
+    completed: function() {
+      return !SongBoom_exports.have() || SongBoom_exports.song() === "Food Vibrations" || SongBoom_exports.songChangesLeft() === 0;
+    },
+    do: function() {
+      return SongBoom_exports.setSong("Food Vibrations");
+    },
+    sobriety: "either"
   }]
 };
 
