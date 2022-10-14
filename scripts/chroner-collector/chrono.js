@@ -9652,7 +9652,7 @@ var Macro2 = /* @__PURE__ */ function(_StrictMacro) {
       if (items.length)
         if (have($skill(_templateObject337 || (_templateObject337 = _taggedTemplateLiteral21(["Ambidextrous Funkslinging"])))))
           for (var i = 0; i <= items.length; i += 2) {
-            var chunk = items.slice(i, i + 1);
+            var chunk = items.slice(i, i + 2);
             chunk.length === 2 ? steps.tryItem(chunk) : steps.tryItem.apply(steps, _toConsumableArray16(chunk));
           }
         else {
