@@ -9489,7 +9489,7 @@ var setup = {
   }, {
     name: "Cold Medicine Cabinent",
     completed: function() {
-      return (0, import_kolmafia33.getWorkshed)() !== $item(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral24(["cold medicine cabinet"]))) || (0, import_kolmafia33.totalTurnsPlayed)() > get("_nextColdMedicineConsult") || get("_coldMedicineConsults") >= 5 || countEnvironment(cmcTarget().environment) <= 10;
+      return (0, import_kolmafia33.getWorkshed)() !== $item(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral24(["cold medicine cabinet"]))) || (0, import_kolmafia33.totalTurnsPlayed)() < get("_nextColdMedicineConsult") || get("_coldMedicineConsults") >= 5 || countEnvironment(cmcTarget().environment) <= 10;
     },
     do: function() {
       return tryGetCMCItem(cmcTarget().item);
