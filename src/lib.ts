@@ -73,18 +73,15 @@ export function sober() {
   return myInebriety() <= inebrietyLimit() + (myFamiliar() === $familiar`Stooper` ? -1 : 0);
 }
 
+export const modes = ["rose", "capsule", "gooso"] as const;
+export type Mode = typeof modes[number];
+
 export const args = Args.create("chrono", "A script for farming chroner", {
   turns: Args.number({
     help: "The number of turns to run (use negative numbers for the number of turns remaining)",
     default: Infinity,
   }),
-  mode: Args.string({
-    options: [
-      ["rose", "Farm Roses from The Main Stage"],
-      ["capsule", "Farm Time Capsules from the Cave Before Time"],
-    ],
-    default: "rose",
-  }),
+  mode: Args.custom<Mode>({ default: "rose" }, (s: string) => s as Mode, "mode"),
   debug: Args.flag({
     help: "Turn on debug printing",
     default: false,
