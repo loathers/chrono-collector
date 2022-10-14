@@ -3724,33 +3724,12 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
   }, {
     key: "if_",
     value: function(condition, ifTrue) {
-      var ballsCondition = "";
-      if (condition instanceof import_kolmafia4.Monster)
-        ballsCondition = "monsterid ".concat(condition.id);
-      else if (condition instanceof Array)
-        ballsCondition = condition.map(function(mon) {
-          return "monsterid ".concat(mon.id);
-        }).join(" || "), ballsCondition = "(".concat(ballsCondition, ")");
-      else if (condition instanceof import_kolmafia4.Effect)
-        ballsCondition = "haseffect ".concat((0, import_kolmafia4.toInt)(condition));
-      else if (condition instanceof import_kolmafia4.Skill)
-        ballsCondition = "hasskill ".concat(skillBallsMacroName(condition));
-      else if (condition instanceof import_kolmafia4.Item) {
-        if (!condition.combat)
-          throw new InvalidMacroError("Item ".concat(condition, " cannot be made a valid BALLS predicate (it is not combat-usable)"));
-        ballsCondition = "hascombatitem ".concat(itemOrItemsBallsMacroName(condition));
-      } else if (condition instanceof import_kolmafia4.Location) {
-        var snarfblat = condition.id;
-        if (snarfblat < 1)
-          throw new InvalidMacroError("Location ".concat(condition, " cannot be made a valid BALLS predicate (it has no location id)"));
-        ballsCondition = "snarfblat ".concat(snarfblat);
-      } else if (condition instanceof import_kolmafia4.Class) {
-        if ((0, import_kolmafia4.toInt)(condition) > 6)
-          throw new InvalidMacroError("Class ".concat(condition, " cannot be made a valid BALLS predicate (it is not a standard class)"));
-        ballsCondition = condition.toString().replaceAll(" ", "").toLowerCase();
-      } else
-        condition instanceof import_kolmafia4.Stat ? ballsCondition = "".concat(condition.toString().toLowerCase(), "class") : ballsCondition = condition;
-      return this.step("if ".concat(ballsCondition)).step(ifTrue).step("endif");
+      return this.step("if ".concat(Macro3.makeBALLSPredicate(condition))).step(ifTrue).step("endif");
+    }
+  }, {
+    key: "ifNot",
+    value: function(condition, ifTrue) {
+      return this.step("if !(".concat(Macro3.makeBALLSPredicate(condition), ")")).step(ifTrue).step("endif");
     }
   }, {
     key: "while_",
@@ -3876,9 +3855,45 @@ var InvalidMacroError = /* @__PURE__ */ function(_Error) {
       return new this().runaway();
     }
   }, {
+    key: "makeBALLSPredicate",
+    value: function(condition) {
+      var ballsCondition = "";
+      if (condition instanceof import_kolmafia4.Monster)
+        ballsCondition = "monsterid ".concat(condition.id);
+      else if (condition instanceof Array)
+        ballsCondition = condition.map(function(mon) {
+          return "monsterid ".concat(mon.id);
+        }).join(" || "), ballsCondition = "(".concat(ballsCondition, ")");
+      else if (condition instanceof import_kolmafia4.Effect)
+        ballsCondition = "haseffect ".concat((0, import_kolmafia4.toInt)(condition));
+      else if (condition instanceof import_kolmafia4.Skill)
+        ballsCondition = "hasskill ".concat(skillBallsMacroName(condition));
+      else if (condition instanceof import_kolmafia4.Item) {
+        if (!condition.combat)
+          throw new InvalidMacroError("Item ".concat(condition, " cannot be made a valid BALLS predicate (it is not combat-usable)"));
+        ballsCondition = "hascombatitem ".concat(itemOrItemsBallsMacroName(condition));
+      } else if (condition instanceof import_kolmafia4.Location) {
+        var snarfblat = condition.id;
+        if (snarfblat < 1)
+          throw new InvalidMacroError("Location ".concat(condition, " cannot be made a valid BALLS predicate (it has no location id)"));
+        ballsCondition = "snarfblat ".concat(snarfblat);
+      } else if (condition instanceof import_kolmafia4.Class) {
+        if ((0, import_kolmafia4.toInt)(condition) > 6)
+          throw new InvalidMacroError("Class ".concat(condition, " cannot be made a valid BALLS predicate (it is not a standard class)"));
+        ballsCondition = condition.toString().replaceAll(" ", "").toLowerCase();
+      } else
+        condition instanceof import_kolmafia4.Stat ? ballsCondition = "".concat(condition.toString().toLowerCase(), "class") : ballsCondition = condition;
+      return ballsCondition;
+    }
+  }, {
     key: "if_",
     value: function(condition, ifTrue) {
       return new this().if_(condition, ifTrue);
+    }
+  }, {
+    key: "ifNot",
+    value: function(condition, ifTrue) {
+      return new this().ifNot(condition, ifTrue);
     }
   }, {
     key: "while_",
@@ -4721,20 +4736,20 @@ function inventoryItems() {
     return have(item4) && [100, (0, import_kolmafia7.autosellPrice)(item4)].includes(price(item4, PriceAge.RECENT));
   });
 }
-function calculateFuelUnitCost(it, targetUnits) {
-  var priceAge = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : PriceAge.RECENT, units = getAverageAdventures(it);
-  return price(it, priceAge) / Math.min(targetUnits, units);
+function calculateFuelUnitCost(it) {
+  var priceAge = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : PriceAge.RECENT, units = getAverageAdventures(it);
+  return price(it, priceAge) / units;
 }
 function isFuelItem(it) {
   return !(0, import_kolmafia7.isNpcItem)(it) && it.fullness + it.inebriety > 0 && getAverageAdventures(it) > 0 && it.tradeable && it.discardable && !fuelSkiplist.includes(it);
 }
-function getBestFuels(targetUnits) {
+function getBestFuels() {
   var allFuel = import_kolmafia7.Item.all().filter(isFuelItem);
   allFuel.filter(function(item4) {
     return (0, import_kolmafia7.historicalPrice)(item4) === 0;
   }).length > 100 && ((0, import_kolmafia7.mallPrices)("food"), (0, import_kolmafia7.mallPrices)("booze"));
   var keyHistorical = function(item4) {
-    return calculateFuelUnitCost(item4, targetUnits, PriceAge.HISTORICAL);
+    return calculateFuelUnitCost(item4, PriceAge.HISTORICAL);
   };
   allFuel.sort(function(x, y) {
     return keyHistorical(x) - keyHistorical(y);
@@ -4748,7 +4763,7 @@ function getBestFuels(targetUnits) {
   var key1 = function(item4) {
     return -getAverageAdventures(item4);
   }, key2 = function(item4) {
-    return calculateFuelUnitCost(item4, targetUnits, PriceAge.RECENT);
+    return calculateFuelUnitCost(item4, PriceAge.RECENT);
   };
   potentialFuel.sort(function(x, y) {
     return key1(x) - key1(y);
@@ -4756,11 +4771,11 @@ function getBestFuels(targetUnits) {
     return key2(x) - key2(y);
   });
   var candidates = potentialFuel.slice(0, 10), key3 = function(item4) {
-    return calculateFuelUnitCost(item4, targetUnits, PriceAge.TODAY);
+    return calculateFuelUnitCost(item4, PriceAge.TODAY);
   };
   if (candidates.sort(function(x, y) {
     return key3(x) - key3(y);
-  }), calculateFuelUnitCost(candidates[0], targetUnits, PriceAge.TODAY) > 100)
+  }), calculateFuelUnitCost(candidates[0], PriceAge.TODAY) > 100)
     throw new Error("Could not identify any fuel with efficiency better than 100 meat per fuel. This means something went wrong.");
   return candidates;
 }
@@ -4772,7 +4787,7 @@ function fillTo(targetUnits) {
   if (!installed())
     return !1;
   for (; (0, import_kolmafia7.getFuel)() < targetUnits; ) {
-    var remaining = targetUnits - (0, import_kolmafia7.getFuel)(), _ref = (0, import_kolmafia7.canInteract)() ? getBestFuels(remaining) : [$item(_templateObject410 || (_templateObject410 = _taggedTemplateLiteral4(["loaf of soda bread"]))), void 0], _ref2 = _slicedToArray4(_ref, 2), bestFuel = _ref2[0], secondBest = _ref2[1], count = Math.ceil(targetUnits / getAverageAdventures(bestFuel)), ceiling = void 0;
+    var _ref = (0, import_kolmafia7.canInteract)() ? getBestFuels() : [$item(_templateObject410 || (_templateObject410 = _taggedTemplateLiteral4(["loaf of soda bread"]))), void 0], _ref2 = _slicedToArray4(_ref, 2), bestFuel = _ref2[0], secondBest = _ref2[1], count = Math.ceil(targetUnits / getAverageAdventures(bestFuel)), ceiling = void 0;
     if (secondBest) {
       var efficiencyOfSecondBest = (0, import_kolmafia7.mallPrice)(secondBest) / getAverageAdventures(secondBest);
       ceiling = Math.ceil(efficiencyOfSecondBest * getAverageAdventures(bestFuel));
