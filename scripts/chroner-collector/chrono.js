@@ -9830,7 +9830,7 @@ function chooseQuestOutfit(_ref) {
   }
   for (var _len2 = arguments.length, outfits = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++)
     outfits[_key2 - 1] = arguments[_key2];
-  var mergedSpec = mergeSpecs.apply(void 0, [spec].concat(outfits));
+  var mergedSpec = mergeSpecs.apply(void 0, outfits.concat([spec]));
   return !have($item(_templateObject1313 || (_templateObject1313 = _taggedTemplateLiteral22(["Crown of Thrones"])))) && have($item(_templateObject1412 || (_templateObject1412 = _taggedTemplateLiteral22(["Buddy Bjorn"])))) && !("back" in mergedSpec) && (mergedSpec.back = $item(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral22(["Buddy Bjorn"])))), mergedSpec.modifier = $familiars(_templateObject1612 || (_templateObject1612 = _taggedTemplateLiteral22(["Reagnimated Gnome, Temporal Riftlet"]))).includes(familiar3) ? "Familiar Weight" : "Item Drop", mergedSpec;
 }
 var equipmentFamiliars = /* @__PURE__ */ new Map([[$familiar(_templateObject1711 || (_templateObject1711 = _taggedTemplateLiteral22(["Reagnimated Gnome"]))), $item(_templateObject1811 || (_templateObject1811 = _taggedTemplateLiteral22(["gnomish housemaid's kgnee"])))], [$familiar(_templateObject1911 || (_templateObject1911 = _taggedTemplateLiteral22(["Shorter-Order Cook"]))), $item(_templateObject2010 || (_templateObject2010 = _taggedTemplateLiteral22(["blue plate"])))], [$familiar(_templateObject2114 || (_templateObject2114 = _taggedTemplateLiteral22(["Stocking Mimic"]))), $item(_templateObject2211 || (_templateObject2211 = _taggedTemplateLiteral22(["bag of many confections"])))]]);
