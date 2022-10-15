@@ -5,8 +5,18 @@ import {
   equippedAmount,
   Location,
   setAutoAttack,
+  toEffect,
 } from "kolmafia";
-import { $item, $slot, CrownOfThrones, get, JuneCleaver, PropertiesManager } from "libram";
+import {
+  $item,
+  $skill,
+  $slot,
+  CrownOfThrones,
+  get,
+  have,
+  JuneCleaver,
+  PropertiesManager,
+} from "libram";
 
 import { bestJuneCleaverOption, shouldSkip } from "./juneCleaver";
 import { printd, sober } from "./lib";
@@ -73,6 +83,25 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
     if (ncBefore > ncAfter) {
       ncForced = true;
     }
+  }
+
+  acquireEffects(task: ChronerTask): void {
+    if (task.do instanceof Location) {
+      if (task.effects === undefined) task.effects = [];
+      task.effects = task.effects.concat(
+        [
+          $skill`Blood Bond`,
+          $skill`Leash of Linguini`,
+          $skill`Empathy of the Newt`,
+          $skill`The Spirit of Taking`,
+          $skill`Fat Leon's Phat Loot Lyric`,
+          $skill`Singer's Faithful Ocelot`,
+        ]
+          .filter((skill) => have(skill))
+          .map((skill) => toEffect(skill))
+      );
+    }
+    super.execute(task);
   }
 
   setChoices(task: ChronerTask, manager: PropertiesManager): void {
