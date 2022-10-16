@@ -9917,7 +9917,9 @@ var location = $location(_templateObject171 || (_templateObject171 = _taggedTemp
         isFree: getKramcoWandererChance() >= 1
       }, sausageSpec, drunkSpec);
     },
-    combat: new ChronerStrategy(Macro2.standardCombat()),
+    combat: new ChronerStrategy(function() {
+      return Macro2.standardCombat();
+    }),
     sobriety: "either"
   }]
 };
@@ -10033,7 +10035,9 @@ var location2 = $location(_templateObject180 || (_templateObject180 = _taggedTem
         isFree: getKramcoWandererChance() >= 1
       }, sausageSpec, drunkSpec);
     },
-    combat: new ChronerStrategy(Macro2.standardCombat()),
+    combat: new ChronerStrategy(function() {
+      return Macro2.standardCombat();
+    }),
     sobriety: "either"
   }]
 };
@@ -10347,7 +10351,9 @@ function main(command) {
       completed: function() {
         return get("questPAGhost") === "unstarted";
       },
-      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject624 || (_templateObject624 = _taggedTemplateLiteral26(["Sing Along"])))).trySkill($skill(_templateObject724 || (_templateObject724 = _taggedTemplateLiteral26(["Shoot Ghost"])))).trySkill($skill(_templateObject823 || (_templateObject823 = _taggedTemplateLiteral26(["Shoot Ghost"])))).trySkill($skill(_templateObject920 || (_templateObject920 = _taggedTemplateLiteral26(["Shoot Ghost"])))).trySkill($skill(_templateObject1019 || (_templateObject1019 = _taggedTemplateLiteral26(["Trap Ghost"]))))),
+      combat: new ChronerStrategy(function() {
+        return Macro2.trySkill($skill(_templateObject624 || (_templateObject624 = _taggedTemplateLiteral26(["Sing Along"])))).trySkill($skill(_templateObject724 || (_templateObject724 = _taggedTemplateLiteral26(["Shoot Ghost"])))).trySkill($skill(_templateObject823 || (_templateObject823 = _taggedTemplateLiteral26(["Shoot Ghost"])))).trySkill($skill(_templateObject920 || (_templateObject920 = _taggedTemplateLiteral26(["Shoot Ghost"])))).trySkill($skill(_templateObject1019 || (_templateObject1019 = _taggedTemplateLiteral26(["Trap Ghost"]))));
+      }),
       sobriety: "sober"
     }, {
       name: "Vote Wanderer",
@@ -10368,7 +10374,9 @@ function main(command) {
       completed: function() {
         return get("lastVoteMonsterTurn") === (0, import_kolmafia35.totalTurnsPlayed)();
       },
-      combat: new ChronerStrategy(Macro2.redigitize().standardCombat()),
+      combat: new ChronerStrategy(function() {
+        return Macro2.redigitize().standardCombat();
+      }),
       sobriety: "either"
     }, {
       name: "Digitize Wanderer",
@@ -10388,7 +10396,9 @@ function main(command) {
       do: function() {
         (0, import_kolmafia35.adv1)(quest.location, -1, ""), digitizes = get("_sourceTerminalDigitizeMonsterCount");
       },
-      combat: new ChronerStrategy(Macro2.redigitize().standardCombat()),
+      combat: new ChronerStrategy(function() {
+        return Macro2.redigitize().standardCombat();
+      }),
       sobriety: "either"
     }, {
       name: "Void Monster",
@@ -10408,7 +10418,9 @@ function main(command) {
       },
       do: quest.location,
       sobriety: "sober",
-      combat: new ChronerStrategy(Macro2.standardCombat())
+      combat: new ChronerStrategy(function() {
+        return Macro2.standardCombat();
+      })
     }, {
       name: "Time Capsule",
       do: function() {
@@ -10425,7 +10437,9 @@ function main(command) {
       completed: function() {
         return !1;
       },
-      combat: new ChronerStrategy(Macro2.standardCombat())
+      combat: new ChronerStrategy(function() {
+        return Macro2.standardCombat();
+      })
     }, {
       name: "Spikolodon Spikes",
       ready: function() {
@@ -10445,7 +10459,9 @@ function main(command) {
       prepare: function() {
         return (0, import_kolmafia35.cliExecute)("parka spikolodon");
       },
-      combat: new ChronerStrategy(Macro2.trySkill($skill(_templateObject2012 || (_templateObject2012 = _taggedTemplateLiteral26(["Launch spikolodon spikes"])))).standardCombat()),
+      combat: new ChronerStrategy(function() {
+        return Macro2.trySkill($skill(_templateObject2012 || (_templateObject2012 = _taggedTemplateLiteral26(["Launch spikolodon spikes"])))).standardCombat();
+      }),
       sobriety: "sober"
     }, {
       name: "Bowling Ball Run",
@@ -10457,7 +10473,9 @@ function main(command) {
       completed: function() {
         return !1;
       },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2213 || (_templateObject2213 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).tryHaveSkill($skill(_templateObject2313 || (_templateObject2313 = _taggedTemplateLiteral26(["Curse of Weaksauce"])))).trySkill($skill(_templateObject2412 || (_templateObject2412 = _taggedTemplateLiteral26(["Bowl a Curveball"])))).abort())
+      combat: new ChronerStrategy(function() {
+        return Macro2.tryHaveSkill($skill(_templateObject2213 || (_templateObject2213 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).tryHaveSkill($skill(_templateObject2313 || (_templateObject2313 = _taggedTemplateLiteral26(["Curse of Weaksauce"])))).trySkill($skill(_templateObject2412 || (_templateObject2412 = _taggedTemplateLiteral26(["Bowl a Curveball"])))).abort();
+      })
     }, {
       name: "Asdon Bumper",
       ready: function() {
@@ -10468,7 +10486,9 @@ function main(command) {
       },
       sobriety: "sober",
       do: $location(_templateObject2512 || (_templateObject2512 = _taggedTemplateLiteral26(["The Cave Before Time"]))),
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2612 || (_templateObject2612 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject2711 || (_templateObject2711 = _taggedTemplateLiteral26(["Asdon Martin: Spring-Loaded Front Bumper"])))).abort()),
+      combat: new ChronerStrategy(function() {
+        return Macro2.tryHaveSkill($skill(_templateObject2612 || (_templateObject2612 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject2711 || (_templateObject2711 = _taggedTemplateLiteral26(["Asdon Martin: Spring-Loaded Front Bumper"])))).abort();
+      }),
       prepare: function() {
         return AsdonMartin_exports.fillTo(50);
       }
@@ -10480,7 +10500,9 @@ function main(command) {
       completed: function() {
         return get("_missileLauncherUsed");
       },
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject2810 || (_templateObject2810 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject299 || (_templateObject299 = _taggedTemplateLiteral26(["Asdon Martin: Missile Launcher"])))).abort()),
+      combat: new ChronerStrategy(function() {
+        return Macro2.tryHaveSkill($skill(_templateObject2810 || (_templateObject2810 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject299 || (_templateObject299 = _taggedTemplateLiteral26(["Asdon Martin: Missile Launcher"])))).abort();
+      }),
       outfit: function() {
         return chooseQuestOutfit({
           location: yrTarget,
@@ -10514,7 +10536,9 @@ function main(command) {
         return (0, import_kolmafia35.cliExecute)("parka dilophosaur");
       },
       do: yrTarget,
-      combat: new ChronerStrategy(Macro2.tryHaveSkill($skill(_templateObject358 || (_templateObject358 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject367 || (_templateObject367 = _taggedTemplateLiteral26(["Spit jurassic acid"])))).abort()),
+      combat: new ChronerStrategy(function() {
+        return Macro2.tryHaveSkill($skill(_templateObject358 || (_templateObject358 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject367 || (_templateObject367 = _taggedTemplateLiteral26(["Spit jurassic acid"])))).abort();
+      }),
       sobriety: "sober"
     }, {
       name: "Grey You Attack Skill",
@@ -10525,7 +10549,9 @@ function main(command) {
       ready: function() {
         return (0, import_kolmafia35.myClass)() === $class(_templateObject4111 || (_templateObject4111 = _taggedTemplateLiteral26(["Grey Goo"]))) && (0, import_kolmafia35.canAdventure)($location(_templateObject4210 || (_templateObject4210 = _taggedTemplateLiteral26(["The Haunted Storage Room"]))));
       },
-      combat: new ChronerStrategy(Macro2.standardCombat()),
+      combat: new ChronerStrategy(function() {
+        return Macro2.standardCombat();
+      }),
       sobriety: "sober"
     }]
   }, engine = new ChronerEngine(getTasks([setup, global2, quest]));
