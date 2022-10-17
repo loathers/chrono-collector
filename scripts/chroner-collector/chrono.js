@@ -10195,7 +10195,7 @@ var setup = {
 };
 
 // src/main.ts
-var _templateObject190, _templateObject281, _templateObject349, _templateObject434, _templateObject525, _templateObject624, _templateObject724, _templateObject823, _templateObject920, _templateObject1019, _templateObject1117, _templateObject1215, _templateObject1315, _templateObject1414, _templateObject1514, _templateObject1614, _templateObject1713, _templateObject1813, _templateObject1913, _templateObject2012, _templateObject2116, _templateObject2213, _templateObject2313, _templateObject2412, _templateObject2512, _templateObject2612, _templateObject2711, _templateObject2810, _templateObject299, _templateObject309, _templateObject3113, _templateObject3211, _templateObject3310, _templateObject3410, _templateObject358, _templateObject367, _templateObject377, _templateObject386, _templateObject396, _templateObject406, _templateObject4111, _templateObject4210;
+var _templateObject190, _templateObject281, _templateObject349, _templateObject434, _templateObject525, _templateObject624, _templateObject724, _templateObject823, _templateObject920, _templateObject1019, _templateObject1117, _templateObject1215, _templateObject1315, _templateObject1414, _templateObject1514, _templateObject1614, _templateObject1713, _templateObject1813, _templateObject1913, _templateObject2012, _templateObject2116, _templateObject2213, _templateObject2313, _templateObject2412, _templateObject2512, _templateObject2612, _templateObject2711, _templateObject2810, _templateObject299, _templateObject309, _templateObject3113, _templateObject3211, _templateObject3310, _templateObject3410, _templateObject358, _templateObject367, _templateObject377, _templateObject386, _templateObject396, _templateObject406, _templateObject4111, _templateObject4210, _templateObject435;
 function _slicedToArray9(arr, i) {
   return _arrayWithHoles9(arr) || _iterableToArrayLimit9(arr, i) || _unsupportedIterableToArray26(arr, i) || _nonIterableRest9();
 }
@@ -10474,7 +10474,8 @@ function main(command) {
         return !1;
       },
       combat: new ChronerStrategy(function() {
-        return Macro2.tryHaveSkill($skill(_templateObject2213 || (_templateObject2213 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).tryHaveSkill($skill(_templateObject2313 || (_templateObject2313 = _taggedTemplateLiteral26(["Curse of Weaksauce"])))).trySkill($skill(_templateObject2412 || (_templateObject2412 = _taggedTemplateLiteral26(["Bowl a Curveball"])))).abort();
+        var romance = get("romanticTarget"), freeMonsters = $monsters(_templateObject2213 || (_templateObject2213 = _taggedTemplateLiteral26(["sausage goblin"])));
+        return romance != null && romance.attributes.includes("FREE") && freeMonsters.push(romance), Macro2.if_(freeMonsters, Macro2.standardCombat()).tryHaveSkill($skill(_templateObject2313 || (_templateObject2313 = _taggedTemplateLiteral26(["Curse of Weaksauce"])))).trySkill($skill(_templateObject2412 || (_templateObject2412 = _taggedTemplateLiteral26(["Bowl a Curveball"])))).abort();
       })
     }, {
       name: "Asdon Bumper",
@@ -10487,13 +10488,14 @@ function main(command) {
       sobriety: "sober",
       do: $location(_templateObject2512 || (_templateObject2512 = _taggedTemplateLiteral26(["The Cave Before Time"]))),
       combat: new ChronerStrategy(function() {
-        return Macro2.tryHaveSkill($skill(_templateObject2612 || (_templateObject2612 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject2711 || (_templateObject2711 = _taggedTemplateLiteral26(["Asdon Martin: Spring-Loaded Front Bumper"])))).abort();
+        var romance = get("romanticTarget"), freeMonsters = $monsters(_templateObject2612 || (_templateObject2612 = _taggedTemplateLiteral26(["sausage goblin"])));
+        return romance != null && romance.attributes.includes("FREE") && freeMonsters.push(romance), Macro2.if_(freeMonsters, Macro2.standardCombat()).skill($skill(_templateObject2711 || (_templateObject2711 = _taggedTemplateLiteral26(["Asdon Martin: Spring-Loaded Front Bumper"])))).abort();
       }),
       prepare: function() {
         return AsdonMartin_exports.fillTo(50);
       }
     }, {
-      name: "Asdon Missle",
+      name: "Asdon Missile",
       ready: function() {
         return AsdonMartin_exports.installed();
       },
@@ -10501,14 +10503,13 @@ function main(command) {
         return get("_missileLauncherUsed");
       },
       combat: new ChronerStrategy(function() {
-        return Macro2.tryHaveSkill($skill(_templateObject2810 || (_templateObject2810 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject299 || (_templateObject299 = _taggedTemplateLiteral26(["Asdon Martin: Missile Launcher"])))).abort();
+        var romance = get("romanticTarget"), freeMonsters = $monsters(_templateObject2810 || (_templateObject2810 = _taggedTemplateLiteral26(["sausage goblin"])));
+        return romance != null && romance.attributes.includes("FREE") && freeMonsters.push(romance), Macro2.if_(freeMonsters, Macro2.standardCombat()).tryHaveSkill($skill(_templateObject299 || (_templateObject299 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject309 || (_templateObject309 = _taggedTemplateLiteral26(["Asdon Martin: Missile Launcher"])))).abort();
       }),
       outfit: function() {
         return chooseQuestOutfit({
           location: yrTarget,
           isFree: !0
-        }, {
-          shirt: $item(_templateObject309 || (_templateObject309 = _taggedTemplateLiteral26(["Jurassic Parka"])))
         });
       },
       prepare: function() {
@@ -10537,17 +10538,18 @@ function main(command) {
       },
       do: yrTarget,
       combat: new ChronerStrategy(function() {
-        return Macro2.tryHaveSkill($skill(_templateObject358 || (_templateObject358 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject367 || (_templateObject367 = _taggedTemplateLiteral26(["Spit jurassic acid"])))).abort();
+        var romance = get("romanticTarget"), freeMonsters = $monsters(_templateObject358 || (_templateObject358 = _taggedTemplateLiteral26(["sausage goblin"])));
+        return romance != null && romance.attributes.includes("FREE") && freeMonsters.push(romance), Macro2.if_(freeMonsters, Macro2.standardCombat()).tryHaveSkill($skill(_templateObject367 || (_templateObject367 = _taggedTemplateLiteral26(["Summon Mayfly Swarm"])))).skill($skill(_templateObject377 || (_templateObject377 = _taggedTemplateLiteral26(["Spit jurassic acid"])))).abort();
       }),
       sobriety: "sober"
     }, {
       name: "Grey You Attack Skill",
       completed: function() {
-        return have($skill(_templateObject377 || (_templateObject377 = _taggedTemplateLiteral26(["Nantlers"])))) || have($skill(_templateObject386 || (_templateObject386 = _taggedTemplateLiteral26(["Nanoshock"])))) || have($skill(_templateObject396 || (_templateObject396 = _taggedTemplateLiteral26(["Audioclasm"]))));
+        return have($skill(_templateObject386 || (_templateObject386 = _taggedTemplateLiteral26(["Nantlers"])))) || have($skill(_templateObject396 || (_templateObject396 = _taggedTemplateLiteral26(["Nanoshock"])))) || have($skill(_templateObject406 || (_templateObject406 = _taggedTemplateLiteral26(["Audioclasm"]))));
       },
-      do: $location(_templateObject406 || (_templateObject406 = _taggedTemplateLiteral26(["The Haunted Storage Room"]))),
+      do: $location(_templateObject4111 || (_templateObject4111 = _taggedTemplateLiteral26(["The Haunted Storage Room"]))),
       ready: function() {
-        return (0, import_kolmafia35.myClass)() === $class(_templateObject4111 || (_templateObject4111 = _taggedTemplateLiteral26(["Grey Goo"]))) && (0, import_kolmafia35.canAdventure)($location(_templateObject4210 || (_templateObject4210 = _taggedTemplateLiteral26(["The Haunted Storage Room"]))));
+        return (0, import_kolmafia35.myClass)() === $class(_templateObject4210 || (_templateObject4210 = _taggedTemplateLiteral26(["Grey Goo"]))) && (0, import_kolmafia35.canAdventure)($location(_templateObject435 || (_templateObject435 = _taggedTemplateLiteral26(["The Haunted Storage Room"]))));
       },
       combat: new ChronerStrategy(function() {
         return Macro2.standardCombat();
