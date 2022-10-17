@@ -14,6 +14,7 @@ import {
   $class,
   $effect,
   $item,
+  $items,
   $location,
   $monsters,
   $skill,
@@ -83,7 +84,7 @@ export function main(command?: string) {
         outfit: () =>
           chooseQuestOutfit(
             { location: quest.location, isFree: true },
-            { back: $item`protonic accelerator pack`, avoid: $items`great wolf's beastly pants` }
+            { back: $item`protonic accelerator pack`, avoid: $items`Great Wolf's beastly trousers` }
           ),
         completed: () => get("questPAGhost") === "unstarted",
         combat: new ChronerStrategy(() =>
