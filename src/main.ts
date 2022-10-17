@@ -83,7 +83,7 @@ export function main(command?: string) {
         outfit: () =>
           chooseQuestOutfit(
             { location: quest.location, isFree: true },
-            { back: $item`protonic accelerator pack` }
+            { back: $item`protonic accelerator pack`, avoid: $items`great wolf's beastly pants` }
           ),
         completed: () => get("questPAGhost") === "unstarted",
         combat: new ChronerStrategy(() =>
