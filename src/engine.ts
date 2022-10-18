@@ -1,5 +1,6 @@
-import { CombatStrategy, Engine, Outfit, Quest, Task } from "grimoire-kolmafia";
+import { AcquireItem, CombatStrategy, Engine, Outfit, Quest, Task } from "grimoire-kolmafia";
 import {
+  availableAmount,
   bjornifyFamiliar,
   enthroneFamiliar,
   equippedAmount,
@@ -14,6 +15,7 @@ import Macro from "./macro";
 
 export type ChronerTask = Task & {
   sobriety: "sober" | "drunk" | "either";
+  tryAcquire?: AcquireItem[];
   forced?: boolean;
 };
 
@@ -47,10 +49,16 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
       (sober() && task.sobriety === "sober") ||
       (!sober() && task.sobriety === "drunk");
 
-    if (task.forced) {
-      return sobriety && ncForced && super.available(task);
-    }
-    return sobriety && super.available(task);
+    const acquired = task.tryAcquire
+      ? task.tryAcquire.every((i) => {
+          const current = availableAmount(i.item) + (i.num ?? 1);
+          this.acquireItems({ ...task, acquire: [{ ...i, optional: true }] });
+          return availableAmount(i.item) >= current;
+        })
+      : true;
+
+    const checks = [acquired, sobriety, ...(task.forced ? [ncForced] : []), super.available(task)];
+    return checks.every((b) => b);
   }
 
   createOutfit(task: ChronerTask): Outfit {

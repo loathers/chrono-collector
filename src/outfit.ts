@@ -44,7 +44,8 @@ export function chooseQuestOutfit(
   { location, isFree }: TaskOptions,
   ...outfits: OutfitSpec[]
 ): OutfitSpec {
-  const familiar = chooseFamiliar({ location });
+  const mergedOutfits = mergeSpecs(...outfits);
+  const familiar = mergedOutfits.familiar ?? chooseFamiliar({ location });
   const famEquip =
     equipmentFamiliars.get(familiar) ??
     (familiar.elementalDamage || familiar.physicalDamage
@@ -95,13 +96,14 @@ export function chooseQuestOutfit(
     if (!accessory) break;
     spec[`acc${i + 1}` as OutfitSlot] = accessory;
   }
-  const mergedSpec = mergeSpecs(...outfits, spec);
+  const mergedSpec = mergeSpecs(mergedOutfits, spec, {
+    modifier: $familiars`Reagnimated Gnome, Temporal Riftlet`.includes(familiar)
+      ? "Familiar Weight"
+      : "Item Drop",
+  });
   if (!have($item`Crown of Thrones`) && have($item`Buddy Bjorn`) && !("back" in mergedSpec)) {
     mergedSpec.back = $item`Buddy Bjorn`;
   }
-  mergedSpec.modifier = $familiars`Reagnimated Gnome, Temporal Riftlet`.includes(familiar)
-    ? "Familiar Weight"
-    : "Item Drop";
   return mergedSpec;
 }
 

@@ -29,7 +29,8 @@ import {
 
 import { capsule } from "./capsule";
 import { ChronerEngine, ChronerQuest, ChronerStrategy, ChronerTask, resetNcForced } from "./engine";
-import { args, printd, printh } from "./lib";
+import { gooso } from "./gooso";
+import { args, Mode, printd, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
 import { rose } from "./rose";
@@ -53,8 +54,12 @@ export function main(command?: string) {
   let digitizes = -1;
   const yrTarget = $location`The Cave Before Time`;
 
-  const quest: ChronerQuest =
-    args.mode === "capsule" ? { ...capsule, completed } : { ...rose, completed };
+  const questOptions: { [m in Mode]: ChronerQuest } = {
+    capsule: capsule,
+    rose: rose,
+    gooso: gooso,
+  };
+  const quest = questOptions[args.mode];
   const global: Quest<ChronerTask> = {
     name: "Global",
     completed,
