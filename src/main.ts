@@ -84,7 +84,13 @@ export function main(command?: string) {
         outfit: () =>
           chooseQuestOutfit(
             { location: quest.location, isFree: true },
-            { back: $item`protonic accelerator pack`, avoid: get("ghostLocation") === $location`Icy Peak` ? $items`Great Wolf's beastly trousers` : [] }
+            {
+              back: $item`protonic accelerator pack`,
+              avoid:
+                get("ghostLocation") === $location`The Icy Peak`
+                  ? $items`Great Wolf's beastly trousers`
+                  : [],
+            }
           ),
         completed: () => get("questPAGhost") === "unstarted",
         combat: new ChronerStrategy(() =>
