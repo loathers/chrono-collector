@@ -66,7 +66,7 @@ export function main(command?: string) {
         do: $location`The Haunted Storage Room`,
         ready: () =>
           myClass() === $class`Grey Goo` && canAdventure($location`The Haunted Storage Room`),
-        combat: new ChronerStrategy(Macro.standardCombat()),
+        combat: new ChronerStrategy(() => Macro.standardCombat()),
         sobriety: "sober",
         choices: { 886: 6 },
       },
