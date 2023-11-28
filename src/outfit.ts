@@ -23,7 +23,11 @@ import { freeFightFamiliar, MenuOptions } from "./familiar";
 import { garboAverageValue, garboValue } from "./garboValue";
 import { maxBy, realmAvailable, sober } from "./lib";
 
-export function ifHave(slot: OutfitSlot, item: Item, condition?: () => boolean): OutfitSpec {
+export function ifHave(
+  slot: OutfitSlot,
+  item: Item,
+  condition?: () => boolean,
+): OutfitSpec {
   return have(item) && canEquip(item) && (condition?.() ?? true)
     ? Object.fromEntries([[slot, item]])
     : {};
@@ -54,13 +58,18 @@ export function chooseQuestOutfit(
   const freeChance = [
     { i: $item`Kramco Sausage-o-Matic™`, p: getKramcoWandererChance() },
     { i: $item`carnivorous potted plant`, p: 0.04 },
-    { i: $item`cursed magnifying glass`, p: get("_voidFreeFights") < 5 ? 1 / 13 : 0 },
+    {
+      i: $item`cursed magnifying glass`,
+      p: get("_voidFreeFights") < 5 ? 1 / 13 : 0,
+    },
   ].filter(({ i }) => have(i) && canEquip(i));
-  const offhands = freeChance.length ? { offhand: maxBy(freeChance, "p").i } : {};
+  const offhands = freeChance.length
+    ? { offhand: maxBy(freeChance, "p").i }
+    : {};
 
   const weapons = mergeSpecs(
     ifHave("weapon", $item`June cleaver`),
-    ifHave("weapon", $item`Fourth of May Cosplay Saber`)
+    ifHave("weapon", $item`Fourth of May Cosplay Saber`),
   );
 
   const backs = mergeSpecs(
@@ -70,9 +79,9 @@ export function chooseQuestOutfit(
       () =>
         get("questPAGhost") === "unstarted" &&
         get("nextParanormalActivity") <= totalTurnsPlayed() &&
-        sober()
+        sober(),
     ),
-    ifHave("back", $item`Time Cloak`)
+    ifHave("back", $item`Time Cloak`),
   );
 
   const spec = mergeSpecs(
@@ -85,8 +94,8 @@ export function chooseQuestOutfit(
     ifHave(
       "pants",
       $item`designer sweatpants`,
-      () => 25 * get("_sweatOutSomeBoozeUsed") + get("sweat") < 75
-    )
+      () => 25 * get("_sweatOutSomeBoozeUsed") + get("sweat") < 75,
+    ),
   );
 
   const bestAccessories = getBestAccessories(isFree);
@@ -96,12 +105,17 @@ export function chooseQuestOutfit(
     spec[`acc${i + 1}` as OutfitSlot] = accessory;
   }
   const mergedSpec = mergeSpecs(...outfits, spec);
-  if (!have($item`Crown of Thrones`) && have($item`Buddy Bjorn`) && !("back" in mergedSpec)) {
+  if (
+    !have($item`Crown of Thrones`) &&
+    have($item`Buddy Bjorn`) &&
+    !("back" in mergedSpec)
+  ) {
     mergedSpec.back = $item`Buddy Bjorn`;
   }
-  mergedSpec.modifier = $familiars`Reagnimated Gnome, Temporal Riftlet`.includes(familiar)
-    ? "Familiar Weight"
-    : "Item Drop";
+  mergedSpec.modifier =
+    $familiars`Reagnimated Gnome, Temporal Riftlet`.includes(familiar)
+      ? "Familiar Weight"
+      : "Item Drop";
   return mergedSpec;
 }
 
@@ -119,11 +133,15 @@ function luckyGoldRing() {
     ...[
       itemAmount($item`hobo nickel`) > 0 ? 100 : 0, // This should be closeted
       itemAmount($item`sand dollar`) > 0 ? garboValue($item`sand dollar`) : 0, // This should be closeted
-      itemAmount($item`Freddy Kruegerand`) > 0 ? garboValue($item`Freddy Kruegerand`) : 0,
+      itemAmount($item`Freddy Kruegerand`) > 0
+        ? garboValue($item`Freddy Kruegerand`)
+        : 0,
       realmAvailable("sleaze") ? garboValue($item`Beach Buck`) : 0,
       realmAvailable("spooky") ? garboValue($item`Coinspiracy`) : 0,
       realmAvailable("stench") ? garboValue($item`FunFunds™`) : 0,
-      realmAvailable("hot") && !get("_luckyGoldRingVolcoino") ? garboValue($item`Volcoino`) : 0,
+      realmAvailable("hot") && !get("_luckyGoldRingVolcoino")
+        ? garboValue($item`Volcoino`)
+        : 0,
       realmAvailable("cold") ? garboValue($item`Wal-Mart gift certificate`) : 0,
       realmAvailable("fantasy") ? garboValue($item`Rubee™`) : 0,
     ].filter((value) => value > 0),
@@ -136,7 +154,8 @@ function luckyGoldRing() {
 const accessories = new Map<Item, (isFree?: boolean) => number>([
   [
     $item`mafia thumb ring`,
-    (isFree?: boolean) => (!isFree ? (1 / 0.96 - 1) * get("valueOfAdventure") : 0),
+    (isFree?: boolean) =>
+      !isFree ? (1 / 0.96 - 1) * get("valueOfAdventure") : 0,
   ],
   // 18.2 expected turns per drug
   // https://kol.coldfront.net/thekolwiki/index.php/Time-twitching_toolbelt
@@ -144,7 +163,7 @@ const accessories = new Map<Item, (isFree?: boolean) => number>([
     $item`time-twitching toolbelt`,
     () =>
       garboAverageValue(
-        ...$items`future drug: Muscularactum, future drug: Smartinex, future drug: Coolscaline`
+        ...$items`future drug: Muscularactum, future drug: Smartinex, future drug: Coolscaline`,
       ) / 18.2,
   ],
   [
@@ -159,7 +178,10 @@ const accessories = new Map<Item, (isFree?: boolean) => number>([
 function getBestAccessories(isFree?: boolean) {
   return Array.from(accessories.entries())
     .filter(([item]) => have(item) && canEquip(item))
-    .map(([item, valueFunction]) => [item, valueFunction(isFree)] as [Item, number])
+    .map(
+      ([item, valueFunction]) =>
+        [item, valueFunction(isFree)] as [Item, number],
+    )
     .sort(([, a], [, b]) => b - a)
     .map(([item]) => item)
     .splice(0, 3);

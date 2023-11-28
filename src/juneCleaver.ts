@@ -28,19 +28,27 @@ function valueJuneCleaverOption(result: Item | number): number {
   return result instanceof Item ? garboValue(result) : result;
 }
 
-export function bestJuneCleaverOption(id: typeof JuneCleaver.choices[number]): 1 | 2 | 3 {
+export function bestJuneCleaverOption(
+  id: (typeof JuneCleaver.choices)[number],
+): 1 | 2 | 3 {
   const options = [1, 2, 3] as const;
-  return maxBy(options, (option) => valueJuneCleaverOption(juneCleaverChoiceValues[id][option]));
+  return maxBy(options, (option) =>
+    valueJuneCleaverOption(juneCleaverChoiceValues[id][option]),
+  );
 }
 
-let juneCleaverSkipChoices: typeof JuneCleaver.choices[number][] | null;
+let juneCleaverSkipChoices: (typeof JuneCleaver.choices)[number][] | null;
 function skipJuneCleaverChoices() {
   if (!juneCleaverSkipChoices) {
     juneCleaverSkipChoices = [...JuneCleaver.choices]
       .sort(
         (a, b) =>
-          valueJuneCleaverOption(juneCleaverChoiceValues[a][bestJuneCleaverOption(a)]) -
-          valueJuneCleaverOption(juneCleaverChoiceValues[b][bestJuneCleaverOption(b)])
+          valueJuneCleaverOption(
+            juneCleaverChoiceValues[a][bestJuneCleaverOption(a)],
+          ) -
+          valueJuneCleaverOption(
+            juneCleaverChoiceValues[b][bestJuneCleaverOption(b)],
+          ),
       )
       .splice(0, 3);
   }
@@ -48,6 +56,11 @@ function skipJuneCleaverChoices() {
   return juneCleaverSkipChoices;
 }
 
-export function shouldSkip(choice: typeof JuneCleaver.choices[number]): boolean {
-  return JuneCleaver.skipsRemaining() > 0 && skipJuneCleaverChoices().includes(choice);
+export function shouldSkip(
+  choice: (typeof JuneCleaver.choices)[number],
+): boolean {
+  return (
+    JuneCleaver.skipsRemaining() > 0 &&
+    skipJuneCleaverChoices().includes(choice)
+  );
 }

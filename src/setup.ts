@@ -52,7 +52,9 @@ export const setup: Quest<ChronerTask> = {
       name: "Beaten Up",
       completed: () => !have($effect`Beaten Up`),
       do: () => {
-        if (["Poetic Justice", "Lost and Found"].includes(get("lastEncounter"))) {
+        if (
+          ["Poetic Justice", "Lost and Found"].includes(get("lastEncounter"))
+        ) {
           uneffect($effect`Beaten Up`);
         }
         if (have($effect`Beaten Up`)) {
@@ -63,7 +65,8 @@ export const setup: Quest<ChronerTask> = {
     },
     {
       name: "Disco Nap",
-      ready: () => have($skill`Disco Nap`) && have($skill`Adventurer of Leisure`),
+      ready: () =>
+        have($skill`Disco Nap`) && have($skill`Adventurer of Leisure`),
       completed: () => poisons.every((e) => !have(e)),
       do: () => useSkill($skill`Disco Nap`),
       sobriety: "either",
@@ -94,7 +97,8 @@ export const setup: Quest<ChronerTask> = {
     {
       name: "Kgnee",
       completed: () =>
-        !have($familiar`Reagnimated Gnome`) || have($item`gnomish housemaid's kgnee`),
+        !have($familiar`Reagnimated Gnome`) ||
+        have($item`gnomish housemaid's kgnee`),
       do: (): void => {
         visitUrl("arena.php");
         runChoice(4);
@@ -128,7 +132,7 @@ export const setup: Quest<ChronerTask> = {
       completed: () => AutumnAton.currentlyIn() !== null,
       do: () =>
         AutumnAton.sendTo(
-          $locations`Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley`
+          $locations`Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley`,
         ),
       ready: () => AutumnAton.available(),
       sobriety: "either",

@@ -1,5 +1,10 @@
 import { myLocation } from "kolmafia";
-import { $item, $location, FloristFriar, getKramcoWandererChance } from "libram";
+import {
+  $item,
+  $location,
+  FloristFriar,
+  getKramcoWandererChance,
+} from "libram";
 
 import { ChronerQuest, ChronerStrategy } from "./engine";
 import { sober } from "./lib";
@@ -33,13 +38,17 @@ export const rose: ChronerQuest = {
       completed: () => false,
       do: $location`Globe Theatre Main Stage`,
       outfit: () => {
-        const drunkSpec = sober() ? {} : { offhand: $item`Drunkula's wineglass` };
+        const drunkSpec = sober()
+          ? {}
+          : { offhand: $item`Drunkula's wineglass` };
         const sausageSpec =
-          getKramcoWandererChance() >= 1 ? ifHave("offhand", $item`Kramco Sausage-o-Matic™`) : {};
+          getKramcoWandererChance() >= 1
+            ? ifHave("offhand", $item`Kramco Sausage-o-Matic™`)
+            : {};
         return chooseQuestOutfit(
           { location, isFree: getKramcoWandererChance() >= 1 },
           sausageSpec,
-          drunkSpec
+          drunkSpec,
         );
       },
       combat: new ChronerStrategy(() => Macro.standardCombat()),
