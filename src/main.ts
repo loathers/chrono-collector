@@ -50,7 +50,7 @@ export function main(command?: string) {
     return;
   }
 
-  sinceKolmafiaRevision(26834);
+  sinceKolmafiaRevision(27668);
   const turncount = myTurncount();
   const completed =
     args.turns > 0
