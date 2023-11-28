@@ -9,6 +9,7 @@ import {
   myTurncount,
   totalTurnsPlayed,
   use,
+  visitUrl,
 } from "kolmafia";
 import {
   $class,
@@ -67,6 +68,17 @@ export function main(command?: string) {
     name: "Global",
     completed,
     tasks: [
+      {
+        name: "Check Access",
+        completed: () => get("timeTowerAvailable"),
+        do: () => {
+          visitUrl("place.php?whichplace=twitch");
+          if (!get("timeTowerAvailable")) {
+            throw "The Time-Twitching Tower is currently unavailable";
+          }
+        },
+        sobriety: "either",
+      },
       {
         name: "Clara's Bell",
         completed: () => !have($item`Clara's bell`) || get("_claraBellUsed"),
