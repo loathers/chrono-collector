@@ -130,10 +130,11 @@ export const setup: Quest<ChronerTask> = {
     {
       name: "Autumn-Aton",
       completed: () => AutumnAton.currentlyIn() !== null,
-      do: () =>
+      do: () => {
         AutumnAton.sendTo(
           $locations`Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley`,
-        ),
+        )
+      },
       ready: () => AutumnAton.available(),
       sobriety: "either",
     },
