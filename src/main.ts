@@ -80,6 +80,20 @@ export function main(command?: string) {
         sobriety: "either",
       },
       {
+        name: "Grey You Attack Skill",
+        completed: () =>
+          have($skill`Nantlers`) ||
+          have($skill`Nanoshock`) ||
+          have($skill`Audioclasm`),
+        do: $location`The Haunted Storage Room`,
+        ready: () =>
+          myClass() === $class`Grey Goo` &&
+          canAdventure($location`The Haunted Storage Room`),
+        combat: new ChronerStrategy(() => Macro.standardCombat()),
+        sobriety: "sober",
+        choices: { 886: 6 },
+      },
+      {
         name: "Clara's Bell",
         completed: () => !have($item`Clara's bell`) || get("_claraBellUsed"),
         do: () => {
@@ -295,19 +309,6 @@ export function main(command?: string) {
             .skill($skill`Spit jurassic acid`)
             .abort();
         }),
-        sobriety: "sober",
-      },
-      {
-        name: "Grey You Attack Skill",
-        completed: () =>
-          have($skill`Nantlers`) ||
-          have($skill`Nanoshock`) ||
-          have($skill`Audioclasm`),
-        do: $location`The Haunted Storage Room`,
-        ready: () =>
-          myClass() === $class`Grey Goo` &&
-          canAdventure($location`The Haunted Storage Room`),
-        combat: new ChronerStrategy(() => Macro.standardCombat()),
         sobriety: "sober",
       },
     ],
