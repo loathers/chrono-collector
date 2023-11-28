@@ -133,7 +133,7 @@ export const setup: Quest<ChronerTask> = {
       do: (): void => {
         AutumnAton.sendTo(
           $locations`Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley`,
-        )
+        );
       },
       ready: () => AutumnAton.available(),
       sobriety: "either",
