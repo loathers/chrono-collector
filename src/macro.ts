@@ -36,8 +36,8 @@ export default class Macro extends StrictMacro {
       shouldRedigitize(),
       Macro.if_(
         get("_sourceTerminalDigitizeMonster") ?? $monster.none,
-        Macro.skill($skill`Digitize`)
-      )
+        Macro.skill($skill`Digitize`),
+      ),
     );
   }
 
@@ -49,7 +49,7 @@ export default class Macro extends StrictMacro {
     const steps = new Macro();
     const items =
       $items`Rain-Doh blue balls, Time-Spinner, Rain-Doh indigo cup, HOA citation pad, porquoise-handled sixgun`.filter(
-        (i) => have(i)
+        (i) => have(i),
       );
     if (items.length) {
       if (!have($skill`Ambidextrous Funkslinging`)) {
@@ -70,20 +70,20 @@ export default class Macro extends StrictMacro {
   standardCombat(): this {
     return this.externalIf(
       canOpenRedPresent() && myFamiliar() === $familiar`Crimbo Shrub`,
-      Macro.trySkill($skill`Open a Big Red Present`)
+      Macro.trySkill($skill`Open a Big Red Present`),
     )
       .externalIf(
         timeToMeatify() && myFamiliar() === $familiar`Grey Goose`,
-        Macro.trySkill($skill`Meatify Matter`)
+        Macro.trySkill($skill`Meatify Matter`),
       )
       .externalIf(
         get("cosmicBowlingBallReturnCombats") < 1,
-        Macro.trySkill($skill`Bowl Straight Up`)
+        Macro.trySkill($skill`Bowl Straight Up`),
       )
       .tryHaveSkill($skill`Summon Mayfly Swarm`)
       .externalIf(
         SongBoom.song() === "Total Eclipse of Your Meat",
-        Macro.tryHaveSkill($skill`Sing Along`)
+        Macro.tryHaveSkill($skill`Sing Along`),
       )
       .tryHaveSkill($skill`Extract`)
       .tryHaveSkill($skill`Micrometeorite`)

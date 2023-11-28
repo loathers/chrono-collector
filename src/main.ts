@@ -28,7 +28,13 @@ import {
 } from "libram";
 
 import { capsule } from "./capsule";
-import { ChronerEngine, ChronerQuest, ChronerStrategy, ChronerTask, resetNcForced } from "./engine";
+import {
+  ChronerEngine,
+  ChronerQuest,
+  ChronerStrategy,
+  ChronerTask,
+  resetNcForced,
+} from "./engine";
 import { args, printd, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
@@ -54,7 +60,9 @@ export function main(command?: string) {
   const yrTarget = $location`The Cave Before Time`;
 
   const quest: ChronerQuest =
-    args.mode === "capsule" ? { ...capsule, completed } : { ...rose, completed };
+    args.mode === "capsule"
+      ? { ...capsule, completed }
+      : { ...rose, completed };
   const global: Quest<ChronerTask> = {
     name: "Global",
     completed,
@@ -90,7 +98,7 @@ export function main(command?: string) {
                 get("ghostLocation") === $location`The Icy Peak`
                   ? $items`Great Wolf's beastly trousers`
                   : [],
-            }
+            },
           ),
         completed: () => get("questPAGhost") === "unstarted",
         combat: new ChronerStrategy(() =>
@@ -98,7 +106,7 @@ export function main(command?: string) {
             .trySkill($skill`Shoot Ghost`)
             .trySkill($skill`Shoot Ghost`)
             .trySkill($skill`Shoot Ghost`)
-            .trySkill($skill`Trap Ghost`)
+            .trySkill($skill`Trap Ghost`),
         ),
         sobriety: "sober",
       },
@@ -115,7 +123,7 @@ export function main(command?: string) {
         outfit: () =>
           chooseQuestOutfit(
             { location: quest.location, isFree: true },
-            { acc3: $item`"I Voted!" sticker` }
+            { acc3: $item`"I Voted!" sticker` },
           ),
         completed: () => get("lastVoteMonsterTurn") === totalTurnsPlayed(),
         combat: new ChronerStrategy(() => Macro.redigitize().standardCombat()),
@@ -127,9 +135,12 @@ export function main(command?: string) {
         outfit: () =>
           chooseQuestOutfit({
             location: quest.location,
-            isFree: get("_sourceTerminalDigitizeMonster")?.attributes.includes("FREE"),
+            isFree: get("_sourceTerminalDigitizeMonster")?.attributes.includes(
+              "FREE",
+            ),
           }),
-        completed: () => get("_sourceTerminalDigitizeMonsterCount") !== digitizes,
+        completed: () =>
+          get("_sourceTerminalDigitizeMonsterCount") !== digitizes,
         do: () => {
           adv1(quest.location, -1, "");
           digitizes = get("_sourceTerminalDigitizeMonsterCount");
@@ -140,12 +151,13 @@ export function main(command?: string) {
       {
         name: "Void Monster",
         ready: () =>
-          have($item`cursed magnifying glass`) && get("cursedMagnifyingGlassCount") === 13,
+          have($item`cursed magnifying glass`) &&
+          get("cursedMagnifyingGlassCount") === 13,
         completed: () => get("_voidFreeFights") >= 5,
         outfit: () =>
           chooseQuestOutfit(
             { location: quest.location, isFree: true },
-            { offhand: $item`cursed magnifying glass` }
+            { offhand: $item`cursed magnifying glass` },
           ),
         do: quest.location,
         sobriety: "sober",
@@ -161,7 +173,7 @@ export function main(command?: string) {
           } else {
             printd("Uh oh, we didn't force the NC");
             const possibleEncouters = Object.keys(
-              getLocationMonsters($location`The Cave Before Time`)
+              getLocationMonsters($location`The Cave Before Time`),
             );
             if (possibleEncouters.includes(get("lastEncounter"))) {
               printd("We hit a normal monster, so reset the noncombat forcing");
@@ -187,19 +199,21 @@ export function main(command?: string) {
             { location: quest.location },
             {
               shirt: $item`Jurassic Parka`,
-            }
+            },
           ),
         do: quest.location,
         completed: () => false,
         prepare: () => cliExecute("parka spikolodon"),
         combat: new ChronerStrategy(() =>
-          Macro.trySkill($skill`Launch spikolodon spikes`).standardCombat()
+          Macro.trySkill($skill`Launch spikolodon spikes`).standardCombat(),
         ),
         sobriety: "sober",
       },
       {
         name: "Bowling Ball Run",
-        ready: () => get("cosmicBowlingBallReturnCombats") < 1 && get("hasCosmicBowlingBall"),
+        ready: () =>
+          get("cosmicBowlingBallReturnCombats") < 1 &&
+          get("hasCosmicBowlingBall"),
         do: $location`The Cave Before Time`,
         sobriety: "sober",
         completed: () => false,
@@ -216,7 +230,8 @@ export function main(command?: string) {
       {
         name: "Asdon Bumper",
         ready: () => AsdonMartin.installed(),
-        completed: () => get("banishedMonsters").includes("Spring-Loaded Front Bumper"),
+        completed: () =>
+          get("banishedMonsters").includes("Spring-Loaded Front Bumper"),
         sobriety: "sober",
         do: $location`The Cave Before Time`,
         combat: new ChronerStrategy(() => {
@@ -250,9 +265,13 @@ export function main(command?: string) {
       {
         name: "Spit Jurassic Acid",
         completed: () => have($effect`Everything Looks Yellow`),
-        ready: () => have($item`Jurassic Parka`) && have($skill`Torso Awareness`),
+        ready: () =>
+          have($item`Jurassic Parka`) && have($skill`Torso Awareness`),
         outfit: () =>
-          chooseQuestOutfit({ location: yrTarget, isFree: true }, { shirt: $item`Jurassic Parka` }),
+          chooseQuestOutfit(
+            { location: yrTarget, isFree: true },
+            { shirt: $item`Jurassic Parka` },
+          ),
         prepare: () => cliExecute("parka dilophosaur"),
         do: yrTarget,
         combat: new ChronerStrategy(() => {
@@ -269,10 +288,13 @@ export function main(command?: string) {
       {
         name: "Grey You Attack Skill",
         completed: () =>
-          have($skill`Nantlers`) || have($skill`Nanoshock`) || have($skill`Audioclasm`),
+          have($skill`Nantlers`) ||
+          have($skill`Nanoshock`) ||
+          have($skill`Audioclasm`),
         do: $location`The Haunted Storage Room`,
         ready: () =>
-          myClass() === $class`Grey Goo` && canAdventure($location`The Haunted Storage Room`),
+          myClass() === $class`Grey Goo` &&
+          canAdventure($location`The Haunted Storage Room`),
         combat: new ChronerStrategy(() => Macro.standardCombat()),
         sobriety: "sober",
       },

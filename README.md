@@ -1,6 +1,6 @@
 <img src="https://user-images.githubusercontent.com/8014761/195185013-bbf800ee-e1ee-4ceb-8428-38e0f394769b.png" alt="chrono logo" style="width: 50%;">
 
-**Chrono Collector** (also known as "chrono" is a script meant to help [Kingdom of Loathing](https://www.kingdomofloathing.com/) players efficiently farm Chroners within the Time Twitching Tower. 
+**Chrono Collector** (also known as "chrono" is a script meant to help [Kingdom of Loathing](https://www.kingdomofloathing.com/) players efficiently farm Chroners within the Time Twitching Tower.
 
 To install, run the following command on an up-to-date [KolMafia](https://github.com/kolmafia/kolmafia) version:
 

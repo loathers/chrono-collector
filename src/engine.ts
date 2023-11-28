@@ -6,7 +6,14 @@ import {
   Location,
   setAutoAttack,
 } from "kolmafia";
-import { $item, $slot, CrownOfThrones, get, JuneCleaver, PropertiesManager } from "libram";
+import {
+  $item,
+  $slot,
+  CrownOfThrones,
+  get,
+  JuneCleaver,
+  PropertiesManager,
+} from "libram";
 
 import { bestJuneCleaverOption, shouldSkip } from "./juneCleaver";
 import { printd, sober } from "./lib";
@@ -83,8 +90,8 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
           JuneCleaver.choices.map((choice) => [
             choice,
             shouldSkip(choice) ? 4 : bestJuneCleaverOption(choice),
-          ])
-        )
+          ]),
+        ),
       );
     }
     this.propertyManager.setChoices({ 955: 2 });
