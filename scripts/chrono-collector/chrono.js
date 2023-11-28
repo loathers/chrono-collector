@@ -29834,7 +29834,7 @@ function main(command) {
     Args.showHelp(args);
     return;
   }
-  sinceKolmafiaRevision(26834);
+  sinceKolmafiaRevision(27668);
   var turncount = (0, import_kolmafia86.myTurncount)();
   var completed = args.turns > 0 ? function() {
     return (0, import_kolmafia86.myTurncount)() - turncount >= args.turns || (0, import_kolmafia86.myAdventures)() === 0;
