@@ -1,5 +1,12 @@
 import { Familiar, Item } from "kolmafia";
-import { $familiar, $item, findLeprechaunMultiplier, get, have, propertyTypes } from "libram";
+import {
+  $familiar,
+  $item,
+  findLeprechaunMultiplier,
+  get,
+  have,
+  propertyTypes,
+} from "libram";
 
 import { garboValue } from "../garboValue";
 
@@ -21,7 +28,8 @@ function valueStandardDropFamiliar({
   additionalValue,
 }: StandardDropFamiliar): GeneralFamiliar {
   const expectedTurns = expected[get(pref)] || Infinity;
-  const expectedValue = garboValue(drop) / expectedTurns + (additionalValue?.() ?? 0);
+  const expectedValue =
+    garboValue(drop) / expectedTurns + (additionalValue?.() ?? 0);
   return {
     familiar,
     expectedValue,
@@ -148,11 +156,13 @@ export default function getDropFamiliars(): GeneralFamiliar[] {
     .map(valueStandardDropFamiliar)
     .filter(
       ({ familiar, expectedValue, leprechaunMultiplier }) =>
-        have(familiar) && (expectedValue || leprechaunMultiplier)
+        have(familiar) && (expectedValue || leprechaunMultiplier),
     );
 }
 
-export function getAllDrops(fam: Familiar): { expectedValue: number; expectedTurns: number }[] {
+export function getAllDrops(
+  fam: Familiar,
+): { expectedValue: number; expectedTurns: number }[] {
   const target = rotatingFamiliars.find(({ familiar }) => familiar === fam);
   if (!have(fam) || !target) return [];
 
@@ -162,7 +172,8 @@ export function getAllDrops(fam: Familiar): { expectedValue: number; expectedTur
   for (let i = current; i < target.expected.length; i++) {
     const turns = target.expected[i];
     returnValue.push({
-      expectedValue: garboValue(target.drop) / turns + (target.additionalValue?.() ?? 0),
+      expectedValue:
+        garboValue(target.drop) / turns + (target.additionalValue?.() ?? 0),
       expectedTurns: turns,
     });
   }

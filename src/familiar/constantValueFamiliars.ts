@@ -36,7 +36,7 @@ const standardFamiliars: ConstantValueFamiliar[] = [
     familiar: $familiar`Shorter-Order Cook`,
     value: () =>
       garboAverageValue(
-        ...$items`short beer, short stack of pancakes, short stick of butter, short glass of water, short white`
+        ...$items`short beer, short stack of pancakes, short stick of butter, short glass of water, short white`,
       ) / 11,
   },
   {
@@ -65,7 +65,9 @@ const standardFamiliars: ConstantValueFamiliar[] = [
   {
     familiar: $familiar`Red-Nosed Snapper`,
     value: ({ location }) =>
-      location === $location`Globe Theatre Main Stage` ? garboValue($item`human musk`) / 11 : 0,
+      location === $location`Globe Theatre Main Stage`
+        ? garboValue($item`human musk`) / 11
+        : 0,
   },
   {
     familiar: $familiar`Mosquito`,
@@ -75,7 +77,9 @@ const standardFamiliars: ConstantValueFamiliar[] = [
   },
 ];
 
-export default function getConstantValueFamiliars(options: MenuOptions = {}): GeneralFamiliar[] {
+export default function getConstantValueFamiliars(
+  options: MenuOptions = {},
+): GeneralFamiliar[] {
   return standardFamiliars
     .filter(({ familiar }) => have(familiar))
     .map(({ familiar, value }) => ({

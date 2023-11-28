@@ -22,26 +22,30 @@ import { $familiar, get, SourceTerminal } from "libram";
 export function maxBy<T>(
   array: T[] | readonly T[],
   optimizer: (element: T) => number,
-  reverse?: boolean
+  reverse?: boolean,
 ): T;
-export function maxBy<S extends string | number | symbol, T extends { [x in S]: number }>(
-  array: T[] | readonly T[],
-  key: S,
-  reverse?: boolean
-): T;
-export function maxBy<S extends string | number | symbol, T extends { [x in S]: number }>(
+export function maxBy<
+  S extends string | number | symbol,
+  T extends { [x in S]: number },
+>(array: T[] | readonly T[], key: S, reverse?: boolean): T;
+export function maxBy<
+  S extends string | number | symbol,
+  T extends { [x in S]: number },
+>(
   array: T[] | readonly T[],
   optimizer: ((element: T) => number) | S,
-  reverse = false
+  reverse = false,
 ): T {
   if (typeof optimizer === "function") {
     return maxBy(
       array.map((key) => ({ key, value: optimizer(key) })),
       "value",
-      reverse
+      reverse,
     ).key;
   } else {
-    return array.reduce((a, b) => (a[optimizer] > b[optimizer] !== reverse ? a : b));
+    return array.reduce((a, b) =>
+      a[optimizer] > b[optimizer] !== reverse ? a : b,
+    );
   }
 }
 
@@ -70,7 +74,10 @@ export function printd(message: string) {
 }
 
 export function sober() {
-  return myInebriety() <= inebrietyLimit() + (myFamiliar() === $familiar`Stooper` ? -1 : 0);
+  return (
+    myInebriety() <=
+    inebrietyLimit() + (myFamiliar() === $familiar`Stooper` ? -1 : 0)
+  );
 }
 
 export const args = Args.create("chrono", "A script for farming chroner", {
@@ -118,12 +125,22 @@ export function countEnvironment(environment: CMCEnvironment): number {
     .filter((e) => e === environment).length;
 }
 
-export type RealmType = "spooky" | "stench" | "hot" | "cold" | "sleaze" | "fantasy" | "pirate";
+export type RealmType =
+  | "spooky"
+  | "stench"
+  | "hot"
+  | "cold"
+  | "sleaze"
+  | "fantasy"
+  | "pirate";
 export function realmAvailable(identifier: RealmType): boolean {
   if (identifier === "fantasy") {
     return get(`_frToday`) || get(`frAlways`);
   } else if (identifier === "pirate") {
     return get(`_prToday`) || get(`prAlways`);
   }
-  return get(`_${identifier}AirportToday`, false) || get(`${identifier}AirportAlways`, false);
+  return (
+    get(`_${identifier}AirportToday`, false) ||
+    get(`${identifier}AirportAlways`, false)
+  );
 }

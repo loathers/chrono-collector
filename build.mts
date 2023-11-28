@@ -21,7 +21,7 @@ const context = await esbuild.context({
     }"`,
   },
   entryPoints: {
-    "scripts/chrono-collector/chrono": "src/main.ts"
+    "scripts/chrono-collector/chrono": "src/main.ts",
   },
   entryNames: "[dir]/[name]",
   outdir: "KoLmafia",
