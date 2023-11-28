@@ -29608,7 +29608,7 @@ var setup = {
       return AutumnAton_exports.currentlyIn() !== null;
     },
     do: function() {
-      return AutumnAton_exports.sendTo($locations(_templateObject2518 || (_templateObject2518 = _taggedTemplateLiteral79(["Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley"]))));
+      AutumnAton_exports.sendTo($locations(_templateObject2518 || (_templateObject2518 = _taggedTemplateLiteral79(["Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley"]))));
     },
     ready: function() {
       return AutumnAton_exports.available();
