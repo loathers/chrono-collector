@@ -29852,6 +29852,18 @@ function main(command) {
     name: "Global",
     completed: completed,
     tasks: [{
+      name: "Check Access",
+      completed: function() {
+        return get("timeTowerAvailable");
+      },
+      do: function() {
+        (0, import_kolmafia86.visitUrl)("place.php?whichplace=twitch");
+        if (!get("timeTowerAvailable")) {
+          throw "The Time-Twitching Tower is currently unavailable";
+        }
+      },
+      sobriety: "either"
+    }, {
       name: "Clara's Bell",
       completed: function() {
         return !have($item(_templateObject2149 || (_templateObject2149 = _taggedTemplateLiteral80(["Clara's bell"])))) || get("_claraBellUsed");
