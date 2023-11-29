@@ -45,7 +45,7 @@ export function resetNcForced() {
   printd("Reset NC forcing");
   ncForced = false;
 }
-CrownOfThrones.createRiderMode("default", () => 0);
+CrownOfThrones.createRiderMode("default", {});
 const chooseRider = () => CrownOfThrones.pickRider("default");
 export class ChronerEngine extends Engine<never, ChronerTask> {
   available(task: ChronerTask): boolean {

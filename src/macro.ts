@@ -1,4 +1,4 @@
-import { Item, myFamiliar, Skill } from "kolmafia";
+import { Item, Monster, myFamiliar, Skill } from "kolmafia";
 import {
   $familiar,
   $item,
@@ -25,6 +25,23 @@ export default class Macro extends StrictMacro {
 
   tryHaveItem(item: Item): this {
     return this.externalIf(have(item), Macro.tryItem(item));
+  }
+
+  static seeMoreOf(monster: Monster): Macro {
+    return new Macro().seeMoreOf(monster);
+  }
+
+  seeMoreOf(monster: Monster): this {
+    return this.if_(
+      monster,
+      Macro.externalIf(
+        get("olfactedMonster") !== monster && get("_olfactionsUsed") < 3,
+        Macro.trySkill($skill`Transcendent Olfaction`),
+      ).externalIf(
+        get("_gallapagosMonster") !== monster,
+        Macro.trySkill($skill`Gallapagosian Mating Call`),
+      ),
+    );
   }
 
   static tryHaveItem(item: Item): Macro {

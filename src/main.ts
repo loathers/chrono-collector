@@ -40,7 +40,28 @@ import { args, printd, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
 import { rose } from "./rose";
+import { future } from "./future";
 import { setup } from "./setup";
+
+const completed = () => {
+  const turncount = myTurncount();
+  return args.turns > 0
+    ? () => myTurncount() - turncount >= args.turns || myAdventures() === 0
+    : () => myAdventures() === -args.turns;
+};
+
+function getQuest(): ChronerQuest {
+  switch (args.mode) {
+    case "capsule":
+      return { ...capsule, completed: completed() };
+    case "rose":
+      return { ...rose, completed: completed() };
+    case "future":
+      return { ...future, completed: completed() };
+    default:
+      throw "Unrecognized mode";
+  }
+}
 
 export function main(command?: string) {
   Args.fill(args, command);
@@ -51,22 +72,14 @@ export function main(command?: string) {
   }
 
   sinceKolmafiaRevision(27668);
-  const turncount = myTurncount();
-  const completed =
-    args.turns > 0
-      ? () => myTurncount() - turncount >= args.turns || myAdventures() === 0
-      : () => myAdventures() === -args.turns;
 
   let digitizes = -1;
   const yrTarget = $location`The Cave Before Time`;
 
-  const quest: ChronerQuest =
-    args.mode === "capsule"
-      ? { ...capsule, completed }
-      : { ...rose, completed };
+  const quest = getQuest();
   const global: Quest<ChronerTask> = {
     name: "Global",
-    completed,
+    completed: completed(),
     tasks: [
       {
         name: "Check Access",
