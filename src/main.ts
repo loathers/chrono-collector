@@ -120,8 +120,10 @@ export function main(command?: string) {
           CinchoDeMayo.totalAvailableCinch() > 60 &&
           !get("noncombatForcerActive"),
         do: () => {
+          const turns = totalTurnsPlayed();
           while (CinchoDeMayo.currentCinch() < 60) {
             cliExecute("rest");
+            if (totalTurnsPlayed() > turns) break;
           }
           useSkill(1, $skill`Cincho: Fiesta Exit`);
         },
