@@ -116,9 +116,10 @@ export function main(command?: string) {
       },
       {
         name: "Fiesta Exit",
+        ready: () => CinchoDeMayo.totalAvailableCinch() > 60,
         completed: () =>
-          CinchoDeMayo.totalAvailableCinch() > 60 &&
-          !get("noncombatForcerActive"),
+          get("noncombatForcerActive") ||
+          CinchoDeMayo.totalAvailableCinch() < 60,
         do: () => {
           const turns = totalTurnsPlayed();
           while (CinchoDeMayo.currentCinch() < 60) {
