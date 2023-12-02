@@ -9,6 +9,7 @@ import {
   myTurncount,
   totalTurnsPlayed,
   use,
+  useSkill,
   visitUrl,
 } from "kolmafia";
 import {
@@ -20,6 +21,7 @@ import {
   $monsters,
   $skill,
   AsdonMartin,
+  CinchoDeMayo,
   Counter,
   get,
   have,
@@ -34,14 +36,16 @@ import {
   ChronerQuest,
   ChronerStrategy,
   ChronerTask,
+  ncForced,
   resetNcForced,
 } from "./engine";
-import { args, printd, printh } from "./lib";
+import { args, freeRest, freeRestsLeft, printd, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
 import { rose } from "./rose";
 import { future } from "./future";
 import { setup } from "./setup";
+import { bigRock } from "./rocks";
 
 const completed = () => {
   const turncount = myTurncount();
@@ -58,6 +62,8 @@ function getQuest(): ChronerQuest {
       return { ...rose, completed: completed() };
     case "future":
       return { ...future, completed: completed() };
+    case "rock":
+      return { ...bigRock, completed: completed() };
     default:
       throw "Unrecognized mode";
   }
@@ -204,6 +210,7 @@ export function main(command?: string) {
       },
       {
         name: "Time Capsule",
+        ready: () => args.mode !== "rock",
         do: () => {
           adv1($location`The Cave Before Time`, 0, "");
           if (get("lastEncounter") === "Time Cave.  Period.") {
@@ -228,6 +235,24 @@ export function main(command?: string) {
         combat: new ChronerStrategy(() => Macro.standardCombat()),
       },
       {
+        name: "Cincho Rest",
+        ready: () =>
+          CinchoDeMayo.have() &&
+          freeRestsLeft() &&
+          CinchoDeMayo.totalAvailableCinch() >= 60,
+        do: () => freeRest(),
+        completed: () => CinchoDeMayo.currentCinch() >= 60,
+        sobriety: "either",
+      },
+      {
+        name: "Cincho Fiesta",
+        ready: () => CinchoDeMayo.have() && CinchoDeMayo.currentCinch() >= 60,
+        outfit: { equip: $items`Cincho de Mayo` },
+        do: () => useSkill($skill`Cincho: Fiesta Exit`),
+        completed: () => ncForced(),
+        sobriety: "sober",
+      },
+      {
         name: "Spikolodon Spikes",
         ready: () =>
           have($item`Jurassic Parka`) &&
@@ -241,11 +266,9 @@ export function main(command?: string) {
             },
           ),
         do: quest.location,
-        completed: () => false,
+        completed: () => ncForced(),
         prepare: () => cliExecute("parka spikolodon"),
-        combat: new ChronerStrategy(() =>
-          Macro.trySkill($skill`Launch spikolodon spikes`).standardCombat(),
-        ),
+        combat: new ChronerStrategy(() => Macro.spikes().standardCombat()),
         sobriety: "sober",
       },
       {

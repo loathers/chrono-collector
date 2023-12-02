@@ -9,14 +9,16 @@ import {
 import {
   $item,
   $slot,
+  CinchoDeMayo,
   CrownOfThrones,
   get,
+  have,
   JuneCleaver,
   PropertiesManager,
 } from "libram";
 
 import { bestJuneCleaverOption, shouldSkip } from "./juneCleaver";
-import { printd, sober } from "./lib";
+import { args, printd, sober } from "./lib";
 import Macro from "./macro";
 
 export type ChronerTask = Task & {
@@ -36,14 +38,21 @@ export class ChronerStrategy extends CombatStrategy {
   }
 }
 
-function countAvailableNcForces() {
-  return (get("_claraBellUsed") ? 0 : 1) + (5 - get("_spikolodonSpikeUses"));
+export function cinchNCs(): number {
+  return CinchoDeMayo.have()
+    ? Math.floor(CinchoDeMayo.totalAvailableCinch() / 60)
+    : 0;
 }
 
-let ncForced = false;
+export const countAvailableNcForces = (): number =>
+  (have($item`Clara's bell`) && !get("_claraBellUsed") ? 1 : 0) +
+  (have($item`Jurassic Parka`) ? 5 - get("_spikolodonSpikeUses") : 0) +
+  cinchNCs();
+
+export const ncForced = (): boolean => get("noncombatForcerActive");
 export function resetNcForced() {
   printd("Reset NC forcing");
-  ncForced = false;
+  ncForced();
 }
 CrownOfThrones.createRiderMode("default", {});
 const chooseRider = () => CrownOfThrones.pickRider("default");
@@ -55,7 +64,7 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
       (!sober() && task.sobriety === "drunk");
 
     if (task.forced) {
-      return sobriety && ncForced && super.available(task);
+      return sobriety && ncForced() && super.available(task);
     }
     return sobriety && super.available(task);
   }
@@ -73,13 +82,7 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
   }
 
   execute(task: ChronerTask): void {
-    const ncBefore = countAvailableNcForces();
     super.execute(task);
-    const ncAfter = countAvailableNcForces();
-
-    if (ncBefore > ncAfter) {
-      ncForced = true;
-    }
   }
 
   setChoices(task: ChronerTask, manager: PropertiesManager): void {
@@ -94,7 +97,7 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
         ),
       );
     }
-    this.propertyManager.setChoices({ 955: 2 });
+    this.propertyManager.setChoices({ 955: args.mode === "rock" ? 3 : 2 });
   }
 
   shouldRepeatAdv(task: ChronerTask): boolean {
