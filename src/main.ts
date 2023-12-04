@@ -222,16 +222,18 @@ export function main(command?: string) {
           // eslint-disable-next-line libram/verify-constants
           have($item`Spring Bros. ID badge`) && have($item`Boltsmann ID badge`),
         completed: () => get("_automatedFutureManufactures") >= 11,
-        // eslint-disable-next-line libram/verify-constants
         do: () =>
           getBestAutomatedFutureSide() === "springbros"
+            // eslint-disable-next-line libram/verify-constants
             ? $location`Spring Bros. Solenoids`
+            // eslint-disable-next-line libram/verify-constants
             : $location`Boltsmann Bearings`,
-        // eslint-disable-next-line libram/verify-constants
         outfit: () => ({
           acc1:
             getBestAutomatedFutureSide() === "springbros"
+              // eslint-disable-next-line libram/verify-constants
               ? $item`Spring Bros. ID badge`
+              // eslint-disable-next-line libram/verify-constants
               : $item`Boltsmann ID badge`,
         }),
         choices: {
