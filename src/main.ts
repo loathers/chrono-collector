@@ -256,9 +256,10 @@ export function main(command?: string) {
       {
         name: "Time Capsule",
         do: () => {
+          const turns = totalTurnsPlayed();
           adv1($location`The Cave Before Time`, 0, "");
-          if (get("lastEncounter") !== "Time Cave.  Period.") {
-            throw "We expeted to force the NC";
+          if (totalTurnsPlayed() > turns && get("lastEncounter") !== "Time Cave.  Period.") {
+            throw "We expected to force the NC";
           }
         },
         forced: true,
