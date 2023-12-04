@@ -223,9 +223,17 @@ export function main(command?: string) {
           have($item`Spring Bros. ID badge`) && have($item`Boltsmann ID badge`),
         completed: () => get("_automatedFutureManufactures") >= 11,
         // eslint-disable-next-line libram/verify-constants
-        do: () => getBestAutomatedFutureSide() === "springbros" ? $location`Spring Bros. Solenoids` : $location`Boltsmann Bearings`,
+        do: () =>
+          getBestAutomatedFutureSide() === "springbros"
+            ? $location`Spring Bros. Solenoids`
+            : $location`Boltsmann Bearings`,
         // eslint-disable-next-line libram/verify-constants
-        outfit: () => ({ acc1: getBestAutomatedFutureSide() === "springbros" ? $item`Spring Bros. ID badge` : $item`Boltsmann ID badge` }),
+        outfit: () => ({
+          acc1:
+            getBestAutomatedFutureSide() === "springbros"
+              ? $item`Spring Bros. ID badge`
+              : $item`Boltsmann ID badge`,
+        }),
         choices: {
           1512: 1,
           1513: 1,
@@ -237,7 +245,10 @@ export function main(command?: string) {
         do: () => {
           const turns = totalTurnsPlayed();
           adv1($location`The Cave Before Time`, 0, "");
-          if (totalTurnsPlayed() > turns && get("lastEncounter") !== "Time Cave.  Period.") {
+          if (
+            totalTurnsPlayed() > turns &&
+            get("lastEncounter") !== "Time Cave.  Period."
+          ) {
             throw "We expected to force the NC";
           }
         },
