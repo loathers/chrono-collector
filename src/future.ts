@@ -5,9 +5,7 @@ import Macro from "./macro";
 import { chooseQuestOutfit, ifHave } from "./outfit";
 import { sessionStorage, visitUrl } from "kolmafia";
 
-// eslint-disable-next-line libram/verify-constants
-const location = $location`The Home of the Future`;
-// eslint-disable-next-line libram/verify-constants
+const location = $location`The Home of The Future`;
 const monster = $monster`robot maid`;
 
 export function getBestAutomatedFutureSide() {
