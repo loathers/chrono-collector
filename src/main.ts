@@ -3,9 +3,11 @@ import {
   adv1,
   canAdventure,
   cliExecute,
+  equip,
   myAdventures,
   myClass,
   myTurncount,
+  sessionStorage,
   totalTurnsPlayed,
   use,
   useSkill,
@@ -215,6 +217,41 @@ export function main(command?: string) {
         do: quest.location,
         sobriety: "sober",
         combat: new ChronerStrategy(() => Macro.standardCombat()),
+      },
+      {
+        name: "Work in the Future",
+        ready: () =>
+          // eslint-disable-next-line libram/verify-constants
+          have($item`Spring Bros. ID badge`) && have($item`Boltsmann ID badge`),
+        completed: () => get("_automatedFutureManufactures") >= 11,
+        do: () => {
+          let best = sessionStorage.getItem("automatedFutureBest");
+          if (!best) {
+            const page = visitUrl("place.php?whichplace=twitch");
+            const springbros = Number(page.match(/title='(-?\d+)' href=adventure.php\?snarfblat=581/)?.[1] ?? "0");
+            const boltsmann = Number(page.match(/title='(-?\d+)' href=adventure.php\?snarfblat=582/)?.[1] ?? "0");
+            best = springbros > boltsmann ? "springbros" : "boltsmann";
+            sessionStorage.setItem("automatedFutureBest", best);
+          }
+
+          const [badge, loc] =
+            best === "springbros"
+              ? [
+                  // eslint-disable-next-line libram/verify-constants
+                  $item`Spring Bros. ID badge`,
+                  // eslint-disable-next-line libram/verify-constants
+                  $location`Spring Bros. Solenoids`,
+                ]
+                // eslint-disable-next-line libram/verify-constants
+              : [$item`Boltsmann ID badge`, $location`Boltsmann Bearings`];
+          equip(badge);
+          adv1(loc, 0, "");
+        },
+        choices: {
+          1512: 1,
+          1513: 1,
+        },
+        sobriety: "either",
       },
       {
         name: "Time Capsule",
