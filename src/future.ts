@@ -45,7 +45,7 @@ export const future: ChronerQuest = {
         );
       },
       combat: new ChronerStrategy(() =>
-        Macro.seeMoreOf(monster).standardCombat(),
+        Macro.step("pickpocket").seeMoreOf(monster).standardCombat(),
       ),
       sobriety: "either",
     },
