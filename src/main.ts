@@ -42,7 +42,7 @@ import { args, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
 import { rose } from "./rose";
-import { future } from "./future";
+import { future, getBestAutomatedFutureSide } from "./future";
 import { setup } from "./setup";
 
 const completed = () => {
@@ -224,29 +224,10 @@ export function main(command?: string) {
           // eslint-disable-next-line libram/verify-constants
           have($item`Spring Bros. ID badge`) && have($item`Boltsmann ID badge`),
         completed: () => get("_automatedFutureManufactures") >= 11,
-        do: () => {
-          let best = sessionStorage.getItem("automatedFutureBest");
-          if (!best) {
-            const page = visitUrl("place.php?whichplace=twitch");
-            const springbros = Number(page.match(/title='(-?\d+)' href=adventure.php\?snarfblat=581/)?.[1] ?? "0");
-            const boltsmann = Number(page.match(/title='(-?\d+)' href=adventure.php\?snarfblat=582/)?.[1] ?? "0");
-            best = springbros > boltsmann ? "springbros" : "boltsmann";
-            sessionStorage.setItem("automatedFutureBest", best);
-          }
-
-          const [badge, loc] =
-            best === "springbros"
-              ? [
-                  // eslint-disable-next-line libram/verify-constants
-                  $item`Spring Bros. ID badge`,
-                  // eslint-disable-next-line libram/verify-constants
-                  $location`Spring Bros. Solenoids`,
-                ]
-                // eslint-disable-next-line libram/verify-constants
-              : [$item`Boltsmann ID badge`, $location`Boltsmann Bearings`];
-          equip(badge);
-          adv1(loc, 0, "");
-        },
+        // eslint-disable-next-line libram/verify-constants
+        do: () => getBestAutomatedFutureSide() === "springbros" ? $location`Spring Bros. Solenoids` : $location`Boltsmann Bearings`,
+        // eslint-disable-next-line libram/verify-constants
+        outfit: () => ({ acc1: getBestAutomatedFutureSide() === "springbros" ? $item`Spring Bros. ID badge` : $item`Boltsmann ID badge` }),
         choices: {
           1512: 1,
           1513: 1,
