@@ -29464,7 +29464,7 @@ var future = {
       }, sausageSpec);
     },
     combat: new ChronerStrategy(function() {
-      return Macro2.seeMoreOf(monster).standardCombat();
+      return Macro2.step("pickpocket").seeMoreOf(monster).standardCombat();
     }),
     sobriety: "either"
   }]
