@@ -63,6 +63,7 @@ export function chooseQuestOutfit(
       p: get("_voidFreeFights") < 5 ? 1 / 13 : 0,
     },
   ].filter(({ i }) => have(i) && canEquip(i));
+
   const offhands = freeChance.length
     ? { offhand: maxBy(freeChance, "p").i }
     : {};
@@ -105,6 +106,11 @@ export function chooseQuestOutfit(
     spec[`acc${i + 1}` as OutfitSlot] = accessory;
   }
   const mergedSpec = mergeSpecs(...outfits, spec);
+
+  if (!sober()) {
+    mergedSpec.offhand = $item`Drunkula's wineglass`;
+  }
+
   if (
     !have($item`Crown of Thrones`) &&
     have($item`Buddy Bjorn`) &&

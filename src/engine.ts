@@ -36,15 +36,6 @@ export class ChronerStrategy extends CombatStrategy {
   }
 }
 
-function countAvailableNcForces() {
-  return (get("_claraBellUsed") ? 0 : 1) + (5 - get("_spikolodonSpikeUses"));
-}
-
-let ncForced = false;
-export function resetNcForced() {
-  printd("Reset NC forcing");
-  ncForced = false;
-}
 CrownOfThrones.createRiderMode("default", {});
 const chooseRider = () => CrownOfThrones.pickRider("default");
 export class ChronerEngine extends Engine<never, ChronerTask> {
@@ -55,7 +46,7 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
       (!sober() && task.sobriety === "drunk");
 
     if (task.forced) {
-      return sobriety && ncForced && super.available(task);
+      return sobriety && get("noncombatForcerActive") && super.available(task);
     }
     return sobriety && super.available(task);
   }
@@ -70,16 +61,6 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
       if (choice) bjornifyFamiliar(choice.familiar);
     }
     return outfit;
-  }
-
-  execute(task: ChronerTask): void {
-    const ncBefore = countAvailableNcForces();
-    super.execute(task);
-    const ncAfter = countAvailableNcForces();
-
-    if (ncBefore > ncAfter) {
-      ncForced = true;
-    }
   }
 
   setChoices(task: ChronerTask, manager: PropertiesManager): void {

@@ -3,12 +3,12 @@ import {
   adv1,
   canAdventure,
   cliExecute,
-  getLocationMonsters,
   myAdventures,
   myClass,
   myTurncount,
   totalTurnsPlayed,
   use,
+  useSkill,
   visitUrl,
 } from "kolmafia";
 import {
@@ -20,6 +20,7 @@ import {
   $monsters,
   $skill,
   AsdonMartin,
+  CinchoDeMayo,
   Counter,
   get,
   have,
@@ -34,9 +35,8 @@ import {
   ChronerQuest,
   ChronerStrategy,
   ChronerTask,
-  resetNcForced,
 } from "./engine";
-import { args, printd, printh } from "./lib";
+import { args, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
 import { rose } from "./rose";
@@ -111,6 +111,20 @@ export function main(command?: string) {
         completed: () => !have($item`Clara's bell`) || get("_claraBellUsed"),
         do: () => {
           use($item`Clara's bell`);
+        },
+        sobriety: "either",
+      },
+      {
+        name: "Fiesta Exit",
+        ready: () => CinchoDeMayo.totalAvailableCinch() > 60,
+        completed: () => get("noncombatForcerActive"),
+        do: () => {
+          const turns = totalTurnsPlayed();
+          while (CinchoDeMayo.currentCinch() < 60) {
+            cliExecute("rest");
+            if (totalTurnsPlayed() > turns) break;
+          }
+          useSkill(1, $skill`Cincho: Fiesta Exit`);
         },
         sobriety: "either",
       },
@@ -206,20 +220,8 @@ export function main(command?: string) {
         name: "Time Capsule",
         do: () => {
           adv1($location`The Cave Before Time`, 0, "");
-          if (get("lastEncounter") === "Time Cave.  Period.") {
-            printd("Forced noncombat!");
-            resetNcForced();
-          } else {
-            printd("Uh oh, we didn't force the NC");
-            const possibleEncouters = Object.keys(
-              getLocationMonsters($location`The Cave Before Time`),
-            );
-            if (possibleEncouters.includes(get("lastEncounter"))) {
-              printd("We hit a normal monster, so reset the noncombat forcing");
-              resetNcForced();
-            } else {
-              printd("We hit something else, so keep trying for the noncombat");
-            }
+          if (get("lastEncounter") !== "Time Cave.  Period.") {
+            throw "We expeted to force the NC";
           }
         },
         forced: true,
