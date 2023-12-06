@@ -42,6 +42,7 @@ import { chooseQuestOutfit } from "./outfit";
 import { rose } from "./rose";
 import { future, getBestAutomatedFutureSide } from "./future";
 import { setup } from "./setup";
+import { bigRock } from "./rocks";
 
 const completed = () => {
   const turncount = myTurncount();
@@ -58,6 +59,8 @@ function getQuest(): ChronerQuest {
       return { ...rose, completed: completed() };
     case "future":
       return { ...future, completed: completed() };
+    case "rock":
+      return { ...bigRock, completed: completed() };
     default:
       throw "Unrecognized mode";
   }
@@ -108,7 +111,10 @@ export function main(command?: string) {
       },
       {
         name: "Clara's Bell",
-        completed: () => !have($item`Clara's bell`) || get("_claraBellUsed"),
+        completed: () =>
+          !have($item`Clara's bell`) ||
+          get("_claraBellUsed") ||
+          get("noncombatForcerActive"),
         do: () => {
           use($item`Clara's bell`);
         },
@@ -239,6 +245,7 @@ export function main(command?: string) {
       },
       {
         name: "Time Capsule",
+        ready: () => args.mode !== "rock",
         do: () => {
           const turns = totalTurnsPlayed();
           adv1($location`The Cave Before Time`, 0, "");
@@ -268,11 +275,9 @@ export function main(command?: string) {
             },
           ),
         do: quest.location,
-        completed: () => false,
+        completed: () => get("noncombatForcerActive"),
         prepare: () => cliExecute("parka spikolodon"),
-        combat: new ChronerStrategy(() =>
-          Macro.trySkill($skill`Launch spikolodon spikes`).standardCombat(),
-        ),
+        combat: new ChronerStrategy(() => Macro.spikes().standardCombat()),
         sobriety: "sober",
       },
       {
@@ -332,7 +337,9 @@ export function main(command?: string) {
         name: "Spit Jurassic Acid",
         completed: () => have($effect`Everything Looks Yellow`),
         ready: () =>
-          have($item`Jurassic Parka`) && have($skill`Torso Awareness`),
+          have($item`Jurassic Parka`) &&
+          have($skill`Torso Awareness`) &&
+          !get("noncombatForcerActive"),
         outfit: () =>
           chooseQuestOutfit(
             { location: yrTarget, isFree: true },
