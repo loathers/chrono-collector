@@ -40,7 +40,7 @@ import { args, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
 import { rose } from "./rose";
-import { future } from "./future";
+import { future, getBestAutomatedFutureSide } from "./future";
 import { setup } from "./setup";
 import { bigRock } from "./rocks";
 
@@ -220,12 +220,37 @@ export function main(command?: string) {
         combat: new ChronerStrategy(() => Macro.standardCombat()),
       },
       {
+        name: "Work in the Future",
+        ready: () =>
+          have($item`Spring Bros. ID badge`) && have($item`Boltsmann ID badge`),
+        completed: () => get("_automatedFutureManufactures") >= 11,
+        do: () =>
+          getBestAutomatedFutureSide() === "springbros"
+            ? $location`Spring Bros. Solenoids`
+            : $location`Boltsmann Bearings`,
+        outfit: () => ({
+          acc1:
+            getBestAutomatedFutureSide() === "springbros"
+              ? $item`Spring Bros. ID badge`
+              : $item`Boltsmann ID badge`,
+        }),
+        choices: {
+          1512: 1,
+          1513: 1,
+        },
+        sobriety: "either",
+      },
+      {
         name: "Time Capsule",
         ready: () => args.mode !== "rock",
         do: () => {
+          const turns = totalTurnsPlayed();
           adv1($location`The Cave Before Time`, 0, "");
-          if (get("lastEncounter") !== "Time Cave.  Period.") {
-            throw "We expeted to force the NC";
+          if (
+            totalTurnsPlayed() > turns &&
+            get("lastEncounter") !== "Time Cave.  Period."
+          ) {
+            throw "We expected to force the NC";
           }
         },
         forced: true,

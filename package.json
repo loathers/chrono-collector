@@ -16,10 +16,10 @@
   },
   "dependencies": {
     "core-js": "^3.32.2",
-    "garbo-lib": "^0.0.1",
+    "garbo-lib": "^0.0.3",
     "grimoire-kolmafia": "^0.3.25",
-    "kolmafia": "^5.27668.0",
-    "libram": "^0.8.17"
+    "kolmafia": "^5.27711.0",
+    "libram": "^0.8.18"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.15",
@@ -34,9 +34,9 @@
     "copyfiles": "^2.4.1",
     "esbuild": "^0.19.3",
     "esbuild-plugin-babel": "^0.2.3",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-libram": "^0.3.4",
     "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-libram": "^0.3.5",
     "lint-staged": "^14.0.1",
     "madge": "^6.1.0",
     "prettier": "^3.0.3",
