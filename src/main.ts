@@ -3,7 +3,6 @@ import {
   adv1,
   canAdventure,
   cliExecute,
-  getLocationMonsters,
   myAdventures,
   myClass,
   myTurncount,
@@ -36,10 +35,8 @@ import {
   ChronerQuest,
   ChronerStrategy,
   ChronerTask,
-  ncForced,
-  resetNcForced,
 } from "./engine";
-import { args, freeRest, freeRestsLeft, printd, printh } from "./lib";
+import { args, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
 import { rose } from "./rose";
@@ -114,9 +111,23 @@ export function main(command?: string) {
       },
       {
         name: "Clara's Bell",
-        completed: () => !have($item`Clara's bell`) || get("_claraBellUsed"),
+        completed: () => !have($item`Clara's bell`) || get("_claraBellUsed") || get("noncombatForcerActive"),
         do: () => {
           use($item`Clara's bell`);
+        },
+        sobriety: "either",
+      },
+      {
+        name: "Fiesta Exit",
+        ready: () => CinchoDeMayo.totalAvailableCinch() > 60,
+        completed: () => get("noncombatForcerActive"),
+        do: () => {
+          const turns = totalTurnsPlayed();
+          while (CinchoDeMayo.currentCinch() < 60) {
+            cliExecute("rest");
+            if (totalTurnsPlayed() > turns) break;
+          }
+          useSkill(1, $skill`Cincho: Fiesta Exit`);
         },
         sobriety: "either",
       },
@@ -213,44 +224,14 @@ export function main(command?: string) {
         ready: () => args.mode !== "rock",
         do: () => {
           adv1($location`The Cave Before Time`, 0, "");
-          if (get("lastEncounter") === "Time Cave.  Period.") {
-            printd("Forced noncombat!");
-            resetNcForced();
-          } else {
-            printd("Uh oh, we didn't force the NC");
-            const possibleEncouters = Object.keys(
-              getLocationMonsters($location`The Cave Before Time`),
-            );
-            if (possibleEncouters.includes(get("lastEncounter"))) {
-              printd("We hit a normal monster, so reset the noncombat forcing");
-              resetNcForced();
-            } else {
-              printd("We hit something else, so keep trying for the noncombat");
-            }
+          if (get("lastEncounter") !== "Time Cave.  Period.") {
+            throw "We expeted to force the NC";
           }
         },
         forced: true,
         sobriety: "either",
         completed: () => false,
         combat: new ChronerStrategy(() => Macro.standardCombat()),
-      },
-      {
-        name: "Cincho Rest",
-        ready: () =>
-          CinchoDeMayo.have() &&
-          freeRestsLeft() &&
-          CinchoDeMayo.totalAvailableCinch() >= 60,
-        do: () => freeRest(),
-        completed: () => CinchoDeMayo.currentCinch() >= 60,
-        sobriety: "either",
-      },
-      {
-        name: "Cincho Fiesta",
-        ready: () => CinchoDeMayo.have() && CinchoDeMayo.currentCinch() >= 60,
-        outfit: { equip: $items`Cincho de Mayo` },
-        do: () => useSkill($skill`Cincho: Fiesta Exit`),
-        completed: () => ncForced(),
-        sobriety: "sober",
       },
       {
         name: "Spikolodon Spikes",
@@ -266,7 +247,7 @@ export function main(command?: string) {
             },
           ),
         do: quest.location,
-        completed: () => ncForced(),
+        completed: () => get("noncombatForcerActive"),
         prepare: () => cliExecute("parka spikolodon"),
         combat: new ChronerStrategy(() => Macro.spikes().standardCombat()),
         sobriety: "sober",
@@ -328,7 +309,7 @@ export function main(command?: string) {
         name: "Spit Jurassic Acid",
         completed: () => have($effect`Everything Looks Yellow`),
         ready: () =>
-          have($item`Jurassic Parka`) && have($skill`Torso Awareness`),
+          have($item`Jurassic Parka`) && have($skill`Torso Awareness`) && !get("noncombatForcerActive"),
         outfit: () =>
           chooseQuestOutfit(
             { location: yrTarget, isFree: true },

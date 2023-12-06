@@ -9,10 +9,8 @@ import {
 import {
   $item,
   $slot,
-  CinchoDeMayo,
   CrownOfThrones,
   get,
-  have,
   JuneCleaver,
   PropertiesManager,
 } from "libram";
@@ -38,22 +36,6 @@ export class ChronerStrategy extends CombatStrategy {
   }
 }
 
-export function cinchNCs(): number {
-  return CinchoDeMayo.have()
-    ? Math.floor(CinchoDeMayo.totalAvailableCinch() / 60)
-    : 0;
-}
-
-export const countAvailableNcForces = (): number =>
-  (have($item`Clara's bell`) && !get("_claraBellUsed") ? 1 : 0) +
-  (have($item`Jurassic Parka`) ? 5 - get("_spikolodonSpikeUses") : 0) +
-  cinchNCs();
-
-export const ncForced = (): boolean => get("noncombatForcerActive");
-export function resetNcForced() {
-  printd("Reset NC forcing");
-  ncForced();
-}
 CrownOfThrones.createRiderMode("default", {});
 const chooseRider = () => CrownOfThrones.pickRider("default");
 export class ChronerEngine extends Engine<never, ChronerTask> {
@@ -64,7 +46,7 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
       (!sober() && task.sobriety === "drunk");
 
     if (task.forced) {
-      return sobriety && ncForced() && super.available(task);
+      return sobriety && get("noncombatForcerActive") && super.available(task);
     }
     return sobriety && super.available(task);
   }
@@ -79,10 +61,6 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
       if (choice) bjornifyFamiliar(choice.familiar);
     }
     return outfit;
-  }
-
-  execute(task: ChronerTask): void {
-    super.execute(task);
   }
 
   setChoices(task: ChronerTask, manager: PropertiesManager): void {

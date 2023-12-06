@@ -3,10 +3,10 @@ import { ChronerQuest, ChronerStrategy } from "./engine";
 import Macro from "./macro";
 import { chooseQuestOutfit, ifHave } from "./outfit";
 import {
-  adv1,
   handlingChoice,
   myAscensions,
   runChoice,
+  toUrl,
   visitUrl,
 } from "kolmafia";
 
@@ -33,14 +33,19 @@ export const bigRock: ChronerQuest = {
         get("_questCaveDan", 0) > 1 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
-        adv1(location, 1);
-        if (handlingChoice()) {
+        visitUrl(toUrl(location));
+          for (const choiceValue of [3,1,2,1,2]) {
+            runChoice(choiceValue);
+          }
+        /* if (handlingChoice()) {
           runChoice(1); // 954 - Ask About Password
           runChoice(2); // 954 - Game of Chance
           runChoice(1); // 954 - Pick Rock
           runChoice(2); // 954 - No Thanks
+        } */
+        if (get("lastEncounter") === "Ook the Mook") {
+          set("_questCaveDan", 2);
         }
-        set("_questCaveDan", 2);
       },
       outfit: () => {
         const sausageSpec =
@@ -55,7 +60,6 @@ export const bigRock: ChronerQuest = {
       combat: new ChronerStrategy(() => Macro.standardCombat()),
       forced: true,
       sobriety: "sober",
-      choices: { 955: 3 },
     },
     {
       name: "Teach Paper",
@@ -64,13 +68,16 @@ export const bigRock: ChronerQuest = {
         get("_questCaveDan", 0) > 2 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
-        adv1(location, 1);
+        visitUrl(toUrl(location))
         if (handlingChoice()) {
+          runChoice(3); // 955 - Go towards noise
           runChoice(1); // 954 - Ask About Password
           runChoice(1); // 954 - Offer to Trade
           runChoice(2); // 954 - Teach Secret of Paper
         }
-        set("_questCaveDan", 3);
+        if (get("lastEncounter") === "Ook the Mook") {
+          set("_questCaveDan", 3);
+        }
       },
       outfit: () => {
         const sausageSpec =
@@ -85,7 +92,6 @@ export const bigRock: ChronerQuest = {
       combat: new ChronerStrategy(() => Macro.standardCombat()),
       forced: true,
       sobriety: "sober",
-      choices: { 955: 3 },
     },
     {
       name: "Teach Scissors",
@@ -94,13 +100,16 @@ export const bigRock: ChronerQuest = {
         get("_questCaveDan", 0) > 3 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
-        adv1(location, 1);
+        visitUrl(toUrl(location))
         if (handlingChoice()) {
+          runChoice(3); // 955 - Go towards noise
           runChoice(1); // 954 - Ask About Password
           runChoice(1); // 954 - Offer to Trade
           runChoice(2); // 954 - Teach Secret of Scissors
         }
-        set("_questCaveDan", 4);
+        if (get("lastEncounter") === "Ook the Mook") {
+          set("_questCaveDan", 4);
+        }
       },
       outfit: () => {
         const sausageSpec =
@@ -115,7 +124,6 @@ export const bigRock: ChronerQuest = {
       combat: new ChronerStrategy(() => Macro.standardCombat()),
       forced: true,
       sobriety: "sober",
-      choices: { 955: 3 },
     },
     {
       name: "RoShamBo",
@@ -124,15 +132,18 @@ export const bigRock: ChronerQuest = {
         get("_questCaveDan", 0) > 4 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
-        adv1(location, 1);
+        visitUrl(toUrl(location))
         if (handlingChoice()) {
+          runChoice(3); // 955 - Go towards noise
           runChoice(1); // 954 - Ask About Password
           runChoice(2); // 954 - Game of Chance
           while (handlingChoice()) {
             runChoice(1); // 954 - Alternating between picking Rock and continuing to play until you win.
           }
         }
-        set("_questCaveDan", 5);
+        if (get("lastEncounter") === "Ook the Mook") {
+          set("_questCaveDan", 5);
+        }
       },
       outfit: () => {
         const sausageSpec =
@@ -147,7 +158,6 @@ export const bigRock: ChronerQuest = {
       combat: new ChronerStrategy(() => Macro.standardCombat()),
       forced: true,
       sobriety: "sober",
-      choices: { 955: 3 },
     },
     {
       name: "CaveDan",
@@ -156,7 +166,7 @@ export const bigRock: ChronerQuest = {
         get("_questCaveDan", 0) > 5 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
-        visitUrl("place.php?whichplace=twitch&action=twitch_dancave1");
+        visitUrl("place.php?whichplace=twitch&action=twitch_dancave3");
         set("_questCaveDan", 6);
         set("lastCaveDanDefeat", myAscensions());
       },

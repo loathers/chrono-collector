@@ -21,7 +21,7 @@ import {
 
 import { freeFightFamiliar, MenuOptions } from "./familiar";
 import { garboAverageValue, garboValue } from "./garboValue";
-import { maxBy, realmAvailable, sober } from "./lib";
+import { args, maxBy, realmAvailable, sober } from "./lib";
 
 export function ifHave(
   slot: OutfitSlot,
@@ -63,6 +63,7 @@ export function chooseQuestOutfit(
       p: get("_voidFreeFights") < 5 ? 1 / 13 : 0,
     },
   ].filter(({ i }) => have(i) && canEquip(i));
+
   const offhands = freeChance.length
     ? { offhand: maxBy(freeChance, "p").i }
     : {};
@@ -105,6 +106,11 @@ export function chooseQuestOutfit(
     spec[`acc${i + 1}` as OutfitSlot] = accessory;
   }
   const mergedSpec = mergeSpecs(...outfits, spec);
+
+  if (!sober()) {
+    mergedSpec.offhand = $item`Drunkula's wineglass`;
+  }
+
   if (
     !have($item`Crown of Thrones`) &&
     have($item`Buddy Bjorn`) &&
@@ -173,6 +179,7 @@ const accessories = new Map<Item, (isFree?: boolean) => number>([
   [$item`lucky gold ring`, luckyGoldRing],
   [$item`Mr. Screege's spectacles`, () => 180],
   [$item`Mr. Cheeng's spectacles`, () => 220],
+  [$item`pro skateboard`, () => (args.mode === "rock" && get("_questCaveDan", 0) === 5 ? 10000 : 0)]
 ]);
 
 function getBestAccessories(isFree?: boolean) {
