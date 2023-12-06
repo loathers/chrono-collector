@@ -179,7 +179,10 @@ const accessories = new Map<Item, (isFree?: boolean) => number>([
   [$item`lucky gold ring`, luckyGoldRing],
   [$item`Mr. Screege's spectacles`, () => 180],
   [$item`Mr. Cheeng's spectacles`, () => 220],
-  [$item`pro skateboard`, () => (args.mode === "rock" && get("_questCaveDan", 0) === 5 ? 10000 : 0)]
+  [
+    $item`pro skateboard`,
+    () => (args.mode === "rock" && get("_questCaveDan", 0) === 5 ? 10000 : 0),
+  ],
 ]);
 
 function getBestAccessories(isFree?: boolean) {

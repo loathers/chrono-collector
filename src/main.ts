@@ -111,7 +111,10 @@ export function main(command?: string) {
       },
       {
         name: "Clara's Bell",
-        completed: () => !have($item`Clara's bell`) || get("_claraBellUsed") || get("noncombatForcerActive"),
+        completed: () =>
+          !have($item`Clara's bell`) ||
+          get("_claraBellUsed") ||
+          get("noncombatForcerActive"),
         do: () => {
           use($item`Clara's bell`);
         },
@@ -334,7 +337,9 @@ export function main(command?: string) {
         name: "Spit Jurassic Acid",
         completed: () => have($effect`Everything Looks Yellow`),
         ready: () =>
-          have($item`Jurassic Parka`) && have($skill`Torso Awareness`) && !get("noncombatForcerActive"),
+          have($item`Jurassic Parka`) &&
+          have($skill`Torso Awareness`) &&
+          !get("noncombatForcerActive"),
         outfit: () =>
           chooseQuestOutfit(
             { location: yrTarget, isFree: true },

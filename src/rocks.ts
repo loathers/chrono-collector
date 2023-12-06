@@ -1,4 +1,12 @@
-import { $familiar, $item, $items, $location, get, getKramcoWandererChance, set } from "libram";
+import {
+  $familiar,
+  $item,
+  $items,
+  $location,
+  get,
+  getKramcoWandererChance,
+  set,
+} from "libram";
 import { ChronerQuest, ChronerStrategy } from "./engine";
 import Macro from "./macro";
 import { chooseQuestOutfit, ifHave } from "./outfit";
@@ -34,9 +42,9 @@ export const bigRock: ChronerQuest = {
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
         visitUrl(toUrl(location));
-          for (const choiceValue of [3,1,2,1,2]) {
-            runChoice(choiceValue);
-          }
+        for (const choiceValue of [3, 1, 2, 1, 2]) {
+          runChoice(choiceValue);
+        }
         /* if (handlingChoice()) {
           runChoice(1); // 954 - Ask About Password
           runChoice(2); // 954 - Game of Chance
@@ -68,7 +76,7 @@ export const bigRock: ChronerQuest = {
         get("_questCaveDan", 0) > 2 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
-        visitUrl(toUrl(location))
+        visitUrl(toUrl(location));
         if (handlingChoice()) {
           runChoice(3); // 955 - Go towards noise
           runChoice(1); // 954 - Ask About Password
@@ -100,7 +108,7 @@ export const bigRock: ChronerQuest = {
         get("_questCaveDan", 0) > 3 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
-        visitUrl(toUrl(location))
+        visitUrl(toUrl(location));
         if (handlingChoice()) {
           runChoice(3); // 955 - Go towards noise
           runChoice(1); // 954 - Ask About Password
@@ -132,7 +140,7 @@ export const bigRock: ChronerQuest = {
         get("_questCaveDan", 0) > 4 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
-        visitUrl(toUrl(location))
+        visitUrl(toUrl(location));
         if (handlingChoice()) {
           runChoice(3); // 955 - Go towards noise
           runChoice(1); // 954 - Ask About Password
@@ -173,7 +181,7 @@ export const bigRock: ChronerQuest = {
       outfit: () => {
         return chooseQuestOutfit(
           { location, isFree: getKramcoWandererChance() >= 1 },
-		  {familiar: $familiar`Grey Goose`, equip: $items`pro skateboard`}
+          { familiar: $familiar`Grey Goose`, equip: $items`pro skateboard` },
         );
       },
       combat: new ChronerStrategy(() => Macro.getRocks().standardCombat()),
