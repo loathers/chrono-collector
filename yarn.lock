@@ -2462,7 +2462,7 @@ __metadata:
     eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-libram: "npm:^0.4.8"
-    garbo-lib: "npm:^0.0.3"
+    garbo-lib: "npm:^1.0.0"
     grimoire-kolmafia: "npm:^0.3.26"
     kolmafia: "npm:^5.27999.0"
     libram: "npm:^0.9.1"
@@ -3398,13 +3398,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"garbo-lib@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "garbo-lib@npm:0.0.3"
+"garbo-lib@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "garbo-lib@npm:1.0.0"
   peerDependencies:
     kolmafia: ^5.27668.0
     libram: ^0.8.17
-  checksum: 10c0/4e2c1c8338b04e26a8d9fab4e2d3119f8011b1e33da28d3c38b4dc2c1494e7c2fa25ffd58e30c407473527c6b88fbd267030d0789309aa0f68f926828c2db4e5
+  checksum: 10c0/73e7a93dff9a6ff1421d38b135a56de641fcd68a9614d45c85bf32de36e60a89e0350ca598ca51db192cd408c5b405b101796fd828aed1d34a14a1d54f4435a4
   languageName: node
   linkType: hard
 
