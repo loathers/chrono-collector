@@ -135,7 +135,7 @@ export const setup: Quest<ChronerTask> = {
           $locations`The Post-Mall, Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley`,
         );
       },
-      ready: () => AutumnAton.available(),
+      ready: () => AutumnAton.available() && !get("noncombatForcerActive"),
       sobriety: "either",
     },
     {

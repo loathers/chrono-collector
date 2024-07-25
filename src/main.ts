@@ -4,6 +4,7 @@ import {
   canAdventure,
   cliExecute,
   myAdventures,
+  myAscensions,
   myClass,
   myTurncount,
   totalTurnsPlayed,
@@ -245,7 +246,10 @@ export function main(command?: string) {
       },
       {
         name: "Time Capsule",
-        ready: () => args.mode !== "rock",
+        ready: () =>
+          args.mode !== "rock" ||
+          get("_questCaveDan", 0) > 4 ||
+          get("lastCaveDanDefeat", 0) >= myAscensions(),
         do: () => {
           const turns = totalTurnsPlayed();
           adv1($location`The Cave Before Time`, 0, "");
@@ -284,7 +288,8 @@ export function main(command?: string) {
         name: "Bowling Ball Run",
         ready: () =>
           get("cosmicBowlingBallReturnCombats") < 1 &&
-          get("hasCosmicBowlingBall"),
+          get("hasCosmicBowlingBall") &&
+          !get("noncombatForcerActive"),
         do: $location`The Cave Before Time`,
         sobriety: "sober",
         completed: () => false,
