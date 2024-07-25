@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Enable corepack
+        run: corepack enable
+
       - name: Use Node.js ${{ env.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -32,6 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Use Node.js ${{ env.node-version }}
         uses: actions/setup-node@v3
@@ -50,6 +56,9 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Use Node.js ${{ env.node-version }}
         uses: actions/setup-node@v3
