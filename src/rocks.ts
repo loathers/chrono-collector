@@ -175,7 +175,7 @@ export const bigRock: ChronerQuest = {
     },
     {
       name: "CaveDan",
-      after: ["Charge Goose"],
+      after: ["Charge Goose", "RoShamBo"],
       completed: () =>
         get("_questCaveDan", 0) > 5 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
