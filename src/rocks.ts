@@ -47,12 +47,6 @@ export const bigRock: ChronerQuest = {
         for (const choiceValue of [3, 1, 2, 1, 2]) {
           runChoice(choiceValue);
         }
-        /* if (handlingChoice()) {
-          runChoice(1); // 954 - Ask About Password
-          runChoice(2); // 954 - Game of Chance
-          runChoice(1); // 954 - Pick Rock
-          runChoice(2); // 954 - No Thanks
-        } */
         if (get("lastEncounter") === "Ook the Mook") {
           set("_questCaveDan", 2);
         }
@@ -111,11 +105,8 @@ export const bigRock: ChronerQuest = {
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
         visitUrl(toUrl(location));
-        if (handlingChoice()) {
-          runChoice(3); // 955 - Go towards noise
-          runChoice(1); // 954 - Ask About Password
-          runChoice(1); // 954 - Offer to Trade
-          runChoice(2); // 954 - Teach Secret of Scissors
+        for (const choiceValue of [3, 1, 1, 2]) {
+          runChoice(choiceValue);
         }
         if (get("lastEncounter") === "Ook the Mook") {
           set("_questCaveDan", 4);
