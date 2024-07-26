@@ -266,6 +266,7 @@ export function main(command?: string) {
         forced: true,
         sobriety: "either",
         completed: () => false,
+        choices: { 955: 2 },
         combat: new ChronerStrategy(() => Macro.standardCombat()),
       },
       {
