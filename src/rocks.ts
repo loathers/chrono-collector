@@ -26,13 +26,21 @@ export const bigRock: ChronerQuest = {
   location,
   tasks: [
     {
+      name: "Set properties after ascension",
+      completed: () => myAscensions() <= get("lastCaveDanDefeat", 0),
+      do: () => {
+        set("questCaveDan", 0);
+      },
+      sobriety: "either",
+    },
+    {
       name: "getHit",
       completed: () =>
-        get("_questCaveDan", 0) > 0 ||
+        get("questCaveDan", 0) > 0 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
         visitUrl("place.php?whichplace=twitch&action=twitch_dancave1");
-        set("_questCaveDan", 1);
+        set("questCaveDan", 1);
       },
       sobriety: "sober",
     },
@@ -40,7 +48,7 @@ export const bigRock: ChronerQuest = {
       name: "rockRockRock",
       after: ["getHit"],
       completed: () =>
-        get("_questCaveDan", 0) > 1 ||
+        get("questCaveDan", 0) > 1 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
         visitUrl(toUrl(location));
@@ -48,7 +56,7 @@ export const bigRock: ChronerQuest = {
           runChoice(choiceValue);
         }
         if (get("lastEncounter") === "Ook the Mook") {
-          set("_questCaveDan", 2);
+          set("questCaveDan", 2);
         }
       },
       outfit: () => {
@@ -69,7 +77,7 @@ export const bigRock: ChronerQuest = {
       name: "Teach Paper",
       after: ["rockRockRock"],
       completed: () =>
-        get("_questCaveDan", 0) > 2 ||
+        get("questCaveDan", 0) > 2 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
         visitUrl(toUrl(location));
@@ -80,7 +88,7 @@ export const bigRock: ChronerQuest = {
           runChoice(2); // 954 - Teach Secret of Paper
         }
         if (get("lastEncounter") === "Ook the Mook") {
-          set("_questCaveDan", 3);
+          set("questCaveDan", 3);
         }
       },
       outfit: () => {
@@ -101,7 +109,7 @@ export const bigRock: ChronerQuest = {
       name: "Teach Scissors",
       after: ["Teach Paper"],
       completed: () =>
-        get("_questCaveDan", 0) > 3 ||
+        get("questCaveDan", 0) > 3 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
         visitUrl(toUrl(location));
@@ -109,7 +117,7 @@ export const bigRock: ChronerQuest = {
           runChoice(choiceValue);
         }
         if (get("lastEncounter") === "Ook the Mook") {
-          set("_questCaveDan", 4);
+          set("questCaveDan", 4);
         }
       },
       outfit: () => {
@@ -130,7 +138,7 @@ export const bigRock: ChronerQuest = {
       name: "RoShamBo",
       after: ["Teach Scissors"],
       completed: () =>
-        get("_questCaveDan", 0) > 4 ||
+        get("questCaveDan", 0) > 4 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
         visitUrl(toUrl(location));
@@ -143,7 +151,7 @@ export const bigRock: ChronerQuest = {
           }
         }
         if (get("lastEncounter") === "Ook the Mook") {
-          set("_questCaveDan", 5);
+          set("questCaveDan", 5);
         }
       },
       outfit: () => {
@@ -165,7 +173,7 @@ export const bigRock: ChronerQuest = {
       after: ["RoShamBo"],
       completed: () =>
         familiarWeight($familiar`Grey Goose`) >= 7 ||
-        get("_questCaveDan", 0) > 5 ||
+        get("questCaveDan", 0) > 5 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
         use($item`Ghost Dog Chow`);
@@ -177,11 +185,11 @@ export const bigRock: ChronerQuest = {
       name: "CaveDan",
       after: ["Charge Goose", "RoShamBo"],
       completed: () =>
-        get("_questCaveDan", 0) > 5 ||
+        get("questCaveDan", 0) > 5 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
       do: () => {
         visitUrl("place.php?whichplace=twitch&action=twitch_dancave3");
-        set("_questCaveDan", 6);
+        set("questCaveDan", 6);
         set("lastCaveDanDefeat", myAscensions());
       },
       outfit: () => {
