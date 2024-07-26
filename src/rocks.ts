@@ -1,3 +1,15 @@
+import { ChronerQuest, ChronerStrategy } from "./engine";
+import Macro from "./macro";
+import { chooseQuestOutfit, ifHave } from "./outfit";
+import {
+  familiarWeight,
+  handlingChoice,
+  myAscensions,
+  runChoice,
+  toUrl,
+  use,
+  visitUrl,
+} from "kolmafia";
 import {
   $familiar,
   $item,
@@ -7,16 +19,6 @@ import {
   getKramcoWandererChance,
   set,
 } from "libram";
-import { ChronerQuest, ChronerStrategy } from "./engine";
-import Macro from "./macro";
-import { chooseQuestOutfit, ifHave } from "./outfit";
-import {
-  handlingChoice,
-  myAscensions,
-  runChoice,
-  toUrl,
-  visitUrl,
-} from "kolmafia";
 
 const location = $location`The Cave Before Time`;
 export const bigRock: ChronerQuest = {
@@ -168,8 +170,21 @@ export const bigRock: ChronerQuest = {
       sobriety: "sober",
     },
     {
-      name: "CaveDan",
+      name: "Charge Goose",
       after: ["RoShamBo"],
+      completed: () =>
+        familiarWeight($familiar`Grey Goose`) >= 7 ||
+        get("_questCaveDan", 0) > 5 ||
+        get("lastCaveDanDefeat", 0) >= myAscensions(),
+      do: () => {
+        use($item`Ghost Dog Chow`);
+      },
+      sobriety: "sober",
+      limit: { tries: 5 },
+    },
+    {
+      name: "CaveDan",
+      after: ["Charge Goose"],
       completed: () =>
         get("_questCaveDan", 0) > 5 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
