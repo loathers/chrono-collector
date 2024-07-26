@@ -308,7 +308,7 @@ export function main(command?: string) {
       },
       {
         name: "Asdon Bumper",
-        ready: () => AsdonMartin.installed(),
+        ready: () => AsdonMartin.installed() && !get("noncombatForcerActive"),
         completed: () =>
           get("banishedMonsters").includes("Spring-Loaded Front Bumper"),
         sobriety: "sober",
@@ -325,7 +325,7 @@ export function main(command?: string) {
       },
       {
         name: "Asdon Missile",
-        ready: () => AsdonMartin.installed(),
+        ready: () => AsdonMartin.installed() && !get("noncombatForcerActive"),
         completed: () => get("_missileLauncherUsed"),
         combat: new ChronerStrategy(() => {
           const romance = get("romanticTarget");
