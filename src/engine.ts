@@ -16,7 +16,7 @@ import {
 } from "libram";
 
 import { bestJuneCleaverOption, shouldSkip } from "./juneCleaver";
-import { args, printd, sober } from "./lib";
+import { printd, sober } from "./lib";
 import Macro from "./macro";
 
 export type ChronerTask = Task & {
@@ -75,7 +75,6 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
         ),
       );
     }
-    this.propertyManager.setChoices({ 955: args.mode === "rock" ? 3 : 2 });
   }
 
   shouldRepeatAdv(task: ChronerTask): boolean {
