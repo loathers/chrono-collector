@@ -48,9 +48,7 @@ export function chooseQuestOutfit(
   ...outfits: OutfitSpec[]
 ): OutfitSpec {
   const mergedInputSpec = mergeSpecs(...outfits);
-  const familiar = mergedInputSpec.familiar
-    ? mergedInputSpec.familiar
-    : chooseFamiliar({ location });
+  const familiar = mergedInputSpec.familiar ?? chooseFamiliar({ location });
   const famEquip =
     equipmentFamiliars.get(familiar) ??
     (familiar.elementalDamage || familiar.physicalDamage
