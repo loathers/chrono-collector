@@ -90,6 +90,7 @@ export const args = Args.create("chrono", "A script for farming chroner", {
       ["rose", "Farm Roses from The Main Stage"],
       ["capsule", "Farm Time Capsules from the Cave Before Time"],
       ["future", "Farm... something from the Automated Future"],
+      ["soup", "Farm soup ingredients from the Primordial Stew"],
     ],
     default: "rose",
   }),
