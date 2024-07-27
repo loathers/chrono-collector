@@ -3,6 +3,7 @@ import {
   bjornifyFamiliar,
   enthroneFamiliar,
   equippedAmount,
+  Item,
   Location,
   setAutoAttack,
 } from "kolmafia";
@@ -13,11 +14,14 @@ import {
   get,
   JuneCleaver,
   PropertiesManager,
+  sum,
+  sumNumbers,
 } from "libram";
 
 import { bestJuneCleaverOption, shouldSkip } from "./juneCleaver";
 import { printd, sober } from "./lib";
 import Macro from "./macro";
+import { garboAverageValue, garboValue } from "./garboValue";
 
 export type ChronerTask = Task & {
   sobriety: "sober" | "drunk" | "either";
@@ -36,7 +40,16 @@ export class ChronerStrategy extends CombatStrategy {
   }
 }
 
-CrownOfThrones.createRiderMode("default", {});
+function dropsValueFunction(drops: Item[] | Map<Item, number>): number {
+  return Array.isArray(drops)
+    ? garboAverageValue(...drops)
+    : sum(
+        [...drops.entries()],
+        ([item, quantity]) => quantity * garboValue(item),
+      ) / sumNumbers([...drops.values()]);
+}
+
+CrownOfThrones.createRiderMode("default", { dropsValueFunction });
 const chooseRider = () => CrownOfThrones.pickRider("default");
 export class ChronerEngine extends Engine<never, ChronerTask> {
   available(task: ChronerTask): boolean {
