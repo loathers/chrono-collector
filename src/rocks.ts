@@ -182,6 +182,7 @@ export const bigRock: ChronerQuest = {
       do: () => {
         use($item`Ghost Dog Chow`);
       },
+      outfit: { familiar: $familiar`Grey Goose` },
       sobriety: "sober",
       limit: { tries: 5 },
     },
