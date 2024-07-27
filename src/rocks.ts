@@ -200,7 +200,7 @@ export const bigRock: ChronerQuest = {
       outfit: () => {
         return chooseQuestOutfit(
           { location, isFree: getKramcoWandererChance() >= 1 },
-          { familiar: $familiar`Grey Goose`, equip: $items`pro skateboard` },
+          { familiar: $familiar`Grey Goose`, acc1: $items`pro skateboard` },
         );
       },
       combat: new ChronerStrategy(() => Macro.getRocks().standardCombat()),
