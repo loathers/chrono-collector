@@ -27,7 +27,9 @@ export const bigRock: ChronerQuest = {
   tasks: [
     {
       name: "Set properties after ascension",
-      completed: () => myAscensions() <= get("lastCaveDanDefeat", 0),
+      completed: () =>
+        myAscensions() <= get("lastCaveDanDefeat", 0) ||
+        get("questCaveDan", 0) === 0,
       do: () => {
         set("questCaveDan", 0);
       },
