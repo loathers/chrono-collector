@@ -27,11 +27,13 @@ export const bigRock: ChronerQuest = {
   tasks: [
     {
       name: "Set properties after ascension",
+      ready: () => get("lastCaveDanPropertyReset", 0) !== myAscensions(),
       completed: () =>
         myAscensions() <= get("lastCaveDanDefeat", 0) ||
         get("questCaveDan", 0) === 0,
       do: () => {
         set("questCaveDan", 0);
+        set("lastCaveDanPropertyReset", myAscensions());
       },
       sobriety: "either",
     },
