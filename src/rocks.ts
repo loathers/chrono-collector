@@ -199,7 +199,7 @@ export const bigRock: ChronerQuest = {
       },
       outfit: () => {
         return chooseQuestOutfit(
-          { location, isFree: getKramcoWandererChance() >= 1 },
+          { location },
           { familiar: $familiar`Grey Goose`, acc1: $items`pro skateboard` },
         );
       },
