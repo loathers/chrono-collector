@@ -38,7 +38,7 @@ export const bigRock: ChronerQuest = {
       sobriety: "either",
     },
     {
-      name: "getHit",
+      name: "Inital Visit to Dan's Cave",
       completed: () =>
         get("questCaveDan", 0) > 0 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
@@ -49,8 +49,8 @@ export const bigRock: ChronerQuest = {
       sobriety: "sober",
     },
     {
-      name: "rockRockRock",
-      after: ["getHit"],
+      name: "Play Rock^3 with Ook the Mook",
+      after: ["Inital Visit to Dan's Cave"],
       completed: () =>
         get("questCaveDan", 0) > 1 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
@@ -78,8 +78,8 @@ export const bigRock: ChronerQuest = {
       sobriety: "sober",
     },
     {
-      name: "Teach Paper",
-      after: ["rockRockRock"],
+      name: "Teach Ook about Paper",
+      after: ["Play Rock^3 with Ook the Mook"],
       completed: () =>
         get("questCaveDan", 0) > 2 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
@@ -110,8 +110,8 @@ export const bigRock: ChronerQuest = {
       sobriety: "sober",
     },
     {
-      name: "Teach Scissors",
-      after: ["Teach Paper"],
+      name: "Teach Ook about Scissors",
+      after: ["Teach Ook about Paper"],
       completed: () =>
         get("questCaveDan", 0) > 3 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
@@ -139,8 +139,8 @@ export const bigRock: ChronerQuest = {
       sobriety: "sober",
     },
     {
-      name: "RoShamBo",
-      after: ["Teach Scissors"],
+      name: "Play RoShamBo to obtain Password",
+      after: ["Teach Ook about Scissors"],
       completed: () =>
         get("questCaveDan", 0) > 4 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
@@ -174,7 +174,7 @@ export const bigRock: ChronerQuest = {
     },
     {
       name: "Charge Goose",
-      after: ["RoShamBo"],
+      after: ["Play RoShamBo to obtain Password"],
       completed: () =>
         familiarWeight($familiar`Grey Goose`) >= 7 ||
         get("questCaveDan", 0) > 5 ||
@@ -187,8 +187,8 @@ export const bigRock: ChronerQuest = {
       limit: { tries: 5 },
     },
     {
-      name: "CaveDan",
-      after: ["Charge Goose", "RoShamBo"],
+      name: "Fight CaveDan",
+      after: ["Charge Goose", "Play RoShamBo to obtain Password"],
       completed: () =>
         get("questCaveDan", 0) > 5 ||
         get("lastCaveDanDefeat", 0) >= myAscensions(),
