@@ -1,4 +1,4 @@
-import { $item, $location, getKramcoWandererChance } from "libram";
+import { $item, $items, $location, getKramcoWandererChance } from "libram";
 
 import { ChronerQuest, ChronerStrategy } from "./engine";
 import Macro from "./macro";
@@ -30,3 +30,6 @@ export const soup: ChronerQuest = {
     },
   ],
 };
+
+// eslint-disable-next-line libram/verify-constants
+export const targetItems = $items`flagellate flagon, messenger bag RNA, proto-proto-protozoa`;

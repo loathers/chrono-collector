@@ -1,6 +1,7 @@
 import { myLocation } from "kolmafia";
 import {
   $item,
+  $items,
   $location,
   FloristFriar,
   getKramcoWandererChance,
@@ -51,3 +52,5 @@ export const rose: ChronerQuest = {
     },
   ],
 };
+
+export const targetItems = $items`rose, red tulip, white tulip, blue tulip`;

@@ -6,6 +6,7 @@ import {
   myAdventures,
   myClass,
   myTurncount,
+  print,
   totalTurnsPlayed,
   use,
   useSkill,
@@ -29,7 +30,7 @@ import {
   withProperty,
 } from "libram";
 
-import { capsule } from "./capsule";
+import { capsule, targetItems as capsuleTargetItems } from "./capsule";
 import {
   ChronerEngine,
   ChronerQuest,
@@ -39,9 +40,13 @@ import {
 import { args, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
-import { rose } from "./rose";
-import { soup } from "./soup";
-import { future, getBestAutomatedFutureSide } from "./future";
+import { rose, targetItems as roseTargetItems } from "./rose";
+import { soup, targetItems as soupTargetItems } from "./soup";
+import {
+  future,
+  targetItems as futureTargetItems,
+  getBestAutomatedFutureSide,
+} from "./future";
 import { setup } from "./setup";
 
 const completed = () => {
@@ -65,6 +70,14 @@ function getQuest(): ChronerQuest {
       throw "Unrecognized mode";
   }
 }
+
+const targetItems = [
+  ...$items`Chroner`,
+  ...capsuleTargetItems,
+  ...roseTargetItems,
+  ...futureTargetItems,
+  ...soupTargetItems,
+];
 
 export function main(command?: string) {
   Args.fill(args, command);
@@ -374,6 +387,7 @@ export function main(command?: string) {
 
   printh(`SESSION RESULTS:`);
   for (const [item, count] of sessionResults.items.entries()) {
-    printh(`ITEM ${item} QTY ${count}`);
+    const fn = targetItems.includes(item) ? printh : print;
+    fn(`ITEM ${item} QTY ${count}`);
   }
 }
