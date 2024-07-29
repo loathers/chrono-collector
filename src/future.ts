@@ -1,4 +1,10 @@
-import { $item, $location, $monster, getKramcoWandererChance } from "libram";
+import {
+  $item,
+  $items,
+  $location,
+  $monster,
+  getKramcoWandererChance,
+} from "libram";
 
 import { ChronerQuest, ChronerStrategy } from "./engine";
 import Macro from "./macro";
@@ -49,3 +55,5 @@ export const future: ChronerQuest = {
     },
   ],
 };
+
+export const targetItems = $items`housekeeping automa-core`;
