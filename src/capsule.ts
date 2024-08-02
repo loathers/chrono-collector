@@ -1,4 +1,4 @@
-import { $item, $location, getKramcoWandererChance } from "libram";
+import { $item, $items, $location, getKramcoWandererChance } from "libram";
 
 import { ChronerQuest, ChronerStrategy } from "./engine";
 import Macro from "./macro";
@@ -28,3 +28,5 @@ export const capsule: ChronerQuest = {
     },
   ],
 };
+
+export const targetItems = $items`twitching time capsule`;
