@@ -4,14 +4,23 @@ import {
   inebrietyLimit,
   isDarkMode,
   Item,
+  mpCost,
   myAdventures,
   myFamiliar,
+  myHp,
   myInebriety,
+  myMaxhp,
+  myMaxmp,
+  myMp,
   print,
   runChoice,
+  Skill,
+  totalFreeRests,
+  use,
+  useSkill,
   visitUrl,
 } from "kolmafia";
-import { $familiar, get, SourceTerminal } from "libram";
+import { $familiar, $item, get, have, SourceTerminal } from "libram";
 
 /**
  * Find the best element of an array, where "best" is defined by some given criteria.
@@ -90,6 +99,7 @@ export const args = Args.create("chrono", "A script for farming chroner", {
       ["rose", "Farm Roses from The Main Stage"],
       ["capsule", "Farm Time Capsules from the Cave Before Time"],
       ["future", "Farm... something from the Automated Future"],
+      ["rock", "Get Caveman Dan's Favorite Rock - duped as much as possible"],
       ["soup", "Farm soup ingredients from the Primordial Stew"],
     ],
     default: "rose",
@@ -145,4 +155,36 @@ export function realmAvailable(identifier: RealmType): boolean {
     get(`_${identifier}AirportToday`, false) ||
     get(`${identifier}AirportAlways`, false)
   );
+}
+
+export function freeRest(): boolean {
+  if (get("timesRested") >= totalFreeRests()) return false;
+
+  if (myHp() >= myMaxhp() && myMp() >= myMaxmp()) {
+    if (have($item`awful poetry journal`)) {
+      use($item`awful poetry journal`);
+    } else {
+      // burn some mp so that we can rest
+      const bestSkill = maxBy(
+        Skill.all().filter((sk) => have(sk) && mpCost(sk) >= 1),
+        (sk) => -mpCost(sk),
+      ); // are there any other skills that cost mana which we should blacklist?
+      // Facial expressions? But this usually won't be an issue since all *NORMAL* classes have access to a level1 1mp skill
+      useSkill(bestSkill);
+    }
+  }
+
+  if (get("chateauAvailable")) {
+    visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
+  } else if (get("getawayCampsiteUnlocked")) {
+    visitUrl("place.php?whichplace=campaway&action=campaway_tentclick");
+  } else {
+    visitUrl("campground.php?action=rest");
+  }
+
+  return true;
+}
+
+export function freeRestsLeft(): boolean {
+  return get("timesRested") >= totalFreeRests();
 }

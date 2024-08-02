@@ -1,3 +1,6 @@
+import { freeFightFamiliar, MenuOptions } from "./familiar";
+import { garboAverageValue, garboValue } from "./garboValue";
+import { args, maxBy, realmAvailable, sober } from "./lib";
 import { OutfitSlot, OutfitSpec } from "grimoire-kolmafia";
 import {
   canEquip,
@@ -18,10 +21,6 @@ import {
   have,
   sumNumbers,
 } from "libram";
-
-import { freeFightFamiliar, MenuOptions } from "./familiar";
-import { garboAverageValue, garboValue } from "./garboValue";
-import { maxBy, realmAvailable, sober } from "./lib";
 
 export function ifHave(
   slot: OutfitSlot,
@@ -48,7 +47,8 @@ export function chooseQuestOutfit(
   { location, isFree }: TaskOptions,
   ...outfits: OutfitSpec[]
 ): OutfitSpec {
-  const familiar = chooseFamiliar({ location });
+  const mergedInputSpec = mergeSpecs(...outfits);
+  const familiar = mergedInputSpec.familiar ?? chooseFamiliar({ location });
   const famEquip =
     equipmentFamiliars.get(familiar) ??
     (familiar.elementalDamage || familiar.physicalDamage
@@ -179,6 +179,10 @@ const accessories = new Map<Item, (isFree?: boolean) => number>([
   [$item`lucky gold ring`, luckyGoldRing],
   [$item`Mr. Screege's spectacles`, () => 180],
   [$item`Mr. Cheeng's spectacles`, () => 220],
+  [
+    $item`pro skateboard`,
+    () => (args.mode === "rock" && get("_questCaveDan", 0) === 5 ? 10000 : 0),
+  ],
 ]);
 
 function getBestAccessories(isFree?: boolean) {

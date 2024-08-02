@@ -4,6 +4,7 @@ import {
   canAdventure,
   cliExecute,
   myAdventures,
+  myAscensions,
   myClass,
   myTurncount,
   print,
@@ -48,6 +49,7 @@ import {
   getBestAutomatedFutureSide,
 } from "./future";
 import { setup } from "./setup";
+import { bigRock } from "./rocks";
 
 const completed = () => {
   const turncount = myTurncount();
@@ -64,6 +66,8 @@ function getQuest(): ChronerQuest {
       return { ...rose, completed: completed() };
     case "future":
       return { ...future, completed: completed() };
+    case "rock":
+      return { ...bigRock, completed: completed() };
     case "soup":
       return { ...soup, completed: completed() };
     default:
@@ -124,7 +128,10 @@ export function main(command?: string) {
       },
       {
         name: "Clara's Bell",
-        completed: () => !have($item`Clara's bell`) || get("_claraBellUsed"),
+        completed: () =>
+          !have($item`Clara's bell`) ||
+          get("_claraBellUsed") ||
+          get("noncombatForcerActive"),
         do: () => {
           use($item`Clara's bell`);
         },
@@ -255,6 +262,10 @@ export function main(command?: string) {
       },
       {
         name: "Time Capsule",
+        ready: () =>
+          args.mode !== "rock" ||
+          get("_questCaveDan", 0) > 4 ||
+          get("lastCaveDanDefeat", 0) >= myAscensions(),
         do: () => {
           const turns = totalTurnsPlayed();
           adv1($location`The Cave Before Time`, 0, "");
@@ -268,6 +279,7 @@ export function main(command?: string) {
         forced: true,
         sobriety: "either",
         completed: () => false,
+        choices: { 955: 2 },
         combat: new ChronerStrategy(() => Macro.standardCombat()),
       },
       {
@@ -284,18 +296,17 @@ export function main(command?: string) {
             },
           ),
         do: quest.location,
-        completed: () => false,
+        completed: () => get("noncombatForcerActive"),
         prepare: () => cliExecute("parka spikolodon"),
-        combat: new ChronerStrategy(() =>
-          Macro.trySkill($skill`Launch spikolodon spikes`).standardCombat(),
-        ),
+        combat: new ChronerStrategy(() => Macro.spikes().standardCombat()),
         sobriety: "sober",
       },
       {
         name: "Bowling Ball Run",
         ready: () =>
           get("cosmicBowlingBallReturnCombats") < 1 &&
-          get("hasCosmicBowlingBall"),
+          get("hasCosmicBowlingBall") &&
+          !get("noncombatForcerActive"),
         do: $location`The Cave Before Time`,
         sobriety: "sober",
         completed: () => false,
@@ -311,7 +322,7 @@ export function main(command?: string) {
       },
       {
         name: "Asdon Bumper",
-        ready: () => AsdonMartin.installed(),
+        ready: () => AsdonMartin.installed() && !get("noncombatForcerActive"),
         completed: () =>
           get("banishedMonsters").includes("Spring-Loaded Front Bumper"),
         sobriety: "sober",
@@ -328,7 +339,7 @@ export function main(command?: string) {
       },
       {
         name: "Asdon Missile",
-        ready: () => AsdonMartin.installed(),
+        ready: () => AsdonMartin.installed() && !get("noncombatForcerActive"),
         completed: () => get("_missileLauncherUsed"),
         combat: new ChronerStrategy(() => {
           const romance = get("romanticTarget");
@@ -348,7 +359,9 @@ export function main(command?: string) {
         name: "Spit Jurassic Acid",
         completed: () => have($effect`Everything Looks Yellow`),
         ready: () =>
-          have($item`Jurassic Parka`) && have($skill`Torso Awareness`),
+          have($item`Jurassic Parka`) &&
+          have($skill`Torso Awareness`) &&
+          !get("noncombatForcerActive"),
         outfit: () =>
           chooseQuestOutfit(
             { location: yrTarget, isFree: true },

@@ -1,4 +1,4 @@
-import { Item, Monster, myFamiliar, Skill } from "kolmafia";
+import { haveEquipped, Item, Monster, myFamiliar, Skill } from "kolmafia";
 import {
   $familiar,
   $item,
@@ -82,6 +82,29 @@ export default class Macro extends StrictMacro {
       steps.tryHaveItem($item`seal tooth`);
     }
     return this.step(steps);
+  }
+
+  getRocks(): this {
+    return this.externalIf(
+      myFamiliar() === $familiar`Grey Goose` &&
+        $familiar`Grey Goose`.experience >= 36,
+      Macro.trySkill($skill`Emit Matter Duplicating Drones`),
+    ).externalIf(
+      haveEquipped($item`pro skateboard`),
+      Macro.trySkill($skill`Do an epic McTwist!`),
+    );
+  }
+
+  static getRocks(): Macro {
+    return new Macro().getRocks();
+  }
+
+  spikes(): this {
+    return this.trySkill($skill`Launch spikolodon spikes`);
+  }
+
+  static spikes(): Macro {
+    return new Macro().spikes();
   }
 
   standardCombat(): this {
