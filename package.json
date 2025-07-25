@@ -1,6 +1,7 @@
 {
   "name": "chroner-collector",
   "version": "0.0.0",
+  "type": "module",
   "author": "Patrick Stalcup <legomaniac0117@gmail.com>",
   "homepage": "",
   "license": "MIT",
@@ -15,33 +16,33 @@
     "pre-commit": "lint-staged"
   },
   "dependencies": {
-    "core-js": "^3.37.1",
-    "garbo-lib": "^1.0.0",
-    "grimoire-kolmafia": "^0.3.26",
-    "kolmafia": "^5.27999.0",
-    "libram": "^0.9.1"
+    "core-js": "^3.44.0",
+    "garbo-lib": "^1.0.2",
+    "grimoire-kolmafia": "^0.3.33",
+    "kolmafia": "^5.28584.0",
+    "libram": "^0.11.6"
   },
   "devDependencies": {
-    "@babel/cli": "^7.24.7",
-    "@babel/compat-data": "^7.24.7",
-    "@babel/core": "^7.24.7",
-    "@babel/preset-env": "^7.24.7",
-    "@babel/preset-react": "^7.24.7",
-    "@babel/preset-typescript": "^7.24.7",
-    "@types/node": "^20.14.10",
-    "@typescript-eslint/eslint-plugin": "^7.16.0",
-    "@typescript-eslint/parser": "^7.16.0",
+    "@babel/cli": "^7.28.0",
+    "@babel/compat-data": "^7.28.0",
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@eslint/js": "^9.32.0",
+    "@types/node": "^24.1.0",
     "copyfiles": "^2.4.1",
-    "esbuild": "^0.23.0",
+    "esbuild": "^0.25.8",
     "esbuild-plugin-babel": "^0.2.3",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-libram": "^0.4.8",
-    "lint-staged": "^15.2.7",
-    "madge": "^7.0.0",
-    "prettier": "^3.3.2",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-libram": "^0.4.29",
+    "lint-staged": "^16.1.2",
+    "madge": "^8.0.0",
+    "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0"
   },
-  "packageManager": "yarn@4.3.1"
+  "packageManager": "yarn@4.9.2"
 }
