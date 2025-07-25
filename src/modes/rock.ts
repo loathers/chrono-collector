@@ -1,6 +1,6 @@
-import { ChronerQuest, ChronerStrategy } from "./engine";
-import Macro from "./macro";
-import { chooseQuestOutfit, ifHave } from "./outfit";
+import { ChronerQuest, ChronerStrategy } from "../engine.js";
+import Macro from "../macro.js";
+import { chooseQuestOutfit, ifHave } from "../outfit.js";
 import {
   familiarWeight,
   handlingChoice,
@@ -21,7 +21,7 @@ import {
 } from "libram";
 
 const location = $location`The Cave Before Time`;
-export const bigRock: ChronerQuest = {
+export const quest: ChronerQuest = {
   name: "Get Rock",
   location,
   tasks: [
@@ -211,3 +211,5 @@ export const bigRock: ChronerQuest = {
     },
   ],
 };
+
+export const targetItems = $items`Caveman Dan's favorite rock`;
