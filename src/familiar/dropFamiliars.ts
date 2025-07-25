@@ -1,3 +1,4 @@
+import { garboValue } from "../garboValue";
 import { Familiar, Item } from "kolmafia";
 import {
   $familiar,
@@ -7,8 +8,6 @@ import {
   have,
   propertyTypes,
 } from "libram";
-
-import { garboValue } from "../garboValue";
 
 import { GeneralFamiliar } from "./lib";
 

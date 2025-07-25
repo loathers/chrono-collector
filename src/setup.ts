@@ -1,7 +1,7 @@
 import { Quest } from "grimoire-kolmafia";
 import {
-  getWorkshed,
   Item,
+  getWorkshed,
   itemAmount,
   myHp,
   myMaxhp,
@@ -20,15 +20,15 @@ import {
   $phylum,
   $skill,
   AutumnAton,
-  get,
-  have,
   Snapper,
   SongBoom,
+  get,
+  have,
   uneffect,
 } from "libram";
 
 import { ChronerTask } from "./engine";
-import { args, CMCEnvironment, countEnvironment, tryGetCMCItem } from "./lib";
+import { CMCEnvironment, args, countEnvironment, tryGetCMCItem } from "./lib";
 
 const poisons = $effects`Hardly Poisoned at All, A Little Bit Poisoned, Somewhat Poisoned, Really Quite Poisoned, Majorly Poisoned`;
 function cmcTarget(): { item: Item; environment: CMCEnvironment } {

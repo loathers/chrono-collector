@@ -1,5 +1,5 @@
 import { Item } from "kolmafia";
-import { $item, get, JuneCleaver } from "libram";
+import { $item, JuneCleaver, get } from "libram";
 
 import { garboValue } from "./garboValue";
 import { maxBy } from "./lib";

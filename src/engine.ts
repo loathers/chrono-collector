@@ -1,27 +1,27 @@
 import { CombatStrategy, Engine, Outfit, Quest, Task } from "grimoire-kolmafia";
 import {
+  Item,
+  Location,
   bjornifyFamiliar,
   enthroneFamiliar,
   equippedAmount,
-  Item,
-  Location,
   setAutoAttack,
 } from "kolmafia";
 import {
   $item,
   $slot,
   CrownOfThrones,
-  get,
   JuneCleaver,
   PropertiesManager,
+  get,
   sum,
   sumNumbers,
 } from "libram";
 
+import { garboAverageValue, garboValue } from "./garboValue";
 import { bestJuneCleaverOption, shouldSkip } from "./juneCleaver";
 import { printd, sober } from "./lib";
 import Macro from "./macro";
-import { garboAverageValue, garboValue } from "./garboValue";
 
 export type ChronerTask = Task & {
   sobriety: "sober" | "drunk" | "either";

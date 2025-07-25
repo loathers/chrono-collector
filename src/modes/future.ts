@@ -1,3 +1,6 @@
+import { ChronerQuest, ChronerStrategy } from "../engine";
+import Macro from "../macro";
+import { chooseQuestOutfit, ifHave } from "../outfit";
 import {
   $item,
   $items,
@@ -5,10 +8,6 @@ import {
   $monster,
   getKramcoWandererChance,
 } from "libram";
-
-import { ChronerQuest, ChronerStrategy } from "../engine";
-import Macro from "../macro";
-import { chooseQuestOutfit, ifHave } from "../outfit";
 
 const location = $location`The Home of The Future`;
 const monster = $monster`robot maid`;
