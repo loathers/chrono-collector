@@ -20,13 +20,6 @@ export default tseslint.config(
       "prefer-arrow-callback": "error",
       "prefer-const": "error",
       "prefer-template": "error",
-      "sort-imports": [
-        "error",
-        {
-          ignoreCase: true,
-          ignoreDeclarationSort: true,
-        },
-      ],
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "error",
       "libram/verify-constants": "error",
