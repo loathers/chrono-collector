@@ -35,4 +35,4 @@ export const quest: ChronerQuest = {
 };
 
 // eslint-disable-next-line libram/verify-constants
-export const targetItems = $items`yordnance magnet, confetti grenade, orphaned baby skeleton, chocolate rations, nice nylon stockings`;
+export const targetItems = $items`ordnance magnet, confetti grenade, orphaned baby skeleton, chocolate rations, nice nylon stockings`;
