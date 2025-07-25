@@ -84,6 +84,10 @@ export default class Macro extends StrictMacro {
     return this.step(steps);
   }
 
+  static doItems(): Macro {
+    return new Macro().doItems();
+  }
+
   getRocks(): this {
     return this.externalIf(
       myFamiliar() === $familiar`Grey Goose` &&
@@ -107,11 +111,15 @@ export default class Macro extends StrictMacro {
     return new Macro().spikes();
   }
 
-  standardCombat(): this {
+  standardCombat(delevelFirst = false): this {
     return this.externalIf(
-      canOpenRedPresent() && myFamiliar() === $familiar`Crimbo Shrub`,
-      Macro.trySkill($skill`Open a Big Red Present`),
+      delevelFirst,
+      Macro.trySkill($skill`Curse of Weaksauce`).doItems(),
     )
+      .externalIf(
+        canOpenRedPresent() && myFamiliar() === $familiar`Crimbo Shrub`,
+        Macro.trySkill($skill`Open a Big Red Present`),
+      )
       .externalIf(
         timeToMeatify() && myFamiliar() === $familiar`Grey Goose`,
         Macro.trySkill($skill`Meatify Matter`),
@@ -127,7 +135,7 @@ export default class Macro extends StrictMacro {
       )
       .tryHaveSkill($skill`Extract`)
       .tryHaveSkill($skill`Micrometeorite`)
-      .doItems()
+      .externalIf(!delevelFirst, Macro.doItems())
       .tryHaveSkill($skill`Nantlers`)
       .tryHaveSkill($skill`Nanoshock`)
       .tryHaveSkill($skill`Audioclasm`)
