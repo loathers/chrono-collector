@@ -6,6 +6,9 @@ import { $item, $items, $location, getKramcoWandererChance } from "libram";
 // eslint-disable-next-line libram/verify-constants
 const location = $location`No Man's and No Skeleton's Land`;
 
+// eslint-disable-next-line libram/verify-constants
+const detector = $item`chocolate and nylons detector`;
+
 export const quest: ChronerQuest = {
   name: "Skeleton",
   location,
@@ -14,14 +17,15 @@ export const quest: ChronerQuest = {
       name: "No Man's and No Skeleton's Land",
       completed: () => false,
       do: location,
+      acquire: [{ item: detector }],
       outfit: () => {
-        const sausageSpec =
+        const spec =
           getKramcoWandererChance() >= 1
             ? ifHave("offhand", $item`Kramco Sausage-o-Matic™`)
-            : {};
+            : ifHave("offhand", detector);
         return chooseQuestOutfit(
           { location, isFree: getKramcoWandererChance() >= 1 },
-          sausageSpec,
+          spec,
         );
       },
       combat: new ChronerStrategy(() => Macro.standardCombat()),
@@ -31,4 +35,4 @@ export const quest: ChronerQuest = {
 };
 
 // eslint-disable-next-line libram/verify-constants
-export const targetItems = $items`confetti grenade, orphaned baby skeleton, ordnance magnet`;
+export const targetItems = $items`yordnance magnet, confetti grenade, orphaned baby skeleton, chocolate rations, nice nylon stockings`;
