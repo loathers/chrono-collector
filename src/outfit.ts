@@ -38,8 +38,8 @@ function mergeSpecs(...outfits: OutfitSpec[]): OutfitSpec {
 
 const chooseFamiliar = (options: MenuOptions = {}): Familiar =>
   canInteract() && sober()
-    ? $familiars`Reagnimated Gnome, Temporal Riftlet`.find((f) => have(f)) ??
-      freeFightFamiliar(options)
+    ? ($familiars`Reagnimated Gnome, Temporal Riftlet`.find((f) => have(f)) ??
+      freeFightFamiliar(options))
     : freeFightFamiliar(options);
 
 type TaskOptions = { location: Location; isFree?: boolean };

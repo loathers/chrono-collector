@@ -4,7 +4,6 @@ import { ChronerQuest, ChronerStrategy } from "./engine";
 import Macro from "./macro";
 import { chooseQuestOutfit, ifHave } from "./outfit";
 
-// eslint-disable-next-line libram/verify-constants
 const location = $location`The Primordial Stew`;
 
 export const soup: ChronerQuest = {
@@ -31,5 +30,4 @@ export const soup: ChronerQuest = {
   ],
 };
 
-// eslint-disable-next-line libram/verify-constants
 export const targetItems = $items`flagellate flagon, messenger bag RNA, proto-proto-protozoa`;
