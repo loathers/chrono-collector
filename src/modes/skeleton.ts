@@ -27,8 +27,7 @@ export const quest: ChronerQuest = {
         );
       },
       combat: new ChronerStrategy(() =>
-        Macro.tryItem($item`Mayor Ghost's scissors`)
-          .standardCombat(true),
+        Macro.tryItem($item`Mayor Ghost's scissors`).standardCombat(true),
       ),
       sobriety: "either",
     },
