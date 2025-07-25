@@ -31399,7 +31399,7 @@ var quest = {
       }, spec);
     },
     combat: new ChronerStrategy(function() {
-      return Macro2.tryItem($item(_templateObject4127 || (_templateObject4127 = _taggedTemplateLiteral96(["Mayor Ghost's scissors"])))).doItems().standardCombat();
+      return Macro2.tryItem($item(_templateObject4127 || (_templateObject4127 = _taggedTemplateLiteral96(["Mayor Ghost's scissors"])))).standardCombat(true);
     }),
     sobriety: "either"
   }]
