@@ -37,7 +37,7 @@
     "esbuild-plugin-babel": "^0.2.3",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-libram": "^0.4.29",
+    "eslint-plugin-libram": "^0.4.30",
     "lint-staged": "^16.1.2",
     "madge": "^8.0.0",
     "prettier": "^3.6.2",

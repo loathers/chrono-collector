@@ -2497,7 +2497,7 @@ __metadata:
     esbuild-plugin-babel: "npm:^0.2.3"
     eslint: "npm:^9.32.0"
     eslint-config-prettier: "npm:^10.1.8"
-    eslint-plugin-libram: "npm:^0.4.29"
+    eslint-plugin-libram: "npm:^0.4.30"
     garbo-lib: "npm:^1.0.2"
     grimoire-kolmafia: "npm:^0.3.33"
     kolmafia: "npm:^5.28584.0"
@@ -3132,13 +3132,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-libram@npm:^0.4.29":
-  version: 0.4.29
-  resolution: "eslint-plugin-libram@npm:0.4.29"
+"eslint-plugin-libram@npm:^0.4.30":
+  version: 0.4.30
+  resolution: "eslint-plugin-libram@npm:0.4.30"
   dependencies:
     html-entities: "npm:^2.5.2"
     requireindex: "npm:~1.2.0"
-  checksum: 10c0/7997f2ce61275d87c526f1dbef38eb63950cf181b4b694a82d9cf625773c22daa3d1cc2341adf7af164569f58713d71fea984c6da0e3ec8d6a087e724a7d60bf
+  checksum: 10c0/2830005325a1aa0382ad55cb87807a0aa497040214446d261bff3a7fefda12e1ea48ff23686fe0615dff4473791aa4c8e5fe9f4a32a0b6d058c93dfed0838e9c
   languageName: node
   linkType: hard
 
