@@ -31395,7 +31395,7 @@ var quest = {
     sobriety: "either"
   }]
 };
-var targetItems = $items(_templateObject4127 || (_templateObject4127 = _taggedTemplateLiteral96(["yordnance magnet, confetti grenade, orphaned baby skeleton, chocolate rations, nice nylon stockings"])));
+var targetItems = $items(_templateObject4127 || (_templateObject4127 = _taggedTemplateLiteral96(["ordnance magnet, confetti grenade, orphaned baby skeleton, chocolate rations, nice nylon stockings"])));
 
 // src/modes/capsule.ts
 init_dist();
