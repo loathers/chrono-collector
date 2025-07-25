@@ -1,15 +1,14 @@
 import { Quest } from "grimoire-kolmafia";
 import {
   Item,
+  create,
   getWorkshed,
   itemAmount,
   myHp,
   myMaxhp,
   putCloset,
-  runChoice,
   totalTurnsPlayed,
   useSkill,
-  visitUrl,
 } from "kolmafia";
 import {
   $effect,
@@ -96,14 +95,13 @@ export const setup: Quest<ChronerTask> = {
     },
     {
       name: "Kgnee",
+      ready: () => !get("_gnomePart"),
       completed: () =>
         !have($familiar`Reagnimated Gnome`) ||
         have($item`gnomish housemaid's kgnee`),
       do: (): void => {
-        visitUrl("arena.php");
-        runChoice(4);
+        create($item`gnomish housemaid's kgnee`);
       },
-      outfit: { familiar: $familiar`Reagnimated Gnome` },
       sobriety: "sober",
     },
     {
