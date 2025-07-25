@@ -1,7 +1,7 @@
 import js from "@eslint/js";
-import tseslint from "typescript-eslint";
-import libram from "eslint-plugin-libram";
 import prettier from "eslint-config-prettier";
+import libram from "eslint-plugin-libram";
+import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   js.configs.recommended,

@@ -1,14 +1,11 @@
-import { freeFightFamiliar, MenuOptions } from "./familiar";
-import { garboAverageValue, garboValue } from "./garboValue";
-import { args, maxBy, realmAvailable, sober } from "./lib";
 import { OutfitSlot, OutfitSpec } from "grimoire-kolmafia";
 import {
-  canEquip,
-  canInteract,
   Familiar,
   Item,
-  itemAmount,
   Location,
+  canEquip,
+  canInteract,
+  itemAmount,
   totalTurnsPlayed,
 } from "kolmafia";
 import {
@@ -21,6 +18,10 @@ import {
   have,
   sumNumbers,
 } from "libram";
+
+import { MenuOptions, freeFightFamiliar } from "./familiar";
+import { garboAverageValue, garboValue } from "./garboValue";
+import { args, maxBy, realmAvailable, sober } from "./lib";
 
 export function ifHave(
   slot: OutfitSlot,

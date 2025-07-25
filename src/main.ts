@@ -1,4 +1,4 @@
-import { Args, getTasks, Quest } from "grimoire-kolmafia";
+import { Args, Quest, getTasks } from "grimoire-kolmafia";
 import {
   adv1,
   canAdventure,
@@ -24,9 +24,9 @@ import {
   AsdonMartin,
   CinchoDeMayo,
   Counter,
+  Session,
   get,
   have,
-  Session,
   sinceKolmafiaRevision,
   withProperty,
 } from "libram";
@@ -39,9 +39,9 @@ import {
 } from "./engine";
 import { args, getBestAutomatedFutureSide, printh } from "./lib";
 import Macro from "./macro";
+import * as modes from "./modes";
 import { chooseQuestOutfit } from "./outfit";
 import { setup } from "./setup";
-import * as modes from "./modes";
 
 const completed = () => {
   const turncount = myTurncount();

@@ -1,3 +1,4 @@
+import { garboAverageValue, garboValue } from "../garboValue";
 import { Familiar, familiarWeight, weightAdjustment } from "kolmafia";
 import {
   $effect,
@@ -5,13 +6,11 @@ import {
   $item,
   $items,
   $location,
+  Robortender,
   findLeprechaunMultiplier,
   get,
   have,
-  Robortender,
 } from "libram";
-
-import { garboAverageValue, garboValue } from "../garboValue";
 
 import { GeneralFamiliar, MenuOptions } from "./lib";
 

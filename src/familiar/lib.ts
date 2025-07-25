@@ -1,14 +1,13 @@
+import { sober } from "../lib";
 import {
   Familiar,
-  familiarWeight,
   Location,
+  familiarWeight,
   myAdventures,
   totalTurnsPlayed,
   weightAdjustment,
 } from "kolmafia";
 import { $effect, $familiar, $item, get, have } from "libram";
-
-import { sober } from "../lib";
 
 export type GeneralFamiliar = {
   familiar: Familiar;
