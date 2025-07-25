@@ -31,25 +31,17 @@ import {
   withProperty,
 } from "libram";
 
-import { capsule, targetItems as capsuleTargetItems } from "./capsule";
 import {
   ChronerEngine,
   ChronerQuest,
   ChronerStrategy,
   ChronerTask,
 } from "./engine";
-import { args, printh } from "./lib";
+import { args, getBestAutomatedFutureSide, printh } from "./lib";
 import Macro from "./macro";
 import { chooseQuestOutfit } from "./outfit";
-import { rose, targetItems as roseTargetItems } from "./rose";
-import { soup, targetItems as soupTargetItems } from "./soup";
-import {
-  future,
-  targetItems as futureTargetItems,
-  getBestAutomatedFutureSide,
-} from "./future";
 import { setup } from "./setup";
-import { bigRock } from "./rocks";
+import * as modes from "./modes";
 
 const completed = () => {
   const turncount = myTurncount();
@@ -61,15 +53,17 @@ const completed = () => {
 function getQuest(): ChronerQuest {
   switch (args.mode) {
     case "capsule":
-      return { ...capsule, completed: completed() };
-    case "rose":
-      return { ...rose, completed: completed() };
+      return { ...modes.capsuleQuest, completed: completed() };
     case "future":
-      return { ...future, completed: completed() };
+      return { ...modes.futureQuest, completed: completed() };
     case "rock":
-      return { ...bigRock, completed: completed() };
+      return { ...modes.rockQuest, completed: completed() };
+    case "rose":
+      return { ...modes.roseQuest, completed: completed() };
+    case "skeleton":
+      return { ...modes.skeletonQuest, completed: completed() };
     case "soup":
-      return { ...soup, completed: completed() };
+      return { ...modes.soupQuest, completed: completed() };
     default:
       throw "Unrecognized mode";
   }
@@ -77,10 +71,12 @@ function getQuest(): ChronerQuest {
 
 const targetItems = [
   ...$items`Chroner`,
-  ...capsuleTargetItems,
-  ...roseTargetItems,
-  ...futureTargetItems,
-  ...soupTargetItems,
+  ...modes.capsuleTargetItems,
+  ...modes.futureTargetItems,
+  ...modes.rockTargetItems,
+  ...modes.roseTargetItems,
+  ...modes.skeletonTargetItems,
+  ...modes.soupTargetItems,
 ];
 
 export function main(command?: string) {

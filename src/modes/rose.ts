@@ -7,13 +7,13 @@ import {
   getKramcoWandererChance,
 } from "libram";
 
-import { ChronerQuest, ChronerStrategy } from "./engine";
-import Macro from "./macro";
-import { chooseQuestOutfit, ifHave } from "./outfit";
+import { ChronerQuest, ChronerStrategy } from "../engine";
+import Macro from "../macro";
+import { chooseQuestOutfit, ifHave } from "../outfit";
 
 const location = $location`Globe Theatre Main Stage`;
 let triedFlorist = false;
-export const rose: ChronerQuest = {
+export const quest: ChronerQuest = {
   name: "Rose",
   location,
   tasks: [

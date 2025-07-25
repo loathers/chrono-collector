@@ -1,18 +1,19 @@
 import { $item, $items, $location, getKramcoWandererChance } from "libram";
 
-import { ChronerQuest, ChronerStrategy } from "./engine";
-import Macro from "./macro";
-import { chooseQuestOutfit, ifHave } from "./outfit";
+import { ChronerQuest, ChronerStrategy } from "../engine";
+import Macro from "../macro";
+import { chooseQuestOutfit, ifHave } from "../outfit";
 
-const location = $location`The Cave Before Time`;
-export const capsule: ChronerQuest = {
-  name: "Capsule",
+const location = $location`The Primordial Stew`;
+
+export const quest: ChronerQuest = {
+  name: "Soup",
   location,
   tasks: [
     {
-      name: "Chroner",
+      name: "Soup",
       completed: () => false,
-      do: $location`The Cave Before Time`,
+      do: location,
       outfit: () => {
         const sausageSpec =
           getKramcoWandererChance() >= 1
@@ -29,4 +30,4 @@ export const capsule: ChronerQuest = {
   ],
 };
 
-export const targetItems = $items`twitching time capsule`;
+export const targetItems = $items`flagellate flagon, messenger bag RNA, proto-proto-protozoa`;

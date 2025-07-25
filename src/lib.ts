@@ -14,6 +14,7 @@ import {
   myMp,
   print,
   runChoice,
+  sessionStorage,
   Skill,
   totalFreeRests,
   use,
@@ -187,4 +188,20 @@ export function freeRest(): boolean {
 
 export function freeRestsLeft(): boolean {
   return get("timesRested") >= totalFreeRests();
+}
+
+export function getBestAutomatedFutureSide() {
+  const stored = sessionStorage.getItem("automatedFutureBest");
+  if (stored) return stored;
+
+  const page = visitUrl("place.php?whichplace=twitch");
+  const springbros = Number(
+    page.match(/title='(-?\d+)' href=adventure.php\?snarfblat=581/)?.[1] ?? "0",
+  );
+  const boltsmann = Number(
+    page.match(/title='(-?\d+)' href=adventure.php\?snarfblat=582/)?.[1] ?? "0",
+  );
+  const best = springbros > boltsmann ? "springbros" : "boltsmann";
+  sessionStorage.setItem("automatedFutureBest", best);
+  return best;
 }
