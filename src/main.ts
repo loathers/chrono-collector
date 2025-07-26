@@ -90,7 +90,7 @@ export function main(command?: string) {
   sinceKolmafiaRevision(27668);
 
   let digitizes = -1;
-  const yrTarget = $location`The Cave Before Time`;
+  const yrTarget = $location`The Roman Forum`;
 
   const quest = getQuest();
   const global: Quest<ChronerTask> = {
