@@ -3,10 +3,8 @@ import Macro from "../macro";
 import { chooseQuestOutfit, ifHave } from "../outfit";
 import { $item, $items, $location, getKramcoWandererChance } from "libram";
 
-// eslint-disable-next-line libram/verify-constants
-const location = $location`No Man's and No Skeleton's Land`;
+const location = $location`No Man's And Also No Skeleton's Land`;
 
-// eslint-disable-next-line libram/verify-constants
 const detector = $item`chocolate and nylons detector`;
 
 export const quest: ChronerQuest = {
@@ -28,11 +26,12 @@ export const quest: ChronerQuest = {
           spec,
         );
       },
-      combat: new ChronerStrategy(() => Macro.standardCombat()),
+      combat: new ChronerStrategy(() =>
+        Macro.tryItem($item`Mayor Ghost's scissors`).standardCombat(true),
+      ),
       sobriety: "either",
     },
   ],
 };
 
-// eslint-disable-next-line libram/verify-constants
 export const targetItems = $items`ordnance magnet, confetti grenade, orphaned baby skeleton, chocolate rations, nice nylon stockings`;

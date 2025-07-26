@@ -13,6 +13,7 @@ import {
   $familiars,
   $item,
   $items,
+  $location,
   get,
   getKramcoWandererChance,
   have,
@@ -52,7 +53,10 @@ export function chooseQuestOutfit(
   const familiar = mergedInputSpec.familiar ?? chooseFamiliar({ location });
   const famEquip =
     equipmentFamiliars.get(familiar) ??
-    (familiar.elementalDamage || familiar.physicalDamage
+    (!(
+      location === $location`Globe Theatre Main Stage` &&
+      !(familiar.elementalDamage || familiar.physicalDamage)
+    )
       ? $item`tiny stillsuit`
       : $item`oversized fish scaler`);
 
