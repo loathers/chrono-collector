@@ -130,7 +130,7 @@ export const setup: Quest<ChronerTask> = {
       completed: () => AutumnAton.currentlyIn() !== null,
       do: (): void => {
         AutumnAton.sendTo(
-          $locations`The Post-Mall, Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley`,
+          $locations`The Roman Forum, The Spooky Old Abandoned Mine, The Post-Mall, Moonshiners' Woods, The Cave Before Time, The Sleazy Back Alley`,
         );
       },
       ready: () => AutumnAton.available(),
