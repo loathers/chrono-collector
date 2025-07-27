@@ -31287,7 +31287,7 @@ function chooseQuestOutfit(_ref) {
   var backs = mergeSpecs(ifHave("back", $item(_templateObject036 || (_templateObject036 = _taggedTemplateLiteral95(["protonic accelerator pack"]))), function() {
     return get("questPAGhost") === "unstarted" && get("nextParanormalActivity") <= (0, import_kolmafia105.totalTurnsPlayed)() && sober();
   }), ifHave("back", $item(_templateObject1143 || (_templateObject1143 = _taggedTemplateLiteral95(["Time Cloak"])))));
-  var spec = mergeSpecs(ifHave("hat", $item(_templateObject1033 || (_templateObject1033 = _taggedTemplateLiteral95(["Crown of Thrones"])))), offhands, weapons2, backs, {
+  var spec = mergeSpecs(mergedInputSpec, ifHave("hat", $item(_templateObject1033 || (_templateObject1033 = _taggedTemplateLiteral95(["Crown of Thrones"])))), offhands, weapons2, backs, {
     familiar: familiar10
   }, ifHave("famequip", famEquip), ifHave("pants", $item(_templateObject1144 || (_templateObject1144 = _taggedTemplateLiteral95(["designer sweatpants"]))), function() {
     return 25 * get("_sweatOutSomeBoozeUsed") + get("sweat") < 75;
