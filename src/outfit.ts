@@ -91,6 +91,7 @@ export function chooseQuestOutfit(
   );
 
   const spec = mergeSpecs(
+    mergedInputSpec,
     ifHave("hat", $item`Crown of Thrones`),
     offhands,
     weapons,
