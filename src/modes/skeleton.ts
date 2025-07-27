@@ -17,10 +17,12 @@ export const quest: ChronerQuest = {
       do: location,
       acquire: [{ item: detector }],
       outfit: () => {
-        const spec =
-          getKramcoWandererChance() >= 1
+        const spec = {
+          ...(getKramcoWandererChance() >= 1
             ? ifHave("offhand", $item`Kramco Sausage-o-Matic™`)
-            : ifHave("offhand", detector);
+            : ifHave("offhand", detector)),
+          ...ifHave("back", $item`Allied Radio Backpack`),
+        };
         return chooseQuestOutfit(
           { location, isFree: getKramcoWandererChance() >= 1 },
           spec,
