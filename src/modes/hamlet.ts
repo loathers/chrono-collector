@@ -31,4 +31,4 @@ export const quest: ChronerQuest = {
 };
 
 // eslint-disable-next-line
-export const targetItems = $items`wooden juggling ball, tactical jester's cap, The Wizard's Android`;
+export const targetItems = $items`tactical jester's cap, The Wizard's Android`;
