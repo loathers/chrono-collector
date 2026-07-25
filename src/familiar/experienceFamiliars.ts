@@ -1,13 +1,13 @@
-import { Familiar } from "kolmafia";
+import { type Familiar } from "kolmafia";
 import {
   $familiar,
   findLeprechaunMultiplier,
   get,
   have,
-  propertyTypes,
+  type propertyTypes,
 } from "libram";
 
-import { GeneralFamiliar } from "./lib";
+import { type GeneralFamiliar } from "./lib";
 
 type ExperienceFamiliar = {
   familiar: Familiar;

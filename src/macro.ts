@@ -1,4 +1,10 @@
-import { Item, Monster, Skill, haveEquipped, myFamiliar } from "kolmafia";
+import {
+  type Item,
+  type Monster,
+  type Skill,
+  haveEquipped,
+  myFamiliar,
+} from "kolmafia";
 import {
   $familiar,
   $item,

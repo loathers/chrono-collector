@@ -1,5 +1,5 @@
-import { ValueFunctions, makeValue } from "garbo-lib";
-import { Item } from "kolmafia";
+import { type ValueFunctions, makeValue } from "garbo-lib";
+import { type Item } from "kolmafia";
 import { $item } from "libram";
 
 let _valueFunctions: ValueFunctions | undefined = undefined;

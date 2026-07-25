@@ -24,6 +24,10 @@ export default defineConfig(
       "prefer-template": "error",
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        { fixStyle: "inline-type-imports" },
+      ],
       "no-restricted-syntax": [
         "error",
         {

@@ -1,4 +1,4 @@
-import { Args, Quest, getTasks } from "grimoire-kolmafia";
+import { Args, type Quest, getTasks } from "grimoire-kolmafia";
 import {
   adv1,
   canAdventure,
@@ -33,9 +33,9 @@ import {
 
 import {
   ChronerEngine,
-  ChronerQuest,
+  type ChronerQuest,
   ChronerStrategy,
-  ChronerTask,
+  type ChronerTask,
 } from "./engine";
 import { args, getBestAutomatedFutureSide, printh } from "./lib";
 import Macro from "./macro";

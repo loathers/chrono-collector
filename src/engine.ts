@@ -1,7 +1,13 @@
-import { CombatStrategy, Engine, Outfit, Quest, Task } from "grimoire-kolmafia";
 import {
-  Item,
-  Location,
+  CombatStrategy,
+  Engine,
+  type Outfit,
+  type Quest,
+  type Task,
+} from "grimoire-kolmafia";
+import {
+  type Item,
+  type Location,
   bjornifyFamiliar,
   enthroneFamiliar,
   equippedAmount,
@@ -12,7 +18,7 @@ import {
   $slot,
   CrownOfThrones,
   JuneCleaver,
-  PropertiesManager,
+  type PropertiesManager,
   get,
   sum,
   sumNumbers,
@@ -21,7 +27,7 @@ import {
 import { garboAverageValue, garboValue } from "./garboValue";
 import { bestJuneCleaverOption, shouldSkip } from "./juneCleaver";
 import { printd, sober } from "./lib";
-import Macro from "./macro";
+import type Macro from "./macro";
 
 export type ChronerTask = Task & {
   sobriety: "sober" | "drunk" | "either";

@@ -1,6 +1,6 @@
 import { Args } from "grimoire-kolmafia";
 import {
-  Item,
+  type Item,
   Skill,
   descToItem,
   inebrietyLimit,
