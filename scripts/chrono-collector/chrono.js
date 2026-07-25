@@ -25461,7 +25461,7 @@ var quest$4 = {
 };
 
 // eslint-disable-next-line
-var targetItems$5 = $items(_templateObject3$6 || (_templateObject3$6 = _taggedTemplateLiteral(["wooden juggling ball, tactical jester's cap, The Wizard's Android"])));
+var targetItems$5 = $items(_templateObject3$6 || (_templateObject3$6 = _taggedTemplateLiteral(["tactical jester's cap, The Wizard's Android"])));
 
 var _templateObject$5, _templateObject2$5, _templateObject3$5, _templateObject4$4, _templateObject5$3, _templateObject6$2, _templateObject7$2, _templateObject8$2, _templateObject9$2, _templateObject0$2, _templateObject1$2;
 var location$3 = $location(_templateObject$5 || (_templateObject$5 = _taggedTemplateLiteral(["The Cave Before Time"])));
