@@ -1,7 +1,5 @@
-.DS_Store
-.vscode
-KoLmafia/scripts/*
 node_modules
+dist
 
 .pnp.*
 .yarn/*
