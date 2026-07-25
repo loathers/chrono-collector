@@ -1,4 +1,3 @@
-import { canOpenRedPresent } from ".";
 import { garboValue } from "../garboValue";
 import { sober } from "../lib";
 import { Familiar, familiarWeight } from "kolmafia";
@@ -7,7 +6,12 @@ import { $familiar, $item, $location, clamp, get, have } from "libram";
 import getConstantValueFamiliars from "./constantValueFamiliars";
 import getDropFamiliars from "./dropFamiliars";
 import getExperienceFamiliars from "./experienceFamiliars";
-import { GeneralFamiliar, MenuOptions, timeToMeatify } from "./lib";
+import {
+  canOpenRedPresent,
+  GeneralFamiliar,
+  MenuOptions,
+  timeToMeatify,
+} from "./lib";
 
 const DEFAULT_MENU_OPTIONS = {
   canChooseMacro: true,
