@@ -1,7 +1,7 @@
 import { sober } from "../lib";
 import {
-  Familiar,
-  Location,
+  type Familiar,
+  type Location,
   familiarWeight,
   myAdventures,
   totalTurnsPlayed,

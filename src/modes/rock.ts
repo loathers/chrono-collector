@@ -1,4 +1,4 @@
-import { ChronerQuest, ChronerStrategy } from "../engine.js";
+import { type ChronerQuest, ChronerStrategy } from "../engine.js";
 import Macro from "../macro.js";
 import { chooseQuestOutfit, ifHave } from "../outfit.js";
 import {

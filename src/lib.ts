@@ -1,6 +1,6 @@
 import { Args } from "grimoire-kolmafia";
 import {
-  Item,
+  type Item,
   Skill,
   descToItem,
   inebrietyLimit,
@@ -99,6 +99,7 @@ export const args = Args.create("chrono", "A script for farming chroner", {
     options: [
       ["capsule", "Farm Time Capsules from the Cave Before Time"],
       ["future", "Farm... something from the Automated Future"],
+      ["hamlet", "Farm rares from Historically-Accurate Hamlet"],
       ["rock", "Get Caveman Dan's Favorite Rock - duped as much as possible"],
       ["rose", "Farm Roses from The Main Stage"],
       ["skeleton", "Farm rares from skeletal fascists"],
@@ -140,13 +141,7 @@ export function countEnvironment(environment: CMCEnvironment): number {
 }
 
 export type RealmType =
-  | "spooky"
-  | "stench"
-  | "hot"
-  | "cold"
-  | "sleaze"
-  | "fantasy"
-  | "pirate";
+  "spooky" | "stench" | "hot" | "cold" | "sleaze" | "fantasy" | "pirate";
 export function realmAvailable(identifier: RealmType): boolean {
   if (identifier === "fantasy") {
     return get(`_frToday`) || get(`frAlways`);

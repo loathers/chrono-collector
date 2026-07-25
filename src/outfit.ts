@@ -1,8 +1,8 @@
-import { OutfitSlot, OutfitSpec } from "grimoire-kolmafia";
+import { type OutfitSlot, type OutfitSpec } from "grimoire-kolmafia";
 import {
-  Familiar,
-  Item,
-  Location,
+  type Familiar,
+  type Item,
+  type Location,
   canEquip,
   canInteract,
   itemAmount,
@@ -20,7 +20,7 @@ import {
   sumNumbers,
 } from "libram";
 
-import { MenuOptions, freeFightFamiliar } from "./familiar";
+import { type MenuOptions, freeFightFamiliar } from "./familiar";
 import { garboAverageValue, garboValue } from "./garboValue";
 import { args, maxBy, realmAvailable, sober } from "./lib";
 

@@ -1,23 +1,17 @@
 import { type ChronerQuest, ChronerStrategy } from "../engine";
 import Macro from "../macro";
 import { chooseQuestOutfit, ifHave } from "../outfit";
-import {
-  $item,
-  $items,
-  $location,
-  $monster,
-  getKramcoWandererChance,
-} from "libram";
+import { $item, $items, $location, getKramcoWandererChance } from "libram";
 
-const location = $location`The Home of The Future`;
-const monster = $monster`robot maid`;
+// eslint-disable-next-line
+const location = $location`Historically-Accurate Hamlet`;
 
 export const quest: ChronerQuest = {
-  name: "Home of the Future",
+  name: "Hamlet",
   location,
   tasks: [
     {
-      name: "Core",
+      name: "Hamlet",
       completed: () => false,
       do: location,
       outfit: () => {
@@ -30,12 +24,11 @@ export const quest: ChronerQuest = {
           sausageSpec,
         );
       },
-      combat: new ChronerStrategy(() =>
-        Macro.step("pickpocket").seeMoreOf(monster).standardCombat(),
-      ),
+      combat: new ChronerStrategy(() => Macro.standardCombat()),
       sobriety: "either",
     },
   ],
 };
 
-export const targetItems = $items`housekeeping automa-core`;
+// eslint-disable-next-line
+export const targetItems = $items`wooden juggling ball, tactical jester's cap, The Wizard's Android`;

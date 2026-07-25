@@ -1,5 +1,5 @@
 import { garboAverageValue, garboValue } from "../garboValue";
-import { Familiar, familiarWeight, weightAdjustment } from "kolmafia";
+import { type Familiar, familiarWeight, weightAdjustment } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -12,7 +12,7 @@ import {
   have,
 } from "libram";
 
-import { GeneralFamiliar, MenuOptions } from "./lib";
+import { type GeneralFamiliar, type MenuOptions } from "./lib";
 
 type ConstantValueFamiliar = {
   familiar: Familiar;

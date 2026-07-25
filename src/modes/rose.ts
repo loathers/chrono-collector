@@ -1,4 +1,4 @@
-import { ChronerQuest, ChronerStrategy } from "../engine";
+import { type ChronerQuest, ChronerStrategy } from "../engine";
 import Macro from "../macro";
 import { chooseQuestOutfit, ifHave } from "../outfit";
 import { myLocation } from "kolmafia";
