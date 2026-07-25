@@ -141,13 +141,7 @@ export function countEnvironment(environment: CMCEnvironment): number {
 }
 
 export type RealmType =
-  | "spooky"
-  | "stench"
-  | "hot"
-  | "cold"
-  | "sleaze"
-  | "fantasy"
-  | "pirate";
+  "spooky" | "stench" | "hot" | "cold" | "sleaze" | "fantasy" | "pirate";
 export function realmAvailable(identifier: RealmType): boolean {
   if (identifier === "fantasy") {
     return get(`_frToday`) || get(`frAlways`);

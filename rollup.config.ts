@@ -21,8 +21,12 @@ const baseSettings = {
     replace({
       preventAssignment: true,
       values: {
-        "process.env.GITHUB_SHA": JSON.stringify(process.env.GITHUB_SHA ?? "CustomBuild"),
-        "process.env.GITHUB_REF_NAME": JSON.stringify(process.env.GITHUB_REF_NAME ?? "CustomBuild"),
+        "process.env.GITHUB_SHA": JSON.stringify(
+          process.env.GITHUB_SHA ?? "CustomBuild",
+        ),
+        "process.env.GITHUB_REF_NAME": JSON.stringify(
+          process.env.GITHUB_REF_NAME ?? "CustomBuild",
+        ),
         "process.env.GITHUB_REPOSITORY": JSON.stringify(
           process.env.GITHUB_REPOSITORY ?? "CustomBuild",
         ),
@@ -60,7 +64,9 @@ const baseSettings = {
     : undefined,
 };
 
-export default [{ "scripts/chrono-collector/chrono": "src/main.ts" }].map((input) => ({
-  input,
-  ...baseSettings,
-}));
+export default [{ "scripts/chrono-collector/chrono": "src/main.ts" }].map(
+  (input) => ({
+    input,
+    ...baseSettings,
+  }),
+);
