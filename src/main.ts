@@ -56,6 +56,8 @@ function getQuest(): ChronerQuest {
       return { ...modes.capsuleQuest, completed: completed() };
     case "future":
       return { ...modes.futureQuest, completed: completed() };
+    case "hamlet":
+      return { ...modes.hamletQuest, completed: completed() };
     case "rock":
       return { ...modes.rockQuest, completed: completed() };
     case "rose":
@@ -73,6 +75,7 @@ const targetItems = [
   ...$items`Chroner`,
   ...modes.capsuleTargetItems,
   ...modes.futureTargetItems,
+  ...modes.hamletTargetItems,
   ...modes.rockTargetItems,
   ...modes.roseTargetItems,
   ...modes.skeletonTargetItems,
