@@ -1,10 +1,21 @@
+import { banishCombat, banishWeaponSpec, prepareBanishes } from "../banish";
 import { type ChronerQuest, ChronerStrategy } from "../engine";
 import Macro from "../macro";
 import { chooseQuestOutfit, ifHave } from "../outfit";
-import { $item, $items, $location, getKramcoWandererChance } from "libram";
+import {
+  $item,
+  $items,
+  $location,
+  $monsters,
+  getKramcoWandererChance,
+} from "libram";
 
 // eslint-disable-next-line
 const location = $location`Historically-Accurate Hamlet`;
+
+// Monsters we want banished for the whole day.
+// eslint-disable-next-line
+const banishTargets = $monsters`soused tosspot, knight in lightweight armor`;
 
 export const quest: ChronerQuest = {
   name: "Hamlet",
@@ -22,9 +33,13 @@ export const quest: ChronerQuest = {
         return chooseQuestOutfit(
           { location, isFree: getKramcoWandererChance() >= 1 },
           sausageSpec,
+          banishWeaponSpec(banishTargets),
         );
       },
-      combat: new ChronerStrategy(() => Macro.standardCombat()),
+      prepare: () => prepareBanishes(banishTargets),
+      combat: new ChronerStrategy(() =>
+        banishCombat(banishTargets, () => Macro.standardCombat()),
+      ),
       sobriety: "either",
     },
   ],
