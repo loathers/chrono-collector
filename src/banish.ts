@@ -40,6 +40,8 @@ const NANOBRAWNY = $effect`Nanobrawny`;
 const NANOBRAWNY_MIN_TURNS = 40;
 // Turns of an effect granted per genie/pocket wish — used to price the Nanites route.
 const WISH_EFFECT_TURNS = 20;
+// Marginal "cost" of firing an already-owned perishable resource: spend it before it decays.
+const SPEND_NOW = -1;
 
 const MONODENT = $item`Monodent of the Sea`;
 const TRYPTOPHAN_DART = $item`tryptophan dart`;
@@ -51,15 +53,19 @@ const GENIE_BOTTLES = $items`genie bottle, replica genie bottle`;
 const POLICY = { wish: true, dart: true };
 
 /**
- * A single way of banishing a monster. Day-long banishers hold their victim until
- * rollover; each banisher can only hold one monster at a time, so keeping two monsters
- * banished all day needs two distinct banishers.
+ * A single, self-describing way of banishing a monster. Each banisher holds only one victim
+ * at a time, so keeping N monsters banished all day needs N distinct banishers. Everything
+ * the engine needs is on the object, so a new banisher is one entry in {@link BANISHERS}.
  */
 type Banisher = {
   source: Skill | Item; // identity; matched against the banishedMonsters property
-  dayLong: boolean;
-  canProvide: () => boolean; // could be deployed today (owns/eventually-usable) — planning
+  dayLong: boolean; // rest-of-day vs turn-based (returns / must be re-applied)
+  weapon?: () => Item | null; // weapon that must be equipped to fire it (forced in lockdown)
+  cost: () => number; // marginal meat cost of one lock now; < 0 = perishable, spend ASAP
+  canProvide: () => boolean; // could be set up today (owned / buyable under policy) — planning
   available: () => boolean; // usable to fire in the current combat — right now
+  deployed?: () => boolean; // already holding a victim, so it can't take another
+  provision?: () => void; // acquire consumables before adventuring (wish / buy)
   macro: () => Macro;
 };
 
@@ -93,11 +99,12 @@ function nanobrawnyWishesNeeded(): number {
   );
 }
 
-// Meat cost of locking a target with each paid day-long fallback, for choosing between them.
-// Every wish is valued at the pocket-wish price: free genie-bottle wishes could otherwise be
-// spent on a pocket wish's worth of effect, so they carry the same opportunity cost.
+// Meat cost of locking a target via Unleash Nanites. Every wish is valued at the pocket-wish
+// price (free genie-bottle wishes carry the same opportunity cost); a buff already at/over the
+// threshold is sunk and perishable, so spend it ASAP.
 function nanitesCost(): number {
   if (nanitesUsed()) return Infinity;
+  if (haveEffect(NANOBRAWNY) >= NANOBRAWNY_MIN_TURNS) return SPEND_NOW;
   return nanobrawnyWishesNeeded() * garboValue(POCKET_WISH);
 }
 
@@ -119,6 +126,7 @@ function wishNanobrawny(): void {
 const bowl: Banisher = {
   source: $skill`Bowl a Curveball`,
   dayLong: false,
+  cost: () => 0,
   canProvide: () => get("hasCosmicBowlingBall"),
   available: () =>
     get("hasCosmicBowlingBall") && get("cosmicBowlingBallReturnCombats") < 1,
@@ -128,14 +136,19 @@ const bowl: Banisher = {
 const lightning: Banisher = {
   source: $skill`Sea *dent: Throw a Lightning Bolt`,
   dayLong: true,
+  weapon: () => MONODENT,
+  cost: () => 0, // 11 free uses/day, keeps drops
   canProvide: () => have(MONODENT) && get("_seadentLightningUsed") < 11,
   available: () => haveEquipped(MONODENT) && get("_seadentLightningUsed") < 11,
+  deployed: () => get("_seadentLightningUsed") > 0,
   macro: () => Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`),
 };
 
 const batter: Banisher = {
   source: $skill`Batter Up!`,
   dayLong: true,
+  weapon: bestClub,
+  cost: () => 0, // Fury regenerates from combat
   // Fury caps at 5 only with Ire of the Orca, which Batter Up! needs to fire.
   canProvide: () =>
     myClass() === $class`Seal Clubber` &&
@@ -152,30 +165,50 @@ const batter: Banisher = {
 const nanites: Banisher = {
   source: $skill`Unleash Nanites`,
   dayLong: true,
+  cost: nanitesCost,
   // Pocket wishes are unlimited (buyable), so under policy Nanites is always provisionable.
   canProvide: () =>
     !nanitesUsed() && (haveEffect(NANOBRAWNY) > 0 || POLICY.wish),
   available: () =>
     !nanitesUsed() && haveEffect(NANOBRAWNY) >= NANOBRAWNY_MIN_TURNS,
+  deployed: nanitesUsed,
+  provision: wishNanobrawny,
   macro: () => Macro.trySkill($skill`Unleash Nanites`),
 };
 
 const dart: Banisher = {
   source: TRYPTOPHAN_DART,
   dayLong: true,
+  cost: dartCost,
   canProvide: () => POLICY.dart,
   available: () => have(TRYPTOPHAN_DART),
+  provision: () => void retrieveItem(TRYPTOPHAN_DART),
   macro: () => Macro.tryHaveItem(TRYPTOPHAN_DART),
 };
 
-// Weapon-based (near-free) banishers first, then the two priced fallbacks. Which priced
-// fallback is actually stocked is decided by price in prepareBanishes; Nanites is promoted
-// ahead of everything when its buff is already up, so a decaying Nanobrawny isn't wasted.
-const DAY_LONG: Banisher[] = [lightning, batter, nanites, dart];
+// The whole registry. Add a future banisher (Reflex Hammer, Latte lid, ice house, ...) by
+// dropping one entry here — the engine below is generic over it.
+const BANISHERS: Banisher[] = [bowl, lightning, batter, nanites, dart];
+const DAY_LONG = BANISHERS.filter((b) => b.dayLong);
 
+const isDeployed = (b: Banisher): boolean => b.deployed?.() ?? false;
+const byCost = (a: Banisher, b: Banisher): number => a.cost() - b.cost();
+
+/** Turn-based banishers that can each hold one target (e.g. the bowling ball). */
+function turnCapacity(): number {
+  return BANISHERS.filter((b) => !b.dayLong && b.canProvide()).length;
+}
+
+function availableTurnBanisher(): Banisher | null {
+  return BANISHERS.find((b) => !b.dayLong && b.available()) ?? null;
+}
+
+/** Cheapest day-long banisher usable this combat that isn't already holding a victim. */
 function bestDayLong(): Banisher | null {
-  if (nanites.available()) return nanites;
-  return DAY_LONG.find((b) => b.available()) ?? null;
+  return (
+    DAY_LONG.filter((b) => b.available() && !isDeployed(b)).sort(byCost)[0] ??
+    null
+  );
 }
 
 /** Monsters currently banished, parsed straight from the raw property (groups of 3). */
@@ -196,20 +229,30 @@ function dayLongLocked(monster: Monster): boolean {
   );
 }
 
-/** How many targets still need a day-long lock, given the bowling ball can hold one. */
+/** How many targets still need a day-long lock, after turn-based banishers take their share. */
 function locksNeeded(targets: Monster[]): number {
   const unlocked = targets.filter((t) => !dayLongLocked(t)).length;
-  return Math.max(0, unlocked - (bowl.canProvide() ? 1 : 0));
+  return Math.max(0, unlocked - turnCapacity());
+}
+
+/** The cheapest day-long banishers we intend to establish for the still-unlocked targets. */
+function plannedDayLong(targets: Monster[]): Banisher[] {
+  const need = locksNeeded(targets);
+  if (need <= 0) return [];
+  return DAY_LONG.filter((b) => b.canProvide() && !isDeployed(b))
+    .sort(byCost)
+    .slice(0, need);
 }
 
 function selectBanisher(target: Monster, targets: Monster[]): Banisher | null {
   if (dayLongLocked(target)) return null; // already gone for the day
   const unlocked = targets.filter((t) => !dayLongLocked(t)).length;
   const dl = bestDayLong();
-  // Lock with a day-long banisher when the free bowling ball can't cover everything;
-  // otherwise let the last remaining target ride the (free) bowling ball.
-  if (dl && (unlocked >= 2 || !bowl.available())) return dl;
-  if (bowl.available()) return bowl;
+  const turn = availableTurnBanisher();
+  // Lock with a day-long banisher when turn-based banishers can't cover everything;
+  // otherwise let the last remaining target ride a (free) turn-based banisher.
+  if (dl && (unlocked > turnCapacity() || !turn)) return dl;
+  if (turn) return turn;
   return dl; // may be null -> fall through to base combat and just kill it
 }
 
@@ -231,42 +274,18 @@ export function banishCombat(targets: Monster[], base: () => Macro): Macro {
 
 /** Whether the outfit still needs a banish weapon forced (monodent / club) this turn. */
 export function pendingWeaponBanish(targets: Monster[]): boolean {
-  return (
-    locksNeeded(targets) > 0 && (lightning.canProvide() || batter.canProvide())
-  );
+  return plannedDayLong(targets).some((b) => b.weapon);
 }
 
-/** Forced weapon spec for the lockdown turns; empty once both targets are handled. */
+/** Forced weapon spec for the lockdown turns; empty once the targets are handled. */
 export function banishWeaponSpec(targets: Monster[]): OutfitSpec {
-  if (locksNeeded(targets) <= 0) return {};
-  if (lightning.canProvide()) return ifHave("weapon", MONODENT);
-  const club = batter.canProvide() ? bestClub() : null;
-  return club ? ifHave("weapon", club) : {};
+  const weapon = plannedDayLong(targets)
+    .find((b) => b.weapon)
+    ?.weapon?.();
+  return weapon ? ifHave("weapon", weapon) : {};
 }
 
 /** Acquire the resources the plan needs before adventuring (wish Nanobrawny / buy darts). */
 export function prepareBanishes(targets: Monster[]): void {
-  const need = locksNeeded(targets);
-  if (need <= 0) return;
-
-  // Near-free, weapon-based day-long banishers we can deploy without buying anything.
-  const cheap = [lightning, batter].filter((b) => b.canProvide()).length;
-  let shortfall = need - cheap;
-  if (shortfall <= 0) return;
-
-  // Nanites locks one monster/day, so use it for a single lock when it's the cheaper of the
-  // two priced fallbacks (dart vs wish), then cover any remaining locks with darts.
-  if (
-    shortfall > 0 &&
-    POLICY.wish &&
-    !nanitesUsed() &&
-    (!POLICY.dart || nanitesCost() <= dartCost())
-  ) {
-    wishNanobrawny();
-    if (haveEffect(NANOBRAWNY) >= NANOBRAWNY_MIN_TURNS) shortfall -= 1;
-  }
-
-  if (shortfall > 0 && POLICY.dart) {
-    retrieveItem(TRYPTOPHAN_DART, shortfall);
-  }
+  for (const banisher of plannedDayLong(targets)) banisher.provision?.();
 }
