@@ -30,20 +30,24 @@ import {
   have,
 } from "libram";
 
+import { garboValue } from "./garboValue";
 import { printd } from "./lib";
 import Macro from "./macro";
 import { ifHave } from "./outfit";
 
-// Unleash Nanites needs more than this many turns of Nanobrawny to fire.
+// Unleash Nanites needs at least this many turns of Nanobrawny to fire.
 const NANOBRAWNY = $effect`Nanobrawny`;
 const NANOBRAWNY_MIN_TURNS = 40;
+// Turns of an effect granted per genie/pocket wish — used to price the Nanites route.
+const WISH_EFFECT_TURNS = 20;
 
 const MONODENT = $item`Monodent of the Sea`;
 const TRYPTOPHAN_DART = $item`tryptophan dart`;
+const POCKET_WISH = $item`pocket wish`;
 const GENIE_BOTTLES = $items`genie bottle, replica genie bottle`;
 
-// Resource policy (per user): full ladder — free/owned sources first, then genie-wish
-// Nanobrawny for Unleash Nanites, then tryptophan darts as an absolute last resort.
+// Resource policy (per user): full ladder — near-free weapon banishers first, then the
+// cheaper of (wish Nanobrawny -> Unleash Nanites) vs (tryptophan dart), by market value.
 const POLICY = { wish: true, dart: true };
 
 /**
@@ -74,9 +78,42 @@ function nanitesUsed(): boolean {
   return get("_nanorhinoBanishedMonster") !== $monster`none`;
 }
 
+// Free genie-bottle wishes remaining today (3/day). Beyond these, wishes cost a pocket wish.
 function genieWishesLeft(): number {
   if (!GENIE_BOTTLES.some((b) => have(b))) return 0;
   return Math.max(0, 3 - get("_genieWishesUsed"));
+}
+
+function nanobrawnyWishesNeeded(): number {
+  return Math.max(
+    0,
+    Math.ceil(
+      (NANOBRAWNY_MIN_TURNS - haveEffect(NANOBRAWNY)) / WISH_EFFECT_TURNS,
+    ),
+  );
+}
+
+// Meat cost of locking a target with each paid day-long fallback, for choosing between them.
+// Every wish is valued at the pocket-wish price: free genie-bottle wishes could otherwise be
+// spent on a pocket wish's worth of effect, so they carry the same opportunity cost.
+function nanitesCost(): number {
+  if (nanitesUsed()) return Infinity;
+  return nanobrawnyWishesNeeded() * garboValue(POCKET_WISH);
+}
+
+// Valued at sale price whether or not one is held — a dart in inventory could be sold instead.
+function dartCost(): number {
+  return garboValue(TRYPTOPHAN_DART);
+}
+
+// Wish Nanobrawny up to a usable level: free genie-bottle wishes first, then pocket wishes.
+function wishNanobrawny(): void {
+  while (haveEffect(NANOBRAWNY) < NANOBRAWNY_MIN_TURNS) {
+    const before = haveEffect(NANOBRAWNY);
+    if (genieWishesLeft() <= 0 && !retrieveItem(POCKET_WISH)) break;
+    cliExecute("genie effect Nanobrawny");
+    if (haveEffect(NANOBRAWNY) <= before) break; // no progress -> bail
+  }
 }
 
 const bowl: Banisher = {
@@ -115,11 +152,11 @@ const batter: Banisher = {
 const nanites: Banisher = {
   source: $skill`Unleash Nanites`,
   dayLong: true,
+  // Pocket wishes are unlimited (buyable), so under policy Nanites is always provisionable.
   canProvide: () =>
-    !nanitesUsed() &&
-    (haveEffect(NANOBRAWNY) > 0 || (POLICY.wish && genieWishesLeft() > 0)),
+    !nanitesUsed() && (haveEffect(NANOBRAWNY) > 0 || POLICY.wish),
   available: () =>
-    !nanitesUsed() && haveEffect(NANOBRAWNY) > NANOBRAWNY_MIN_TURNS,
+    !nanitesUsed() && haveEffect(NANOBRAWNY) >= NANOBRAWNY_MIN_TURNS,
   macro: () => Macro.trySkill($skill`Unleash Nanites`),
 };
 
@@ -131,8 +168,9 @@ const dart: Banisher = {
   macro: () => Macro.tryHaveItem(TRYPTOPHAN_DART),
 };
 
-// Cheapest -> most expensive. Nanites is promoted ahead of this order whenever its buff is
-// already up, so a wished (decaying) Nanobrawny is spent before it wears off.
+// Weapon-based (near-free) banishers first, then the two priced fallbacks. Which priced
+// fallback is actually stocked is decided by price in prepareBanishes; Nanites is promoted
+// ahead of everything when its buff is already up, so a decaying Nanobrawny isn't wasted.
 const DAY_LONG: Banisher[] = [lightning, batter, nanites, dart];
 
 function bestDayLong(): Banisher | null {
@@ -206,35 +244,29 @@ export function banishWeaponSpec(targets: Monster[]): OutfitSpec {
   return club ? ifHave("weapon", club) : {};
 }
 
-/** Acquire the resources the plan needs before adventuring (wish Nanobrawny / buy a dart). */
+/** Acquire the resources the plan needs before adventuring (wish Nanobrawny / buy darts). */
 export function prepareBanishes(targets: Monster[]): void {
   const need = locksNeeded(targets);
   if (need <= 0) return;
 
-  // Day-long banishers we can deploy without spending consumable resources.
+  // Near-free, weapon-based day-long banishers we can deploy without buying anything.
   const cheap = [lightning, batter].filter((b) => b.canProvide()).length;
   let shortfall = need - cheap;
   if (shortfall <= 0) return;
 
-  // Fallback 1: wish for Nanobrawny so Unleash Nanites can fire.
+  // Nanites locks one monster/day, so use it for a single lock when it's the cheaper of the
+  // two priced fallbacks (dart vs wish), then cover any remaining locks with darts.
   if (
+    shortfall > 0 &&
     POLICY.wish &&
     !nanitesUsed() &&
-    haveEffect(NANOBRAWNY) <= NANOBRAWNY_MIN_TURNS
+    (!POLICY.dart || nanitesCost() <= dartCost())
   ) {
-    while (
-      haveEffect(NANOBRAWNY) <= NANOBRAWNY_MIN_TURNS &&
-      genieWishesLeft() > 0
-    ) {
-      cliExecute("genie effect Nanobrawny");
-    }
-  }
-  if (!nanitesUsed() && haveEffect(NANOBRAWNY) > NANOBRAWNY_MIN_TURNS) {
-    shortfall -= 1;
+    wishNanobrawny();
+    if (haveEffect(NANOBRAWNY) >= NANOBRAWNY_MIN_TURNS) shortfall -= 1;
   }
 
-  // Fallback 2: a tryptophan dart (last resort — using it costs an adventure).
-  if (POLICY.dart && shortfall > 0 && !have(TRYPTOPHAN_DART)) {
-    retrieveItem(TRYPTOPHAN_DART);
+  if (shortfall > 0 && POLICY.dart) {
+    retrieveItem(TRYPTOPHAN_DART, shortfall);
   }
 }
