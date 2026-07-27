@@ -50,9 +50,9 @@ const POLICY = { wish: true, dart: true };
  */
 type Banisher = {
   action: ActionSource;
-  dayLong: boolean; // rest-of-day hold vs turn-based (returns / must be re-applied)
-  ready?: () => boolean; // extra to fire THIS combat beyond action.available() (equipped / off cooldown / buff up)
-  contains: () => Monster | null; // the victim it is currently holding, if any
+  dayLong: boolean;
+  ready: () => boolean;
+  contains: () => Monster | null;
 };
 
 const notNone = (monster: Monster | null): Monster | null =>
@@ -190,8 +190,7 @@ const BANISHERS: Banisher[] = [bowl, lightning, batter, nanites, dart];
 const DAY_LONG = BANISHERS.filter((b) => b.dayLong);
 
 const canProvide = (b: Banisher): boolean => b.action.available();
-const isReady = (b: Banisher): boolean =>
-  b.action.available() && (b.ready?.() ?? true);
+const isReady = (b: Banisher): boolean => b.action.available() && b.ready();
 const isDeployed = (b: Banisher): boolean => b.contains() !== null;
 const byCost = (a: Banisher, b: Banisher): number =>
   a.action.cost() - b.action.cost();
