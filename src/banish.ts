@@ -22,7 +22,6 @@ import {
   $skill,
   $slot,
   ActionSource,
-  Requirement,
   get,
   have,
   multiSplit,
@@ -32,23 +31,16 @@ import { garboValue } from "./garboValue";
 import { printd } from "./lib";
 import Macro from "./macro";
 
-// Resource policy (per user): full ladder — near-free weapon banishers first, then the cheaper
-// of (wish Nanobrawny -> Unleash Nanites) vs (tryptophan dart), by market value. Shared by the
-// Nanites/dart banishers; every other value is inlined into the banisher that uses it.
-const POLICY = { wish: true, dart: true };
-
 /**
- * A day-long-aware wrapper around libram's {@link ActionSource}. The `action` carries the
- * reusable primitive — source, macro, cost, per-slot equipment (a maximizer `Requirement`),
- * and preparation. `action.available()` (potential > 0) means "could be set up today"; the
- * fields below add what libram's banish framework lacks. Adding a banisher is one entry in
- * {@link BANISHERS}.
+ * Wraps libram's {@link ActionSource} (source, macro, cost, preparation). `action.available()`
+ * (potential > 0) means "could be set up today"; `ready`/`contains`/`outfit` add the rest.
  */
 type Banisher = {
   action: ActionSource;
   dayLong: boolean;
   ready: () => boolean;
   contains: () => Monster | null;
+  outfit?: () => OutfitSpec;
 };
 
 const notNone = (monster: Monster | null): Monster | null =>
@@ -66,8 +58,6 @@ function bestClub(): Item {
   );
 }
 
-// The whole registry. Add a future banisher (Reflex Hammer, Latte lid, ice house, ...) by
-// dropping one entry here — the engine below is generic over it.
 const BANISHERS: Banisher[] = [
   {
     action: new ActionSource(
@@ -87,14 +77,11 @@ const BANISHERS: Banisher[] = [
           ? Math.max(0, 11 - get("_seadentLightningUsed")) // 11 uses/day
           : 0,
       Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`),
-      {
-        equipmentRequirements: () =>
-          new Requirement([], { forceEquip: [$item`Monodent of the Sea`] }),
-      },
     ),
     dayLong: true,
     ready: () => haveEquipped($item`Monodent of the Sea`),
-    contains: () => bannedBy("Sea *dent"),
+    contains: () => banishedBy("Sea *dent"),
+    outfit: () => ({ weapon: $item`Monodent of the Sea` }),
   },
   {
     action: new ActionSource(
@@ -106,25 +93,18 @@ const BANISHERS: Banisher[] = [
           ? 1
           : 0,
       Macro.trySkill($skill`Batter Up!`),
-      {
-        equipmentRequirements: () =>
-          new Requirement([], { forceEquip: [bestClub()] }),
-        preparation: () => retrieveItem(bestClub()),
-      },
+      { preparation: () => retrieveItem(bestClub()) },
     ),
     dayLong: true,
     ready: () =>
       itemType(equippedItem($slot`weapon`)) === "club" && myFury() >= 5,
-    contains: () => bannedBy("Batter Up!"),
+    contains: () => banishedBy("Batter Up!"),
+    outfit: () => ({ weapon: bestClub() }),
   },
   {
     action: new ActionSource(
       $skill`Unleash Nanites`,
-      () =>
-        get("_nanorhinoBanishedMonster") === $monster`none` &&
-        (haveEffect($effect`Nanobrawny`) > 0 || POLICY.wish)
-          ? 1
-          : 0,
+      () => (get("_nanorhinoBanishedMonster") === $monster`none` ? 1 : 0),
       Macro.trySkill($skill`Unleash Nanites`),
       {
         cost: () => {
@@ -151,7 +131,7 @@ const BANISHERS: Banisher[] = [
   {
     action: new ActionSource(
       $item`tryptophan dart`,
-      () => (POLICY.dart ? 1 : 0),
+      () => 1,
       Macro.tryHaveItem($item`tryptophan dart`),
       {
         cost: () => garboValue($item`tryptophan dart`),
@@ -160,7 +140,7 @@ const BANISHERS: Banisher[] = [
     ),
     dayLong: true,
     ready: () => have($item`tryptophan dart`),
-    contains: () => bannedBy("tryptophan dart"),
+    contains: () => banishedBy("tryptophan dart"),
   },
 ];
 const DAY_LONG = BANISHERS.filter((b) => b.dayLong);
@@ -183,15 +163,13 @@ function banishedEntries(): { monster: Monster; banisher: string }[] {
   ]).map(([monster, banisher]) => ({ monster, banisher }));
 }
 
-/** The monster a banisher is currently holding, matched by its banishedMonsters name. */
-function bannedBy(banisher: string): Monster | null {
+function banishedBy(banisher: string): Monster | null {
   const match = banishedEntries().find(
     (e) => e.banisher.toLowerCase() === banisher.toLowerCase(),
   );
   return match?.monster ?? null;
 }
 
-/** Turn-based banishers that can each hold one target (e.g. the bowling ball). */
 function turnCapacity(): number {
   return BANISHERS.filter((b) => !b.dayLong && canProvide(b)).length;
 }
@@ -207,7 +185,6 @@ function turnHeldMonsters(): Monster[] {
     .filter((m) => m !== null);
 }
 
-/** Held by a rest-of-day banisher (i.e. banished, but not by a turn-based banisher). */
 function dayLongLocked(monster: Monster): boolean {
   return (
     banishedEntries().some((e) => e.monster === monster) &&
@@ -215,13 +192,11 @@ function dayLongLocked(monster: Monster): boolean {
   );
 }
 
-/** How many targets still need a day-long lock, after turn-based banishers take their share. */
 function locksNeeded(targets: Monster[]): number {
   const unlocked = targets.filter((t) => !dayLongLocked(t)).length;
   return Math.max(0, unlocked - turnCapacity());
 }
 
-/** The cheapest day-long banishers we intend to establish for the still-unlocked targets. */
 function plannedDayLong(targets: Monster[]): Banisher[] {
   const need = locksNeeded(targets);
   if (need <= 0) return [];
@@ -230,7 +205,6 @@ function plannedDayLong(targets: Monster[]): Banisher[] {
     .slice(0, need);
 }
 
-/** Cheapest day-long banisher usable this combat that isn't already holding a victim. */
 function bestDayLong(): Banisher | null {
   return (
     DAY_LONG.filter((b) => isReady(b) && !isDeployed(b)).sort(byCost)[0] ?? null
@@ -238,20 +212,16 @@ function bestDayLong(): Banisher | null {
 }
 
 function selectBanisher(target: Monster, targets: Monster[]): Banisher | null {
-  if (dayLongLocked(target)) return null; // already gone for the day
+  if (dayLongLocked(target)) return null;
   const dl = bestDayLong();
   const turn = availableTurnBanisher();
   // Lock with a day-long banisher when turn-based banishers can't cover everything;
   // otherwise let the last remaining target ride a (free) turn-based banisher.
   if (dl && (locksNeeded(targets) > 0 || !turn)) return dl;
   if (turn) return turn;
-  return dl; // may be null -> fall through to base combat and just kill it
+  return dl;
 }
 
-/**
- * Combat macro that banishes each target with its chosen banisher, then runs `base` for
- * everything else (non-targets, Kramco free fights, or a target we couldn't banish).
- */
 export function banishCombat(targets: Monster[], base: () => Macro): Macro {
   let macro = new Macro();
   for (const target of targets) {
@@ -264,22 +234,14 @@ export function banishCombat(targets: Monster[], base: () => Macro): Macro {
   return macro.step(base());
 }
 
-/**
- * Forced equipment for the lockdown turns, taken from the first planned banisher that needs
- * gear (any slot — it comes straight off the ActionSource's maximizer `Requirement`). Empty
- * once the targets are handled, so the farming outfit returns.
- */
 export function banishOutfitSpec(targets: Monster[]): OutfitSpec {
-  const requirement = plannedDayLong(targets)
-    .map((b) => b.action.constraints.equipmentRequirements?.())
-    .find((r) => r);
-  const equip = (requirement?.maximizeOptions.forceEquip ?? []).filter((i) =>
-    canEquip(i),
+  return (
+    plannedDayLong(targets)
+      .find((b) => b.outfit)
+      ?.outfit?.() ?? {}
   );
-  return equip.length ? { equip } : {};
 }
 
-/** Acquire the resources the plan needs before adventuring (wish Nanobrawny / buy darts). */
 export function prepareBanishes(targets: Monster[]): void {
   for (const banisher of plannedDayLong(targets)) {
     banisher.action.constraints.preparation?.();
