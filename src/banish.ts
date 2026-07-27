@@ -1,27 +1,23 @@
 import { type OutfitSpec } from "grimoire-kolmafia";
 import {
-  type Item,
+  Item,
   type Monster,
   canEquip,
   cliExecute,
   equippedItem,
-  getInventory,
-  getPower,
   haveEffect,
   haveEquipped,
-  isUnrestricted,
   itemType,
   myClass,
   myFury,
   retrieveItem,
-  toItem,
   toMonster,
+  weaponHands,
 } from "kolmafia";
 import {
   $class,
   $effect,
   $item,
-  $items,
   $monster,
   $skill,
   $slot,
@@ -33,7 +29,7 @@ import {
 } from "libram";
 
 import { garboValue } from "./garboValue";
-import { maxBy, printd } from "./lib";
+import { printd } from "./lib";
 import Macro from "./macro";
 
 // Resource policy (per user): full ladder — near-free weapon banishers first, then the cheaper
@@ -56,137 +52,115 @@ type Banisher = {
 };
 
 const notNone = (monster: Monster | null): Monster | null =>
-  monster && monster !== $monster`none` ? monster : null;
+  monster === $monster`none` ? null : monster;
 
-/** Highest-power owned, equippable, unrestricted club — what Batter Up! needs in-hand. */
-function bestClub(): Item | null {
-  const clubs = Object.keys(getInventory())
-    .map((name) => toItem(name))
-    .filter((i) => itemType(i) === "club" && canEquip(i) && isUnrestricted(i));
-  const weapon = equippedItem($slot`weapon`);
-  if (itemType(weapon) === "club") clubs.push(weapon);
-  return clubs.length ? maxBy(clubs, getPower) : null;
+/** Best owned, equippable club — 1-handed preferred so it doesn't take the offhand slot. */
+function bestClub(): Item {
+  const clubs = Item.all().filter(
+    (i) => have(i) && canEquip(i) && itemType(i) === "club",
+  );
+  return (
+    clubs.find((i) => weaponHands(i) === 1) ??
+    clubs.find((i) => weaponHands(i) === 2) ??
+    $item`seal-clubbing club`
+  );
 }
-
-function nanitesUsed(): boolean {
-  return get("_nanorhinoBanishedMonster") !== $monster`none`;
-}
-
-// Meat cost of locking a target via Unleash Nanites. Every wish is valued at the pocket-wish
-// price (a free genie-bottle wish carries the same opportunity cost); a buff already at/over the
-// threshold (40 turns) is sunk and perishable, so it's free — and urgent — to spend.
-function nanitesCost(): number {
-  const turns = haveEffect($effect`Nanobrawny`);
-  if (nanitesUsed()) return Infinity;
-  if (turns >= 40) return -1;
-  return Math.ceil((40 - turns) / 20) * garboValue($item`pocket wish`);
-}
-
-// Wish Nanobrawny up to a usable level: free genie-bottle wishes first, then bought pocket
-// wishes (unlimited). Each wish grants ~20 turns; Unleash Nanites needs at least 40.
-function wishNanobrawny(): boolean {
-  const nanobrawny = $effect`Nanobrawny`;
-  const freeWishes = () =>
-    $items`genie bottle, replica genie bottle`.some((b) => have(b))
-      ? Math.max(0, 3 - get("_genieWishesUsed"))
-      : 0;
-  while (haveEffect(nanobrawny) < 40) {
-    const before = haveEffect(nanobrawny);
-    if (freeWishes() <= 0 && !retrieveItem($item`pocket wish`)) break;
-    cliExecute("genie effect Nanobrawny");
-    if (haveEffect(nanobrawny) <= before) break; // no progress -> bail
-  }
-  return haveEffect(nanobrawny) >= 40;
-}
-
-const bowl: Banisher = {
-  action: new ActionSource(
-    $skill`Bowl a Curveball`,
-    () => (get("hasCosmicBowlingBall") ? 1 : 0),
-    Macro.trySkill($skill`Bowl a Curveball`),
-  ),
-  dayLong: false,
-  ready: () => get("cosmicBowlingBallReturnCombats") < 1,
-  contains: () => notNone(get("_curveballMonster")),
-};
-
-const lightning: Banisher = {
-  action: new ActionSource(
-    $skill`Sea *dent: Throw a Lightning Bolt`,
-    () =>
-      have($item`Monodent of the Sea`)
-        ? Math.max(0, 11 - get("_seadentLightningUsed")) // 11 uses/day
-        : 0,
-    Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`),
-    {
-      equipmentRequirements: () =>
-        new Requirement([], { forceEquip: [$item`Monodent of the Sea`] }),
-    },
-  ),
-  dayLong: true,
-  ready: () => haveEquipped($item`Monodent of the Sea`),
-  contains: () => bannedBy("Sea *dent"),
-};
-
-const batter: Banisher = {
-  action: new ActionSource(
-    $skill`Batter Up!`,
-    () =>
-      myClass() === $class`Seal Clubber` &&
-      have($skill`Batter Up!`) &&
-      have($skill`Ire of the Orca`) && // Fury caps at 5 (needed to fire) only with Ire
-      bestClub() !== null
-        ? 1
-        : 0,
-    Macro.trySkill($skill`Batter Up!`),
-    {
-      equipmentRequirements: () => {
-        const club = bestClub();
-        return new Requirement([], { forceEquip: club ? [club] : [] });
-      },
-    },
-  ),
-  dayLong: true,
-  ready: () =>
-    itemType(equippedItem($slot`weapon`)) === "club" && myFury() >= 5,
-  contains: () => bannedBy("Batter Up!"),
-};
-
-const nanites: Banisher = {
-  action: new ActionSource(
-    $skill`Unleash Nanites`,
-    // Pocket wishes are unlimited (buyable), so under policy Nanites is always provisionable.
-    () =>
-      !nanitesUsed() && (haveEffect($effect`Nanobrawny`) > 0 || POLICY.wish)
-        ? 1
-        : 0,
-    Macro.trySkill($skill`Unleash Nanites`),
-    { cost: nanitesCost, preparation: wishNanobrawny },
-  ),
-  dayLong: true,
-  ready: () => haveEffect($effect`Nanobrawny`) >= 40,
-  contains: () => notNone(get("_nanorhinoBanishedMonster")),
-};
-
-const dart: Banisher = {
-  action: new ActionSource(
-    $item`tryptophan dart`,
-    () => (POLICY.dart ? 1 : 0),
-    Macro.tryHaveItem($item`tryptophan dart`),
-    // Valued at sale price even when held — a dart in inventory could be sold instead.
-    {
-      cost: () => garboValue($item`tryptophan dart`),
-      preparation: () => retrieveItem($item`tryptophan dart`),
-    },
-  ),
-  dayLong: true,
-  ready: () => have($item`tryptophan dart`),
-  contains: () => bannedBy("tryptophan dart"),
-};
 
 // The whole registry. Add a future banisher (Reflex Hammer, Latte lid, ice house, ...) by
 // dropping one entry here — the engine below is generic over it.
-const BANISHERS: Banisher[] = [bowl, lightning, batter, nanites, dart];
+const BANISHERS: Banisher[] = [
+  {
+    action: new ActionSource(
+      $skill`Bowl a Curveball`,
+      () => (get("hasCosmicBowlingBall") ? 1 : 0),
+      Macro.trySkill($skill`Bowl a Curveball`),
+    ),
+    dayLong: false,
+    ready: () => get("cosmicBowlingBallReturnCombats") < 1,
+    contains: () => notNone(get("_curveballMonster")),
+  },
+  {
+    action: new ActionSource(
+      $skill`Sea *dent: Throw a Lightning Bolt`,
+      () =>
+        have($item`Monodent of the Sea`)
+          ? Math.max(0, 11 - get("_seadentLightningUsed")) // 11 uses/day
+          : 0,
+      Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`),
+      {
+        equipmentRequirements: () =>
+          new Requirement([], { forceEquip: [$item`Monodent of the Sea`] }),
+      },
+    ),
+    dayLong: true,
+    ready: () => haveEquipped($item`Monodent of the Sea`),
+    contains: () => bannedBy("Sea *dent"),
+  },
+  {
+    action: new ActionSource(
+      $skill`Batter Up!`,
+      () =>
+        myClass() === $class`Seal Clubber` &&
+        have($skill`Batter Up!`) &&
+        have($skill`Ire of the Orca`) // Fury caps at 5 (needed to fire) only with Ire
+          ? 1
+          : 0,
+      Macro.trySkill($skill`Batter Up!`),
+      {
+        equipmentRequirements: () =>
+          new Requirement([], { forceEquip: [bestClub()] }),
+        preparation: () => retrieveItem(bestClub()),
+      },
+    ),
+    dayLong: true,
+    ready: () =>
+      itemType(equippedItem($slot`weapon`)) === "club" && myFury() >= 5,
+    contains: () => bannedBy("Batter Up!"),
+  },
+  {
+    action: new ActionSource(
+      $skill`Unleash Nanites`,
+      () =>
+        get("_nanorhinoBanishedMonster") === $monster`none` &&
+        (haveEffect($effect`Nanobrawny`) > 0 || POLICY.wish)
+          ? 1
+          : 0,
+      Macro.trySkill($skill`Unleash Nanites`),
+      {
+        cost: () => {
+          const turns = haveEffect($effect`Nanobrawny`);
+          if (get("_nanorhinoBanishedMonster") !== $monster`none`)
+            return Infinity;
+          if (turns >= 40) return -1;
+          return Math.ceil((40 - turns) / 20) * garboValue($item`pocket wish`);
+        },
+        preparation: () => {
+          while (haveEffect($effect`Nanobrawny`) < 40) {
+            if (!cliExecute("genie effect Nanobrawny")) break;
+          }
+          return haveEffect($effect`Nanobrawny`) >= 40;
+        },
+      },
+    ),
+    dayLong: true,
+    ready: () => haveEffect($effect`Nanobrawny`) >= 40,
+    contains: () => notNone(get("_nanorhinoBanishedMonster")),
+  },
+  {
+    action: new ActionSource(
+      $item`tryptophan dart`,
+      () => (POLICY.dart ? 1 : 0),
+      Macro.tryHaveItem($item`tryptophan dart`),
+      {
+        cost: () => garboValue($item`tryptophan dart`),
+        preparation: () => retrieveItem($item`tryptophan dart`),
+      },
+    ),
+    dayLong: true,
+    ready: () => have($item`tryptophan dart`),
+    contains: () => bannedBy("tryptophan dart"),
+  },
+];
 const DAY_LONG = BANISHERS.filter((b) => b.dayLong);
 
 const canProvide = (b: Banisher): boolean => b.action.available();
