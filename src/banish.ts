@@ -58,17 +58,10 @@ function bestClub(): Item {
   );
 }
 
+// The bowling ball is intentionally absent: the global "Bowling Ball Run" task
+// (src/main.ts) recycles it every time it returns, so hamlet can't rely on it — every
+// target needs its own day-long banisher.
 const BANISHERS: Banisher[] = [
-  {
-    action: new ActionSource(
-      $skill`Bowl a Curveball`,
-      () => (get("hasCosmicBowlingBall") ? 1 : 0),
-      Macro.trySkill($skill`Bowl a Curveball`),
-    ),
-    dayLong: false,
-    ready: () => get("cosmicBowlingBallReturnCombats") < 1,
-    contains: () => notNone(get("_curveballMonster")),
-  },
   {
     action: new ActionSource(
       $skill`Sea *dent: Throw a Lightning Bolt`,
