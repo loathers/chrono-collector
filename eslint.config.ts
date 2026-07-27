@@ -1,8 +1,10 @@
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
-import libram from "eslint-plugin-libram";
+import libram, { verifyConstantsSinceRevision } from "eslint-plugin-libram";
 import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
+
+await verifyConstantsSinceRevision(29117);
 
 export default defineConfig(
   {

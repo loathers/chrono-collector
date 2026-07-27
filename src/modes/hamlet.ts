@@ -10,11 +10,9 @@ import {
   getKramcoWandererChance,
 } from "libram";
 
-// eslint-disable-next-line
 const location = $location`Historically-Accurate Hamlet`;
 
 // Monsters we want banished for the whole day.
-// eslint-disable-next-line
 const banishTargets = $monsters`soused tosspot, knight in lightweight armor`;
 
 export const quest: ChronerQuest = {
@@ -45,5 +43,4 @@ export const quest: ChronerQuest = {
   ],
 };
 
-// eslint-disable-next-line
 export const targetItems = $items`tactical jester's cap, The Wizard's Android`;
