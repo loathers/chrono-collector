@@ -29,6 +29,7 @@ import {
   Requirement,
   get,
   have,
+  multiSplit,
 } from "libram";
 
 import { garboValue } from "./garboValue";
@@ -51,7 +52,7 @@ type Banisher = {
   action: ActionSource;
   dayLong: boolean; // rest-of-day hold vs turn-based (returns / must be re-applied)
   ready?: () => boolean; // extra to fire THIS combat beyond action.available() (equipped / off cooldown / buff up)
-  contains?: () => Monster | null; // the victim it is currently holding, if any
+  contains: () => Monster | null; // the victim it is currently holding, if any
 };
 
 const notNone = (monster: Monster | null): Monster | null =>
@@ -148,6 +149,7 @@ const batter: Banisher = {
   dayLong: true,
   ready: () =>
     itemType(equippedItem($slot`weapon`)) === "club" && myFury() >= 5,
+  contains: () => bannedBy("Batter Up!"),
 };
 
 const nanites: Banisher = {
@@ -179,6 +181,7 @@ const dart: Banisher = {
   ),
   dayLong: true,
   ready: () => have($item`tryptophan dart`),
+  contains: () => bannedBy("tryptophan dart"),
 };
 
 // The whole registry. Add a future banisher (Reflex Hammer, Latte lid, ice house, ...) by
@@ -189,20 +192,20 @@ const DAY_LONG = BANISHERS.filter((b) => b.dayLong);
 const canProvide = (b: Banisher): boolean => b.action.available();
 const isReady = (b: Banisher): boolean =>
   b.action.available() && (b.ready?.() ?? true);
-const isDeployed = (b: Banisher): boolean => (b.contains?.() ?? null) !== null;
+const isDeployed = (b: Banisher): boolean => b.contains() !== null;
 const byCost = (a: Banisher, b: Banisher): number =>
   a.action.cost() - b.action.cost();
 
-/** Monsters currently banished, paired with the banisher name from the raw property. */
+// Monsters currently banished, paired with the raw banisher name. We reuse libram's
+// `multiSplit` (the primitive under `getBanishedMonsters`) but keep the banisher name as a
+// plain string instead of resolving it to an Item/Skill — that resolution collapses the
+// several banishers that map to `none` (e.g. Bowl a Curveball, Batter Up!) onto one key.
 function banishedEntries(): { monster: Monster; banisher: string }[] {
-  const parts = get("banishedMonsters").split(":");
-  const entries: { monster: Monster; banisher: string }[] = [];
-  for (let i = 0; i + 2 < parts.length; i += 3) {
-    if (parts[i]) {
-      entries.push({ monster: toMonster(parts[i]), banisher: parts[i + 1] });
-    }
-  }
-  return entries;
+  return multiSplit<[Monster, string, number]>("banishedMonsters", ":", ":", [
+    toMonster,
+    (s) => s,
+    Number,
+  ]).map(([monster, banisher]) => ({ monster, banisher }));
 }
 
 /** The monster a banisher is currently holding, matched by its banishedMonsters name. */
@@ -225,8 +228,8 @@ function availableTurnBanisher(): Banisher | null {
 /** Victims currently held by turn-based banishers — they return, so not a day-long lock. */
 function turnHeldMonsters(): Monster[] {
   return BANISHERS.filter((b) => !b.dayLong)
-    .map((b) => b.contains?.())
-    .filter((m): m is Monster => (m ?? null) !== null);
+    .map((b) => b.contains())
+    .filter((m) => m !== null);
 }
 
 /** Held by a rest-of-day banisher (i.e. banished, but not by a turn-based banisher). */
