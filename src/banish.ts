@@ -136,7 +136,9 @@ const BANISHERS: Banisher[] = [
         },
         preparation: () => {
           while (haveEffect($effect`Nanobrawny`) < 40) {
+            const before = haveEffect($effect`Nanobrawny`);
             if (!cliExecute("genie effect Nanobrawny")) break;
+            if (haveEffect($effect`Nanobrawny`) <= before) break;
           }
           return haveEffect($effect`Nanobrawny`) >= 40;
         },
