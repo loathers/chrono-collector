@@ -273,8 +273,8 @@ export function banishOutfitSpec(targets: Monster[]): OutfitSpec {
   const requirement = plannedDayLong(targets)
     .map((b) => b.action.constraints.equipmentRequirements?.())
     .find((r) => r);
-  const equip = (requirement?.maximizeOptions.forceEquip ?? []).filter(
-    canEquip,
+  const equip = (requirement?.maximizeOptions.forceEquip ?? []).filter((i) =>
+    canEquip(i),
   );
   return equip.length ? { equip } : {};
 }
