@@ -1,4 +1,4 @@
-import { banishCombat, banishWeaponSpec, prepareBanishes } from "../banish";
+import { banishCombat, banishOutfitSpec, prepareBanishes } from "../banish";
 import { type ChronerQuest, ChronerStrategy } from "../engine";
 import Macro from "../macro";
 import { chooseQuestOutfit, ifHave } from "../outfit";
@@ -33,7 +33,7 @@ export const quest: ChronerQuest = {
         return chooseQuestOutfit(
           { location, isFree: getKramcoWandererChance() >= 1 },
           sausageSpec,
-          banishWeaponSpec(banishTargets),
+          banishOutfitSpec(banishTargets),
         );
       },
       prepare: () => prepareBanishes(banishTargets),

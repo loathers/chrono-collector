@@ -2,7 +2,6 @@ import { type OutfitSpec } from "grimoire-kolmafia";
 import {
   type Item,
   type Monster,
-  type Skill,
   canEquip,
   cliExecute,
   equippedItem,
@@ -26,6 +25,8 @@ import {
   $monster,
   $skill,
   $slot,
+  ActionSource,
+  Requirement,
   get,
   have,
 } from "libram";
@@ -33,7 +34,6 @@ import {
 import { garboValue } from "./garboValue";
 import { printd } from "./lib";
 import Macro from "./macro";
-import { ifHave } from "./outfit";
 
 // Unleash Nanites needs at least this many turns of Nanobrawny to fire.
 const NANOBRAWNY = $effect`Nanobrawny`;
@@ -53,20 +53,17 @@ const GENIE_BOTTLES = $items`genie bottle, replica genie bottle`;
 const POLICY = { wish: true, dart: true };
 
 /**
- * A single, self-describing way of banishing a monster. Each banisher holds only one victim
- * at a time, so keeping N monsters banished all day needs N distinct banishers. Everything
- * the engine needs is on the object, so a new banisher is one entry in {@link BANISHERS}.
+ * A day-long-aware wrapper around libram's {@link ActionSource}. The `action` carries the
+ * reusable primitive — source, macro, cost, per-slot equipment (a maximizer `Requirement`),
+ * and preparation — while these fields add the semantics libram's banish framework lacks:
+ * whether the banish lasts all day, whether it can fire this exact combat, and whether it is
+ * already holding a victim. Adding a banisher is one entry in {@link BANISHERS}.
  */
 type Banisher = {
-  source: Skill | Item; // identity; matched against the banishedMonsters property
-  dayLong: boolean; // rest-of-day vs turn-based (returns / must be re-applied)
-  weapon?: () => Item | null; // weapon that must be equipped to fire it (forced in lockdown)
-  cost: () => number; // marginal meat cost of one lock now; < 0 = perishable, spend ASAP
-  canProvide: () => boolean; // could be set up today (owned / buyable under policy) — planning
-  available: () => boolean; // usable to fire in the current combat — right now
+  action: ActionSource;
+  dayLong: boolean; // rest-of-day hold vs turn-based (returns / must be re-applied)
+  readyNow: () => boolean; // usable in the current combat (gear equipped + resource ready)
   deployed?: () => boolean; // already holding a victim, so it can't take another
-  provision?: () => void; // acquire consumables before adventuring (wish / buy)
-  macro: () => Macro;
 };
 
 /** Highest-power owned, equippable, unrestricted club — what Batter Up! needs in-hand. */
@@ -108,82 +105,98 @@ function nanitesCost(): number {
   return nanobrawnyWishesNeeded() * garboValue(POCKET_WISH);
 }
 
-// Valued at sale price whether or not one is held — a dart in inventory could be sold instead.
-function dartCost(): number {
-  return garboValue(TRYPTOPHAN_DART);
-}
-
 // Wish Nanobrawny up to a usable level: free genie-bottle wishes first, then pocket wishes.
-function wishNanobrawny(): void {
+function wishNanobrawny(): boolean {
   while (haveEffect(NANOBRAWNY) < NANOBRAWNY_MIN_TURNS) {
     const before = haveEffect(NANOBRAWNY);
     if (genieWishesLeft() <= 0 && !retrieveItem(POCKET_WISH)) break;
     cliExecute("genie effect Nanobrawny");
     if (haveEffect(NANOBRAWNY) <= before) break; // no progress -> bail
   }
+  return haveEffect(NANOBRAWNY) >= NANOBRAWNY_MIN_TURNS;
 }
 
+// `action.available()` (potential > 0) is plan-time "could be set up today"; `readyNow` is the
+// stricter "can fire this combat". Costs/equipment/preparation ride on the ActionSource.
 const bowl: Banisher = {
-  source: $skill`Bowl a Curveball`,
+  action: new ActionSource(
+    $skill`Bowl a Curveball`,
+    () => (get("hasCosmicBowlingBall") ? 1 : 0),
+    Macro.trySkill($skill`Bowl a Curveball`),
+  ),
   dayLong: false,
-  cost: () => 0,
-  canProvide: () => get("hasCosmicBowlingBall"),
-  available: () =>
+  readyNow: () =>
     get("hasCosmicBowlingBall") && get("cosmicBowlingBallReturnCombats") < 1,
-  macro: () => Macro.trySkill($skill`Bowl a Curveball`),
 };
 
 const lightning: Banisher = {
-  source: $skill`Sea *dent: Throw a Lightning Bolt`,
+  action: new ActionSource(
+    $skill`Sea *dent: Throw a Lightning Bolt`,
+    () => (have(MONODENT) ? Math.max(0, 11 - get("_seadentLightningUsed")) : 0),
+    Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`),
+    {
+      equipmentRequirements: () =>
+        new Requirement([], { forceEquip: [MONODENT] }),
+    },
+  ),
   dayLong: true,
-  weapon: () => MONODENT,
-  cost: () => 0, // 11 free uses/day, keeps drops
-  canProvide: () => have(MONODENT) && get("_seadentLightningUsed") < 11,
-  available: () => haveEquipped(MONODENT) && get("_seadentLightningUsed") < 11,
+  readyNow: () => haveEquipped(MONODENT) && get("_seadentLightningUsed") < 11,
   deployed: () => get("_seadentLightningUsed") > 0,
-  macro: () => Macro.trySkill($skill`Sea *dent: Throw a Lightning Bolt`),
 };
 
 const batter: Banisher = {
-  source: $skill`Batter Up!`,
+  action: new ActionSource(
+    $skill`Batter Up!`,
+    () =>
+      myClass() === $class`Seal Clubber` &&
+      have($skill`Batter Up!`) &&
+      have($skill`Ire of the Orca`) && // Fury caps at 5 (needed to fire) only with Ire
+      bestClub() !== null
+        ? 1
+        : 0,
+    Macro.trySkill($skill`Batter Up!`),
+    {
+      equipmentRequirements: () => {
+        const club = bestClub();
+        return new Requirement([], { forceEquip: club ? [club] : [] });
+      },
+    },
+  ),
   dayLong: true,
-  weapon: bestClub,
-  cost: () => 0, // Fury regenerates from combat
-  // Fury caps at 5 only with Ire of the Orca, which Batter Up! needs to fire.
-  canProvide: () =>
-    myClass() === $class`Seal Clubber` &&
-    have($skill`Batter Up!`) &&
-    have($skill`Ire of the Orca`) &&
-    bestClub() !== null,
-  available: () =>
+  readyNow: () =>
     have($skill`Batter Up!`) &&
     itemType(equippedItem($slot`weapon`)) === "club" &&
     myFury() >= 5,
-  macro: () => Macro.trySkill($skill`Batter Up!`),
 };
 
 const nanites: Banisher = {
-  source: $skill`Unleash Nanites`,
+  action: new ActionSource(
+    $skill`Unleash Nanites`,
+    // Pocket wishes are unlimited (buyable), so under policy Nanites is always provisionable.
+    () =>
+      !nanitesUsed() && (haveEffect(NANOBRAWNY) > 0 || POLICY.wish) ? 1 : 0,
+    Macro.trySkill($skill`Unleash Nanites`),
+    { cost: nanitesCost, preparation: wishNanobrawny },
+  ),
   dayLong: true,
-  cost: nanitesCost,
-  // Pocket wishes are unlimited (buyable), so under policy Nanites is always provisionable.
-  canProvide: () =>
-    !nanitesUsed() && (haveEffect(NANOBRAWNY) > 0 || POLICY.wish),
-  available: () =>
+  readyNow: () =>
     !nanitesUsed() && haveEffect(NANOBRAWNY) >= NANOBRAWNY_MIN_TURNS,
   deployed: nanitesUsed,
-  provision: wishNanobrawny,
-  macro: () => Macro.trySkill($skill`Unleash Nanites`),
 };
 
 const dart: Banisher = {
-  source: TRYPTOPHAN_DART,
+  action: new ActionSource(
+    TRYPTOPHAN_DART,
+    () => (POLICY.dart ? 1 : 0),
+    Macro.tryHaveItem(TRYPTOPHAN_DART),
+    // Valued at sale price even when held — a dart in inventory could be sold instead.
+    {
+      cost: () => garboValue(TRYPTOPHAN_DART),
+      preparation: () => retrieveItem(TRYPTOPHAN_DART),
+    },
+  ),
   dayLong: true,
-  cost: dartCost,
-  canProvide: () => POLICY.dart,
-  available: () => have(TRYPTOPHAN_DART),
-  provision: () => void retrieveItem(TRYPTOPHAN_DART),
-  macro: () => Macro.tryHaveItem(TRYPTOPHAN_DART),
+  readyNow: () => have(TRYPTOPHAN_DART),
 };
 
 // The whole registry. Add a future banisher (Reflex Hammer, Latte lid, ice house, ...) by
@@ -191,22 +204,24 @@ const dart: Banisher = {
 const BANISHERS: Banisher[] = [bowl, lightning, batter, nanites, dart];
 const DAY_LONG = BANISHERS.filter((b) => b.dayLong);
 
+const canProvide = (b: Banisher): boolean => b.action.available();
 const isDeployed = (b: Banisher): boolean => b.deployed?.() ?? false;
-const byCost = (a: Banisher, b: Banisher): number => a.cost() - b.cost();
+const byCost = (a: Banisher, b: Banisher): number =>
+  a.action.cost() - b.action.cost();
 
 /** Turn-based banishers that can each hold one target (e.g. the bowling ball). */
 function turnCapacity(): number {
-  return BANISHERS.filter((b) => !b.dayLong && b.canProvide()).length;
+  return BANISHERS.filter((b) => !b.dayLong && canProvide(b)).length;
 }
 
 function availableTurnBanisher(): Banisher | null {
-  return BANISHERS.find((b) => !b.dayLong && b.available()) ?? null;
+  return BANISHERS.find((b) => !b.dayLong && b.readyNow()) ?? null;
 }
 
 /** Cheapest day-long banisher usable this combat that isn't already holding a victim. */
 function bestDayLong(): Banisher | null {
   return (
-    DAY_LONG.filter((b) => b.available() && !isDeployed(b)).sort(byCost)[0] ??
+    DAY_LONG.filter((b) => b.readyNow() && !isDeployed(b)).sort(byCost)[0] ??
     null
   );
 }
@@ -239,7 +254,7 @@ function locksNeeded(targets: Monster[]): number {
 function plannedDayLong(targets: Monster[]): Banisher[] {
   const need = locksNeeded(targets);
   if (need <= 0) return [];
-  return DAY_LONG.filter((b) => b.canProvide() && !isDeployed(b))
+  return DAY_LONG.filter((b) => canProvide(b) && !isDeployed(b))
     .sort(byCost)
     .slice(0, need);
 }
@@ -265,27 +280,31 @@ export function banishCombat(targets: Monster[], base: () => Macro): Macro {
   for (const target of targets) {
     const banisher = selectBanisher(target, targets);
     if (banisher) {
-      printd(`Banish: ${target} -> ${banisher.source}`);
-      macro = macro.if_(target, banisher.macro());
+      printd(`Banish: ${target} -> ${banisher.action.name()}`);
+      macro = macro.if_(target, banisher.action.macro);
     }
   }
   return macro.step(base());
 }
 
-/** Whether the outfit still needs a banish weapon forced (monodent / club) this turn. */
-export function pendingWeaponBanish(targets: Monster[]): boolean {
-  return plannedDayLong(targets).some((b) => b.weapon);
-}
-
-/** Forced weapon spec for the lockdown turns; empty once the targets are handled. */
-export function banishWeaponSpec(targets: Monster[]): OutfitSpec {
-  const weapon = plannedDayLong(targets)
-    .find((b) => b.weapon)
-    ?.weapon?.();
-  return weapon ? ifHave("weapon", weapon) : {};
+/**
+ * Forced equipment for the lockdown turns, taken from the first planned banisher that needs
+ * gear (any slot — it comes straight off the ActionSource's maximizer `Requirement`). Empty
+ * once the targets are handled, so the farming outfit returns.
+ */
+export function banishOutfitSpec(targets: Monster[]): OutfitSpec {
+  const requirements = plannedDayLong(targets)
+    .find((b) => b.action.constraints.equipmentRequirements)
+    ?.action.constraints.equipmentRequirements?.();
+  const equip = (requirements?.maximizeOptions.forceEquip ?? []).filter(
+    canEquip,
+  );
+  return equip.length ? { equip } : {};
 }
 
 /** Acquire the resources the plan needs before adventuring (wish Nanobrawny / buy darts). */
 export function prepareBanishes(targets: Monster[]): void {
-  for (const banisher of plannedDayLong(targets)) banisher.provision?.();
+  for (const banisher of plannedDayLong(targets)) {
+    banisher.action.constraints.preparation?.();
+  }
 }
