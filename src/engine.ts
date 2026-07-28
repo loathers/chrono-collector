@@ -11,6 +11,7 @@ import {
   bjornifyFamiliar,
   enthroneFamiliar,
   equippedAmount,
+  myAscensions,
   setAutoAttack,
 } from "kolmafia";
 import {
@@ -26,7 +27,7 @@ import {
 
 import { garboAverageValue, garboValue } from "./garboValue";
 import { bestJuneCleaverOption, shouldSkip } from "./juneCleaver";
-import { printd, sober } from "./lib";
+import { args, printd, sober } from "./lib";
 import type Macro from "./macro";
 
 export type ChronerTask = Task & {
@@ -83,6 +84,15 @@ export class ChronerEngine extends Engine<never, ChronerTask> {
   }
 
   setChoices(task: ChronerTask, manager: PropertiesManager): void {
+    // Withheld until Caveman Dan is settled: those tasks resolve choice 955 via runChoice.
+    if (
+      args.mode !== "rock" ||
+      get("_questCaveDan", 0) > 4 ||
+      get("lastCaveDanDefeat", 0) >= myAscensions()
+    ) {
+      manager.setChoice(955, 2);
+    }
+
     super.setChoices(task, manager);
     if (equippedAmount($item`June cleaver`) > 0) {
       this.propertyManager.setChoices(
